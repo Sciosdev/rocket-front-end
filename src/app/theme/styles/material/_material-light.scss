@@ -371,10 +371,12 @@ $theme: (
 
   header-background-color: rgb(243, 178, 0),
   footer-background-color: color-primary-default,
-  header-text-color: text-alternate-color,
+  custom-header-color: text-alternate-color,
+  header-text-color: custom-header-color,
+  header-icon-color: custom-header-color,
   footer-text-color: text-alternate-color,
   footer-text-highlight-color: footer-text-color,
-  sidebar-background-color: rgb(33, 33, 45),
+  sidebar-background-color: background-basic-color-2,
 
   menu-text-font-weight: 400,
   menu-text-color: rgba(0, 0, 0, 0.87),

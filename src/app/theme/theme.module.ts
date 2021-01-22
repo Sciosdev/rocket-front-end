@@ -97,7 +97,7 @@ const NB_MODULES = [
 const NB_THEME_PROVIDERS = [
   ...NbThemeModule.forRoot(
     {
-      name: 'material-dark',
+      name: 'material-light',
     }, [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME, MATERIAL_LIGHT_THEME, MATERIAL_DARK_THEME ]
   ).providers,
   ...NbSidebarModule.forRoot().providers,

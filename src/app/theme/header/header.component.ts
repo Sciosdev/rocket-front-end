@@ -15,17 +15,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   themes = [
     {
-      value: 'dark',
-      name: 'Oscuro',
-    },
-    {
-      value: 'cosmic',
-      name: 'Morado',
-    },
-    {
-      value: 'default',
+      value: 'material-light',
       name: 'Claro',
     },
+    {
+      value: 'material-dark',
+      name: 'Oscuro',
+    }
   ];
 
   currentTheme = 'default';

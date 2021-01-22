@@ -23,14 +23,24 @@
     [matRippleCentered]="true"
     (click)="toggleSidebar()"
   >
-    <nb-icon style="color: rgb(13, 6, 77) !important;" [icon]="(materialTheme$ | async) ? 'menu-outline' : 'menu-2-outline'"></nb-icon>
+    <nb-icon [icon]="(materialTheme$ | async) ? 'menu-outline' : 'menu-2-outline'"></nb-icon>
   </a>
-  <a class="logo" href="#" (click)="goToHome()">Rocket - <span>1.0.0</span></a>
+  <a class="logo" href="#" (click)="goToHome()"><span>Rocket App</span></a>
 </div>
-<div class="header-container">
-  <!--
-  <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
-    <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
+
+
+
+  <nb-select
+    status="primary"
+    matRipple
+    [selected]="currentTheme"
+    (selectedChange)="changeTheme($event)"
+  >
+    <nb-option
+      *ngFor="let theme of themes"
+      [value]="theme.value"
+      matRipple
+    >{{ theme.name }}</nb-option>
   </nb-select>
-  -->
-</div>
+
+
