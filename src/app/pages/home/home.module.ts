@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router'; // we also need angular router for Nebular to function properly
-import { NbSidebarModule, NbLayoutModule, NbButtonModule } from '@nebular/theme';
+import { NbSidebarModule, NbLayoutModule, NbButtonModule, NbCardModule, NbProgressBarModule } from '@nebular/theme';
 import { HomeComponent } from './home.component';
 
 
@@ -14,6 +14,8 @@ import { HomeComponent } from './home.component';
     NbLayoutModule,
     NbSidebarModule, // NbSidebarModule.forRoot(), //if this is your app.module
     NbButtonModule,
+    NbCardModule,
+    NbProgressBarModule,
   ]
 })
 export class HomeModule { }

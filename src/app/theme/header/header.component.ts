@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NbSidebarService, NbMenuService, NbThemeService } from '@nebular/theme';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+
+import { RippleService } from 'src/app/core/utils/ripple.service';
 
 @Component({
   selector: 'app-header',
@@ -9,6 +11,7 @@ import { map, takeUntil } from 'rxjs/operators';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  public readonly materialTheme$: Observable<boolean>;
 
   themes = [
     {
@@ -31,7 +34,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-  ) { }
+    private rippleService: RippleService,
+  ) {
+    this.materialTheme$ = this.themeService.onThemeChange()
+      .pipe(map(theme => {
+        const themeName: string = theme?.name || '';
+        return themeName.startsWith('material');
+      }));
+   }
   private destroy$: Subject<void> = new Subject<void>();
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
@@ -41,7 +51,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         map(({ name }) => name),
         takeUntil(this.destroy$),
       )
-      .subscribe(themeName => this.currentTheme = themeName);
+      .subscribe(themeName => {this.currentTheme = themeName;
+        this.rippleService.toggle(themeName?.startsWith('material'));});
   }
 
   /**

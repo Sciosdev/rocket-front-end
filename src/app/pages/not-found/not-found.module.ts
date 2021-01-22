@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotFoundComponent } from './not-found.component';
+import { NbButtonModule, NbCardModule } from '@nebular/theme';
 
 
 
 @NgModule({
   declarations: [NotFoundComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    NbCardModule,
+    NbButtonModule,
   ]
 })
 export class NotFoundModule { }

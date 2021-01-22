@@ -20,10 +20,10 @@ export class PagesComponent {
     },
     {
       title: 'Inicio',
-      icon: 'file-text-outline',
+      icon: 'car-outline',
       link: '/pages/home',
       home: true
-    }
+    },
   ];
   
   menu = this.MENU_ITEMS;

@@ -1,16 +1,31 @@
 <div class="header-container">
+  <!-- 
   <div class="logo-container">
-    <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
-      <nb-icon icon="menu-2-outline"></nb-icon>
-    </a>
-    <a class="logo">
-      <span style="font-size: x-large;">
-        <b>Rocket</b>
-
-        <small style="margin-left: 10px; margin-right: 10px;">1.0.0</small>
-      </span>
-    </a>
+      <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
+        <nb-icon icon="menu-2-outline"></nb-icon>
+      </a>
+      <a class="logo">
+        <span style="font-size: x-large;">
+          <b>Rocket</b>
+          
+          <small style="margin-left: 10px; margin-right: 10px;">1.0.0</small>
+        </span>
+      </a>
+    </div>
   </div>
+-->
+<div class="logo-container">
+  <a
+    href="#"
+    class="sidebar-toggle"
+    matRipple
+    [matRippleUnbounded]="true"
+    [matRippleCentered]="true"
+    (click)="toggleSidebar()"
+  >
+    <nb-icon style="color: rgb(13, 6, 77) !important;" [icon]="(materialTheme$ | async) ? 'menu-outline' : 'menu-2-outline'"></nb-icon>
+  </a>
+  <a class="logo" href="#" (click)="goToHome()">Rocket - <span>1.0.0</span></a>
 </div>
 <div class="header-container">
   <!--
