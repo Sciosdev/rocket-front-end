@@ -51,6 +51,7 @@ import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
 import { MATERIAL_LIGHT_THEME } from './styles/material/theme.material-light';
 import { MATERIAL_DARK_THEME } from './styles/material/theme.material-dark';
+import { MATERIAL_DARK_BLUE_THEME } from './styles/material/theme.material-dark-blue';
 
 
 /**
@@ -98,7 +99,7 @@ const NB_THEME_PROVIDERS = [
   ...NbThemeModule.forRoot(
     {
       name: 'material-light',
-    }, [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME, MATERIAL_LIGHT_THEME, MATERIAL_DARK_THEME ]
+    }, [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME, MATERIAL_LIGHT_THEME, MATERIAL_DARK_THEME, MATERIAL_DARK_BLUE_THEME ]
   ).providers,
   ...NbSidebarModule.forRoot().providers,
   ...NbMenuModule.forRoot().providers,

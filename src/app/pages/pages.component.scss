@@ -3,6 +3,10 @@ nb-sidebar>div.main-container {
     transition: width 0.3s;
 }
 
-nb-layout .layout {
-  background-color: crimson;
+@mixin material-overrides() {
+  @include nb-for-themes(material-dark, material-dark-blue, material-light) {
+.rocket-content {
+  background-color: column-layout-bg-color;
+}
+  }
 }
