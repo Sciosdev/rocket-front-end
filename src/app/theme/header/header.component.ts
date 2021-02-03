@@ -4,6 +4,7 @@ import { Subject, Observable } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
 import { RippleService } from 'src/app/core/utils/ripple.service';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +13,8 @@ import { RippleService } from 'src/app/core/utils/ripple.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public readonly materialTheme$: Observable<boolean>;
+
+  user;
 
   themes = [
     {
@@ -35,12 +38,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private rippleService: RippleService,
+    private authService: NbAuthService
   ) {
     this.materialTheme$ = this.themeService.onThemeChange()
       .pipe(map(theme => {
         const themeName: string = theme?.name || '';
         return themeName.startsWith('material');
       }));
+
+      this.authService.onTokenChange()
+      .subscribe((token: NbAuthJWTToken) => {
+
+        if (token.isValid()) {
+          this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+        }
+
+      });
    }
   private destroy$: Subject<void> = new Subject<void>();
   ngOnInit() {

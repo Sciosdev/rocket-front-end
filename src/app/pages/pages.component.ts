@@ -19,8 +19,8 @@ export class PagesComponent {
       group: true,
     },
     {
-      title: 'Inicio',
-      icon: 'car-outline',
+      title: 'Carga de layout',
+      icon: 'upload-outline',
       link: '/pages/home',
       home: true
     },
@@ -30,8 +30,15 @@ export class PagesComponent {
 
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');
-
+    this.isExpanded();
     return false;
+  }
+
+  isExpanded(): boolean {
+    this.sidebarService.onExpand().subscribe(function(e) {
+      console.log(e);
+    });
+    return true;
   }
 
   gotoHome() {

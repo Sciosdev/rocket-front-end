@@ -8,22 +8,22 @@
 @import '~@nebular/theme/styles/core/mixins';
 
 $theme: (
-  color-primary-100: #e8cbfe,
-  color-primary-200: #ce97fd,
-  color-primary-300: #ae63f9,
-  color-primary-400: #903df4,
-  color-primary-500: #6200ee,
-  color-primary-600: #4b00cc,
-  color-primary-700: #3800ab,
-  color-primary-800: #27008a,
-  color-primary-900: #1b0072,
+  color-primary-100: #ffc76b,
+  color-primary-200: #ffaa4f,
+  color-primary-300: #ff8d32,
+  color-primary-400: #ff7010,
+  color-primary-500: #dd5400,
+  color-primary-600: #bb3700,
+  color-primary-700: #9a1600,
+  color-primary-800: #7c0000,
+  color-primary-900: #600000,
 
-  color-primary-transparent-100: rgba(98, 0, 238, 0.08),
-  color-primary-transparent-200: rgba(98, 0, 238, 0.16),
-  color-primary-transparent-300: rgba(98, 0, 238, 0.24),
-  color-primary-transparent-400: rgba(98, 0, 238, 0.32),
-  color-primary-transparent-500: rgba(98, 0, 238, 0.4),
-  color-primary-transparent-600: rgba(98, 0, 238, 0.48),
+  color-primary-transparent-100: rgba(255, 112, 16, 0.08),
+  color-primary-transparent-200: rgba(255, 112, 16, 0.16),
+  color-primary-transparent-300: rgba(255, 112, 16, 0.24),
+  color-primary-transparent-400: rgba(255, 112, 16, 0.32),
+  color-primary-transparent-500: rgba(255, 112, 16, 0.4),
+  color-primary-transparent-600: rgba(255, 112, 16, 0.48),
 
   color-success-100: #edfbd1,
   color-success-200: #d7f7a6,
@@ -369,7 +369,7 @@ $theme: (
     '0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12)'
   ),
 
-  header-background-color: rgb(239, 80, 0),
+  header-background-color: rgb(255, 112, 16),
   footer-background-color: color-primary-default,
   custom-header-color: text-alternate-color,
   header-text-color: custom-header-color,
@@ -494,7 +494,10 @@ $theme: (
   option-small-text-font-weight: material-regular-font-weight,
   option-medium-text-font-weight: material-regular-font-weight,
   option-large-text-font-weight: material-regular-font-weight,
-  option-giant-text-font-weight: material-regular-font-weight
+  option-giant-text-font-weight: material-regular-font-weight,
+
+  header-height: 3.5rem,
+  layout-window-mode-padding-top: 1rem,
 );
 
 $nb-themes: nb-register-theme($theme, material-light, default);
