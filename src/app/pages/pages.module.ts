@@ -16,6 +16,7 @@ import {
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ThemeModule } from '../theme/theme.module';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [PagesComponent],
@@ -32,6 +33,7 @@ import { ThemeModule } from '../theme/theme.module';
     NbIconModule,
     ThemeModule,
     NbCardModule,
+    NgxSpinnerModule
     ],
   providers: []
 })

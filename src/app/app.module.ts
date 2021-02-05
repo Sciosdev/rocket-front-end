@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { NgxSpinnerModule } from "ngx-spinner";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,6 +17,7 @@ import {
 } from '@nebular/auth';
 import { AuthGuard } from './auth.guard';
 
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
 @NgModule({
@@ -39,7 +40,7 @@ import { AuthGuard } from './auth.guard';
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
-          baseEndpoint: 'http://18.221.76.172:8080',
+          baseEndpoint: 'https://3.135.222.80:8443',
           login: {
             // ...
             endpoint: '/DemoAuthMongo/api/auth/login',
@@ -90,9 +91,13 @@ import { AuthGuard } from './auth.guard';
         },
       },
     }),
+
+    NgxSpinnerModule
+  
   ],
   providers: [ThemeModule.forRoot().providers,AuthGuard
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule { }
