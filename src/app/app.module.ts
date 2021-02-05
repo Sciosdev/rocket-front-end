@@ -40,7 +40,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
-          baseEndpoint: 'https://3.135.222.80:8443',
+          baseEndpoint: 'https://18.221.76.172:8443',
           login: {
             // ...
             endpoint: '/DemoAuthMongo/api/auth/login',

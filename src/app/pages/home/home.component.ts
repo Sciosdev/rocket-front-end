@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   test() {
-    this.spinner.show();
+    this.loading = true;
 
     this.resultJson.forEach( element => {
       /*this.testService
@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       console.log(element);
     });
 
-    this.spinner.hide();
+    setTimeout(() => this.loading = false, 3000);
 
   }
   ngOnInit() {}
