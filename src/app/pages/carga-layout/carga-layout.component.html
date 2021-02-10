@@ -1,0 +1,23 @@
+<nb-card>
+    <nb-card-body style="padding: 50px;">
+      <nb-stepper #stepper disableStepNavigation>
+  
+        <nb-step label="Carga de archivo" >
+         <app-carga-archivo></app-carga-archivo>
+        </nb-step>
+  
+        <nb-step label="Previsualización">
+        
+        </nb-step>
+  
+        <nb-step label="Descarga PDF">
+         
+        </nb-step>
+  
+        <nb-step [hidden]="true">
+         
+        </nb-step>
+      </nb-stepper>
+    </nb-card-body>
+  </nb-card>
+  

@@ -17,6 +17,7 @@ import {
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ThemeModule } from '../theme/theme.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { CargaLayoutModule } from './carga-layout/carga-layout.module';
 
 @NgModule({
   declarations: [PagesComponent],
@@ -24,6 +25,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     CommonModule,
     PagesRoutingModule,
     HomeModule,
+    CargaLayoutModule,
     NotFoundModule,
     NbLayoutModule,
     NbSidebarModule,

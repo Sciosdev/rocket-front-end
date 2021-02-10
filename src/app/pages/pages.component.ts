@@ -19,10 +19,15 @@ export class PagesComponent {
       group: true,
     },
     {
-      title: 'Carga de layout',
-      icon: 'upload-outline',
+      title: 'Inicio',
+      icon: 'home',
       link: '/pages/home',
       home: true
+    },
+    {
+      title: 'Carga de layout',
+      icon: 'upload-outline',
+      link: '/pages/layout',
     },
   ];
   

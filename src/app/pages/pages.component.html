@@ -4,16 +4,24 @@
     </nb-layout-header>
 
     <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive >
+        <nb-sidebar-header>
+            <img src="../../assets/images/rocket_courier.png" class="expanded"/>
+            <img src="../../assets/images/favicon.png" class="compacted" width="38px" height="26px"/>
+        </nb-sidebar-header>
        <!--  <div>
             <img src="../../assets/images/rocket_courier.png"/>
         </div> -->
         <nb-menu [items]="menu"></nb-menu>
     </nb-sidebar>
 
-    <nb-layout-column class="rocket-content">
+    <nb-layout-column class="rocket-bg">
         <ngx-spinner bdOpacity=1 bdColor="rgba(0,34,64,0.9)" size="medium" color="#ffffff" type="cube-transition" [fullScreen]="true">
 
         </ngx-spinner>
         <router-outlet></router-outlet>
     </nb-layout-column>
+    <nb-layout-footer>
+
+    <app-footer></app-footer>
+    </nb-layout-footer>
 </nb-layout>

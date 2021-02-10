@@ -1,36 +1,16 @@
-<nb-card accent="danger" size="tiny" [nbSpinner]="loading"
-nbSpinnerStatus="danger"
-nbSpinnerSize="large"
-nbSpinnerMessage="" nbSpinnerMessage="Leyendo archivo, por favor espere ...">
-    <nb-card-header>
-       Carga de layout
-    </nb-card-header>
-    <nb-card-body>
-        <form>
-            <div class="row">
-                <div class="col-md-3 m-2">
-                    <button mat-raised-button color="primary" type="button" (click)="finput.click()" style="width: 200px">
-            <mat-icon>library_add</mat-icon>
-            <span>
-              Seleccionar Archivo
-            </span>
-          </button>
-                    <!-- <span style="margin: 20px"></span> -->
-                </div>
-                <div class="col-md-5 m-2">
-                    <mat-form-field class="label-archivo-cargado">
-                        <input matInput [ngModel]="nombreArchivo" readonly="true" name="label-archivo" placeholder="Archivo Seleccionado" />
-                    </mat-form-field>
-                    <input #finput (change)="seleccionaArchivo($event.target.files[0])" id="file-upload" accept=".csv" type="file" style="display: none" />
-                </div>
-            </div>
-            <div class="row" *ngIf="resultJson.length != 0">
-                <button mat-raised-button color="primary" type="button" (click)="test()">
-                    <mat-icon>category</mat-icon>
-          Subir Info
-        </button>
-
-            </div>
+<div class="background">
+<div class="rastreo">
+    <form>
+        <mat-form-field >
+            <mat-label>Localiza tu envío</mat-label>
+            <input matInput type="search" placeholder="Código de rastreo">
+            <button mat-button matSuffix mat-raised-button  aria-label="search"  color="accent" >
+                <span>
+                    Buscar
+                </span>
+                    <mat-icon>search</mat-icon>                  
+            </button>
+        </mat-form-field>
         </form>
-    </nb-card-body>
-</nb-card>
+</div>
+</div>

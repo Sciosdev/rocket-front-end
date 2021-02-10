@@ -18,6 +18,7 @@ import {
 import { AuthGuard } from './auth.guard';
 
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -40,7 +41,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
-          baseEndpoint: 'https://18.221.76.172:8443',
+          baseEndpoint: 'https://3.135.222.80:8443',
           login: {
             // ...
             endpoint: '/DemoAuthMongo/api/auth/login',
@@ -92,7 +93,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
       },
     }),
 
-    NgxSpinnerModule
+    NgxSpinnerModule,
+
+    FontAwesomeModule
   
   ],
   providers: [ThemeModule.forRoot().providers,AuthGuard

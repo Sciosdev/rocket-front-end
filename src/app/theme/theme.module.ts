@@ -53,6 +53,8 @@ import { DARK_THEME } from './styles/theme.dark';
 import { MATERIAL_LIGHT_THEME } from './styles/material/theme.material-light';
 import { MATERIAL_DARK_THEME } from './styles/material/theme.material-dark';
 import { MATERIAL_DARK_BLUE_THEME } from './styles/material/theme.material-dark-blue';
+import { FooterComponent } from './footer/footer.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 /**
@@ -110,9 +112,9 @@ const NB_THEME_PROVIDERS = [
 ];
 
 @NgModule({
-  declarations: [HeaderComponent],
-  imports: [MatRippleModule, ...BASE_MODULES, ...NB_MODULES],
-  exports: [MatRippleModule, ...BASE_MODULES, ...NB_MODULES, HeaderComponent],
+  declarations: [HeaderComponent, FooterComponent],
+  imports: [MatRippleModule, ...BASE_MODULES, ...NB_MODULES, FontAwesomeModule],
+  exports: [MatRippleModule, ...BASE_MODULES, ...NB_MODULES, HeaderComponent, FooterComponent],
 })
 
 

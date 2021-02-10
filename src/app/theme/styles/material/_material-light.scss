@@ -369,14 +369,14 @@ $theme: (
     '0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12)'
   ),
 
-  header-background-color: rgb(255, 112, 16),
-  footer-background-color: color-primary-default,
+  header-background-color: color-primary-400,//rgb(255, 112, 16),
+  footer-background-color: color-primary-400,
   custom-header-color: text-alternate-color,
   header-text-color: custom-header-color,
   header-icon-color: custom-header-color,
   footer-text-color: text-alternate-color,
   footer-text-highlight-color: footer-text-color,
-  sidebar-background-color: background-basic-color-2,
+  sidebar-background-color: #fcebd9,
   column-layout-bg-color: background-basic-color-1,
 
   menu-text-font-weight: 400,
@@ -497,6 +497,7 @@ $theme: (
   option-giant-text-font-weight: material-regular-font-weight,
 
   header-height: 3.5rem,
+  footer-height: 3.5rem,
   layout-window-mode-padding-top: 1rem,
 );
 
