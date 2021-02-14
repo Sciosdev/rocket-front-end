@@ -5,6 +5,7 @@ import { map, takeUntil } from 'rxjs/operators';
 
 import { RippleService } from 'src/app/core/utils/ripple.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -43,7 +44,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private rippleService: RippleService,
-    private authService: NbAuthService
+    private authService: NbAuthService,
+    private router: Router
   ) {
     this.materialTheme$ = this.themeService.onThemeChange()
       .pipe(map(theme => {
@@ -56,6 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         if (token.isValid()) {
           this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+
         }
 
       });
@@ -82,6 +85,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  goToLogin() {
+    this.router.navigateByUrl("/auth/login");
+  }
   /**
    * Redirecciona a home
    */

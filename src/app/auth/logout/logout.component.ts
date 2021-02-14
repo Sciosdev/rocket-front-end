@@ -43,12 +43,6 @@ export class LogoutComponent extends NbLogoutComponent implements OnInit {
    * Método para el cierre de sesión
    */
   logout() {
-    this.usuarioService.usuario = null;
-    this.usuarioService.token = null;
-
-    localStorage.removeItem('token');
-    localStorage.removeItem('usuario');
-
     const strategy = 'email';
     super.logout(strategy);
     this.tokenService.clear();

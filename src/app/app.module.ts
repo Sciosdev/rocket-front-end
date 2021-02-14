@@ -19,6 +19,8 @@ import { AuthGuard } from './auth.guard';
 
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
+import { RoleProvider } from './auth/role.provider';
 
 
 @NgModule({
@@ -41,10 +43,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
-          baseEndpoint: 'https://3.135.222.80:8443',
+          baseEndpoint: 'https://18.221.76.172:8443',
           login: {
             // ...
-            endpoint: '/DemoAuthMongo/api/auth/login',
+            endpoint: '/jwtdemo/userp',
             method: 'POST',
             defaultMessages: ['Sesión iniciada satisfactoriamente'],
             defaultErrors: [
@@ -52,7 +54,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
             ],
             redirect: {
               failure: '/auth/login',
-              success: '/pages',
+              success: '/pages/home',
             },
           },
           register: {
@@ -95,10 +97,27 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
     NgxSpinnerModule,
 
-    FontAwesomeModule
+    FontAwesomeModule,
+    NbSecurityModule.forRoot({
+      accessControl: {
+        ROLE_PRESIDENCIA: {
+          menu: ['guest'],
+        },
+        ROLE_USER: {
+          parent: 'ROLE_PRESIDENCIA',
+          menu: ['user'],
+          view: ['layout'],
+        },
+        ROLE_ADMIN: {
+          parent: 'ROLE_USER',
+          menu: ['admin']
+        },
+    }}),
   
   ],
-  providers: [ThemeModule.forRoot().providers,AuthGuard
+  providers: [ThemeModule.forRoot().providers,
+    AuthGuard,
+    {provide: NbRoleProvider, useClass: RoleProvider}
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

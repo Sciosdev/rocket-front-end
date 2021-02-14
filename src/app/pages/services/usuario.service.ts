@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Usuario } from '../models/usuario.model';
 import { HttpClient } from '@angular/common/http';
 
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { NbAuthService, NbAuthJWTToken, NbTokenService } from '@nebular/auth';
 import { CargaArchivosService } from './carga-archivos.service';
@@ -50,30 +50,23 @@ export class UsuarioService {
   }
 
   /**
-   * Valida si el usuario tiene sesion iniciada
-   */
-  estaLogueado() {
-    this.token = null;
-    this.token = localStorage.getItem('token');
-    return this.token === null ? false : this.token.length > 5 ? true : false;
-  }
-
-  /**
    * Carga la informacion del usuario al aplicativo
    */
   cargaInformacion() {
-    if (!this.estaLogueado()) {
-      this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-        if (token.isValid()) {
-          this.usuario = token.getPayload().usuario;
-          this.token = token.getValue();
-          this.guardarInformacion(this.token, this.usuario);
-        }
-      });
-    } else {
-      this.usuario = JSON.parse(localStorage.getItem('usuario'));
-      this.token = localStorage.getItem('token');
-    }
+
+    this.authService.isAuthenticated()
+      .pipe(
+        tap(authenticated => {
+          if (authenticated) {
+            this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+              if (token.isValid()) {
+                this.usuario = token.getPayload().usuario;
+                this.token = token.getValue();
+                this.guardarInformacion(this.token, this.usuario);
+              }
+            });
+          }
+        }));
   }
 
   /**

@@ -13,6 +13,7 @@ export class Usuario {
    * @param _id Identificador
    */
   constructor(
+    public sub: string,
     /**
      * Nombre del usuario
      */

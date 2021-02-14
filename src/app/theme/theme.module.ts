@@ -55,6 +55,7 @@ import { MATERIAL_DARK_THEME } from './styles/material/theme.material-dark';
 import { MATERIAL_DARK_BLUE_THEME } from './styles/material/theme.material-dark-blue';
 import { FooterComponent } from './footer/footer.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NbSecurityModule } from '@nebular/security';
 
 
 /**
@@ -92,7 +93,8 @@ const NB_MODULES = [
   NbTooltipModule,
   NbEvaIconsModule,
   NbIconModule,
-  NbBadgeModule
+  NbBadgeModule,
+  NbSecurityModule
 ];
 
 /**

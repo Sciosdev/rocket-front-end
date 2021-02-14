@@ -23,8 +23,8 @@ export class LoginComponent extends NbLoginComponent {
     if (this.rememberMeFormControl.value)
       localStorage.setItem('remember', this.nameFormControl.value);
     else localStorage.removeItem('remember');
-    this.user.name = this.nameFormControl.value;
-    this.user.password = this.passwordFormControl.value;
+    this.user.user = this.nameFormControl.value;
+    this.user.pwd = this.passwordFormControl.value;
     const _this = this;
     this.errors = [];
     this.messages = [];
