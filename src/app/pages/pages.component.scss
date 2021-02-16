@@ -47,3 +47,12 @@ nb-sidebar {
 
 }
 
+.background {
+  background-image: url("../../assets/images/fondo.png");
+  background-color: rgb(253, 246, 240);
+  height: 100%;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: relative;
+}

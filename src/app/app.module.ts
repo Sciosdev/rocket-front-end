@@ -46,7 +46,7 @@ import { RoleProvider } from './auth/role.provider';
           baseEndpoint: 'https://18.221.76.172:8443',
           login: {
             // ...
-            endpoint: '/jwtdemo/userp',
+            endpoint: '/jwtdemo-1/userp',
             method: 'POST',
             defaultMessages: ['Sesión iniciada satisfactoriamente'],
             defaultErrors: [
@@ -100,17 +100,26 @@ import { RoleProvider } from './auth/role.provider';
     FontAwesomeModule,
     NbSecurityModule.forRoot({
       accessControl: {
-        ROLE_PRESIDENCIA: {
+        guest: {
           menu: ['guest'],
+          view: ['home'],
         },
-        ROLE_USER: {
-          parent: 'ROLE_PRESIDENCIA',
+        messenger: {
+          parent: 'guest',
+          menu: ['user'],
+        },
+        customer: {
+          parent: 'guest',
           menu: ['user'],
           view: ['layout'],
         },
-        ROLE_ADMIN: {
-          parent: 'ROLE_USER',
-          menu: ['admin']
+        admin: {
+          parent: 'guest',
+          menu: ['admin'],
+          view: ['layout'],
+        },
+        full: {
+          parent: 'admin',
         },
     }}),
   

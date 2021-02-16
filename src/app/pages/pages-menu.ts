@@ -18,7 +18,7 @@ export const admin_menu: NbMenuItem[] = [
             permission: 'menu',
             resource: 'guest'
           },
-      },
+    },
     {
       title: 'Carga de layout',
       icon: 'upload-outline',
