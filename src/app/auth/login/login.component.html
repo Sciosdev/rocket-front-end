@@ -8,7 +8,7 @@
     </ul>
 </nb-alert>
 
-<nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="success" role="alert">
+<nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="primary" role="alert">
     <p class="alert-title"><b>Éxito</b></p>
     <ul class="alert-message-list">
         <li *ngFor="let message of messages" class="alert-message">
@@ -35,7 +35,7 @@
                 La contraseña es <strong>REQUERIDA</strong>
             </mat-error>
         </mat-form-field>
-        <mat-checkbox [formControl]="rememberMeFormControl">Recuerdame!</mat-checkbox>
+        
         <button type="submit" mat-raised-button color="accent" [disabled]="
         passwordFormControl.hasError('required') ||
         nameFormControl.hasError('required')
@@ -48,7 +48,7 @@
     </div>
 </form>
 
-<section class="another-action" aria-label="Register">
+<!-- <section class="another-action" aria-label="Register">
     ¿No tienes una cuenta?
     <a class="text-link" routerLink="../register">Registrate</a>
-</section>
+</section> -->
