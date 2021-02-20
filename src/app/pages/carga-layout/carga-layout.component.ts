@@ -12,4 +12,10 @@ export class CargaLayoutComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  archivoCargado:any;
+
+  setArchivoCargado($event) {
+    this.archivoCargado = $event;
+  }
+
 }

@@ -3,14 +3,14 @@
       <nb-stepper #stepper disableStepNavigation>
   
         <nb-step label="Carga de archivo" >
-         <app-carga-archivo></app-carga-archivo>
+         <app-carga-archivo (archivoCargado) = setArchivoCargado($event)></app-carga-archivo>
         </nb-step>
   
         <nb-step label="Previsualización">
-        
+        <app-previsualizacion [archivoCargado] = "archivoCargado"></app-previsualizacion>
         </nb-step>
   
-        <nb-step label="Descarga PDF">
+        <nb-step label="Procesamiento">
          
         </nb-step>
   

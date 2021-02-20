@@ -1,6 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { takeWhile } from 'rxjs/operators';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-home',
@@ -47,7 +45,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   jsonAsText: string;
 
   constructor(
-    private spinner: NgxSpinnerService
   ) {
     this.alive = true;
   }
@@ -83,7 +80,6 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param archivo Archivo CSV con los datos a predecir
    */
   seleccionaArchivo(archivo: File) {
-    this.spinner.show();
     this.lf = false;
     this.cr = false;
     if (!archivo) {
@@ -142,14 +138,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       } catch (error) {
         console.warn(error);
-       this.spinner.hide();
       }
-      this.spinner.hide();
     };
 
     console.log(this.resultJson);
     reader.readAsText(archivo);
     this.nombreArchivo = archivo.name;
-    this.spinner.hide();
   }
 }

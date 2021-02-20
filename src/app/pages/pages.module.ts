@@ -16,7 +16,6 @@ import {
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ThemeModule } from '../theme/theme.module';
-import { NgxSpinnerModule } from 'ngx-spinner';
 import { CargaLayoutModule } from './carga-layout/carga-layout.module';
 
 @NgModule({
@@ -34,9 +33,8 @@ import { CargaLayoutModule } from './carga-layout/carga-layout.module';
     NbEvaIconsModule,
     NbIconModule,
     ThemeModule,
-    NbCardModule,
-    NgxSpinnerModule
-    ],
+    NbCardModule
+],
   providers: []
 })
 export class PagesModule { }
