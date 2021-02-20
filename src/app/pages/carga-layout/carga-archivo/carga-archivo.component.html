@@ -1,42 +1,35 @@
 <form #firstForm="ngForm" class="step-container">
-    <div class="row">
-      <nb-alert outline="info" style="width: 100%">
-        <h2>Instrucciones</h2>
-        <mat-divider></mat-divider>
-        <ol>
-          <li>
-            <p>Selecciona el archivo con el layout
-                <nb-icon icon="plus-square-outline"></nb-icon>
-              .</p>
-          </li>
-          <li>
-            <p>Da clic en continuar para pasar a la previsualización del archivo.</p>
-          </li>
-        </ol>
-      </nb-alert>
-    </div>
-    <div class="row mt-4">
-      <div class="col-md-12 ml-3">
-            <nb-checkbox (checkedChange)="setHasHeader($event)" status="success">El archivo tiene encabezado</nb-checkbox>
-      </div>
-      <div class="col-md-6 col-lg-6 col-sm-12">
-        <div class="col-md-12">
-          <input #finput (change)="seleccionaArchivo($event.target.files[0])" id="file-upload" accept=".csv"
-            type="file" style="display: none" />
-          <label for="label-archivo" class="label">Archivo Cargado</label>
-          <input nbInput [ngModel]="nombreArchivo" readonly="true" name="label-archivo" fullWidth
-              placeholder="Archivo Seleccionado" status="primary" />
-  
-          <button nbButton status="primary" size="small" (click)="finput.click()">
+  <div class="row">
+    <nb-alert outline="info" style="width: 100%">
+      <h2>Instrucciones</h2>
+      <mat-divider></mat-divider>
+      <ol>
+        <li>
+          <p>Selecciona el archivo con el layout
             <nb-icon icon="plus-square-outline"></nb-icon>
-            <span>Seleccionar Archivo</span>
-          </button>
-        </div>
-  
-      </div>
+            .
+          </p>
+        </li>
+        <li>
+          <p>Da clic en continuar para pasar a la previsualización del archivo.</p>
+        </li>
+      </ol>
+    </nb-alert>
+  </div>
+  <div class="row mt-4">
+    <div class="col-md-12 ml-3">
+      <mat-form-field >
+        <mat-label>Archivo Seleccionado</mat-label>
+        <input #finput2 (change)="readExcel($event)" id="file-upload" accept=".csv,.xlsx" type="file"
+          style="display: none" />
+        <input matInput [ngModel]="nombreArchivo" readonly="true" name="label-archivo"/>
+        <button matSuffix nbButton matRipple status=info (click)="finput2.click()">
+          Seleccionar Archivo
+        </button>
+    </mat-form-field>
+
     </div>
-    <hr />
-    <button nbButton nbStepperNext type="button"
-      [disabled]="!validSelection || !fileLoaded">Continuar</button>
-  </form>
-  
+  </div>
+  <hr />
+  <button nbButton nbStepperNext type="button" [disabled]="!fileLoaded">Continuar</button>
+</form>

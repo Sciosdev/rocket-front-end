@@ -1,0 +1,6 @@
+<p>previsualizacion works!</p>
+<table >
+    <tr *ngFor="let item of resultJson" style="border: 1px solid blue;">
+        <ngx-json-viewer [json]="item" [expanded]="false"></ngx-json-viewer>
+    </tr>
+</table>
