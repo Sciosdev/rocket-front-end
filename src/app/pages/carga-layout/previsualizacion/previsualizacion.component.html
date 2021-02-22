@@ -1,13 +1,38 @@
+<div class="jumbotron">
+  <h1 class="display-4">Instrucciones</h1>
+  <hr class="my-4">
+  <ol>
+    <li>
+      <p>Revisa que los datos correspondan con el archivo cargado.</p>
+    </li>
+    <li>
+      <p>Una vez verificado que la información es la correcta, da clic en continuar para procesar el
+        archivo.</p>
+    </li>
+  </ol>
+</div>
 
-<p-table [value]="prevRows"  [style]="{'overflow-y': 'hidden', 'display': 'block', 'overflow-x': 'auto', 'white-space': 'nowrap', 'width': '100%'}" scrollHeight="200px"
-   [rowHover]="true">
+<p-table [value]="prevRows" [columns]="headerExcel"
+  [style]="{'overflow-y': 'hidden', 'display': 'block', 'overflow-x': 'auto', 'white-space': 'nowrap', 'width': '100%'}"
+  scrollHeight="200px" [rowHover]="true" styleClass="p-datatable-striped">
 
 
-    <ng-template pTemplate="body" let-item>
-        <tr>
-            <td >{{item.row_number}}</td>
-            <td *ngFor="let col of headerExcel" [ngStyle]="{'width':'max-content'}">
-                <p>{{item[col.type][col.field]}}</p></td>
-        </tr>
-    </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let col of headerExcel" [ngStyle]="{'width':'max-content'}" [ngClass]="'header'">
+        {{col.header}}
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-item>
+    <tr>
+      <td *ngFor="let col of headerExcel">
+        {{item[col.field]}}</td>
+    </tr>
+  </ng-template>
 </p-table>
+<hr class="my-4">
+<button nbButton (click)="processExcel()" type="button" [disabled] = "procesado" status="info">Procesar</button>
+<hr class="my-4">
+<button nbButton nbStepperNext type="button" [disabled] = "!procesado" status="success">Continuar</button>

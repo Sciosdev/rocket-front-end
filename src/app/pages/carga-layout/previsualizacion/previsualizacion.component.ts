@@ -13,15 +13,14 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   @Input() archivoCargado: any;
 
   nombreArchivo: string;
-
-  resultJson: any[];
+  resultJson: any;
   prevRows: any[];
-  datasource;
   headerExcel: any[];
+  procesado: boolean;
   constructor() { }
 
   ngOnInit(): void {
-
+    this.procesado = false;
   }
 
   ngOnChanges(): void {
@@ -34,17 +33,10 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
 
   processExcel() {
     let resultado: any[] = [];
-    let headerEx: any[] = [];
     const map = layout_map;
     const workbook = new Excel.Workbook();
 
     this.nombreArchivo = this.archivoCargado.name;
-
-
-
-    /**
-     * Final Solution For Importing the Excel FILE
-     */
 
     const arryBuffer = new Response(this.archivoCargado).arrayBuffer();
 
@@ -61,7 +53,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
               "payment": {},
               "extra": {}
             };
-            registro.row_number = rowNumber;
+
             row.eachCell(function (cell, colNumber) {
               var header = worksheet.getRow(2).getCell(colNumber).value;
               var type = map[header].type;
@@ -69,19 +61,17 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
 
               if (rowNumber > 2) {
                 registro[type][id] = cell.value;
-              }
-              if (rowNumber == 2) {
-
-                headerEx.push({ header });
+                registro.row_number = rowNumber - 2;
               }
             });
             resultado.push(registro);
           });
         });
     });
-    this.resultJson = resultado;
-    this.headerExcel = headerEx;
-    this.datasource = new MatTableDataSource(this.resultJson);
+    this.resultJson = {};
+    this.resultJson.registro_id = resultado;
+    this.procesado = true;
+    console.log(this.resultJson);
   }
 
   previewData() {
@@ -100,39 +90,28 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
           const worksheet = workbook.worksheets[0];
 
           worksheet.eachRow(function (row, rowNumber) {
-            let registro: any = {
-              "row_number": "",
-              "order": {},
-              "billing_address": {},
-              "shipping_address": {},
-              "payment": {},
-              "extra": {}
-            };
-            if(rowNumber < 8) {
-              registro.row_number = rowNumber - 2;
+            let registro: any = {};
+            if (rowNumber < 6) {
               row.eachCell(function (cell, colNumber) {
 
-              let header = worksheet.getRow(2).getCell(colNumber).value;
-              var type = map[header].type;
-              let field = map[header].column_id;
+                let header = "Columna " + colNumber;
+                let field = "column" + colNumber;
 
-              if (rowNumber > 2) {
-                registro[type][field] = cell.value;
-              }
-              if (rowNumber == 2) {
 
-              let aux: any = {}
-              aux.header = header;
-              aux.field = field;
-              aux.type = type;
-              headerEx.push(aux);
-              }
-            });
+                registro[field] = cell.value;
 
-            if(rowNumber > 2){
+                if (rowNumber == 2) {
+
+                  let aux: any = {}
+                  aux.header = header;
+                  aux.field = field;
+                  headerEx.push(aux);
+                }
+              });
+
               resultado.push(registro);
+
             }
-          }
           });
         });
     });
