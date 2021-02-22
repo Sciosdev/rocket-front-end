@@ -4,6 +4,11 @@ export const layout_map = {
         "type": "order",
         "required": ""
     },
+    "OrderKey": {
+        "column_id": "order_key",
+        "type": "order",
+        "required": ""
+    },
     "Name": {
         "column_id": "name",
         "type": "order",

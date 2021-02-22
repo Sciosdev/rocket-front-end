@@ -7,6 +7,7 @@ import { CargaArchivoComponent } from './carga-archivo/carga-archivo.component';
 import { PrevisualizacionComponent } from './previsualizacion/previsualizacion.component';
 import { PrettyPrintJsonPipe } from 'src/app/pipes/pretty-print-json.pipe';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import {TableModule} from 'primeng/table';
 
 
 
@@ -16,7 +17,8 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
     CommonModule,
     ThemeModule,
     MaterialModule,
-    NgxJsonViewerModule
+    NgxJsonViewerModule,
+    TableModule,
   ]
 })
 export class CargaLayoutModule { }

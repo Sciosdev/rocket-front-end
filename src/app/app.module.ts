@@ -20,7 +20,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import { RoleProvider } from './auth/role.provider';
-import { PrettyPrintJsonPipe } from './pipes/pretty-print-json.pipe';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 
@@ -48,7 +47,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
           baseEndpoint: 'https://18.221.76.172:8443',
           login: {
             // ...
-            endpoint: '/jwtdemo-1/userp',
+            endpoint: '/rocket-back-end/auth/login',
             method: 'POST',
             defaultMessages: ['Sesión iniciada satisfactoriamente'],
             defaultErrors: [

@@ -5,6 +5,7 @@ import { NbSidebarModule, NbLayoutModule, NbButtonModule, NbCardModule, NbProgre
 import { HomeComponent } from './home.component';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../material/material.module';
+import {ButtonModule} from 'primeng/button';
 
 
 
@@ -23,7 +24,8 @@ import { MaterialModule } from '../../material/material.module';
     NbCardModule,
     FormsModule,
     MaterialModule,
-    NbSpinnerModule
+    NbSpinnerModule,
+    ButtonModule
   ]
 })
 export class HomeModule { }

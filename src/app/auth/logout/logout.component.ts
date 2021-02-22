@@ -6,7 +6,7 @@ import {
   NbTokenService,
 } from '@nebular/auth';
 import { Router } from '@angular/router';
-import { UsuarioService } from '../../pages/services/usuario.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 /**
  * Clase para el cierre de sesión definido en @nebular/auth

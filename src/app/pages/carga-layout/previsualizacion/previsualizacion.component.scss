@@ -1,0 +1,6 @@
+:host ::ng-deep {    
+    .p-datatable table {
+        table-layout: inherit !important;
+        white-space: nowrap
+    }
+}
