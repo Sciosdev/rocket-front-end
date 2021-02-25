@@ -33,6 +33,7 @@
   </ng-template>
 </p-table>
 <hr class="my-4">
-<button nbButton (click)="processExcel()" type="button" [disabled] = "procesado" status="info">Procesar</button>
-<hr class="my-4">
-<button nbButton nbStepperNext type="button" [disabled] = "!procesado" status="success">Continuar</button>
+<button nbButton (click)="register()" type="button" [disabled] = "procesado" status="info">Continuar</button>
+
+<ngx-loading-x [show]="load">
+</ngx-loading-x>

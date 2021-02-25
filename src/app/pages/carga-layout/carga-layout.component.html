@@ -7,13 +7,12 @@
         </nb-step>
   
         <nb-step label="Previsualización">
-        <app-previsualizacion [archivoCargado] = "archivoCargado"></app-previsualizacion>
+        <app-previsualizacion [archivoCargado] = "archivoCargado" (resultado)=setResultado($event)></app-previsualizacion>
         </nb-step>
   
         <nb-step label="Procesamiento">
-         
+         <app-show-result [resultado] = "resultado"></app-show-result>
         </nb-step>
-  
         <nb-step [hidden]="true">
          
         </nb-step>

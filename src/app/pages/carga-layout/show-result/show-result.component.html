@@ -1,0 +1,16 @@
+<table *ngIf="resultado">
+    <tbody>
+        <tr>
+            <td>Total Exitoso</td>
+            <td>{{resultado.registrosExitosos}}</td>
+        </tr>
+        <tr>
+            <td>Total Error</td>
+            <td>{{resultado.registrosFallidos}}</td>
+        </tr>
+        <tr>
+            <td>Total Omitido</td>
+            <td>{{resultado.registrosOmitidos}}</td>
+        </tr>
+    </tbody>
+</table>

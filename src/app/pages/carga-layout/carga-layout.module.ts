@@ -8,17 +8,20 @@ import { PrevisualizacionComponent } from './previsualizacion/previsualizacion.c
 import { PrettyPrintJsonPipe } from 'src/app/pipes/pretty-print-json.pipe';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import {TableModule} from 'primeng/table';
+import { NgxLoadingXModule } from 'ngx-loading-x';
+import { ShowResultComponent } from './show-result/show-result.component';
 
 
 
 @NgModule({
-  declarations: [CargaLayoutComponent, CargaArchivoComponent, PrevisualizacionComponent, PrettyPrintJsonPipe],
+  declarations: [CargaLayoutComponent, CargaArchivoComponent, PrevisualizacionComponent, PrettyPrintJsonPipe, ShowResultComponent],
   imports: [
     CommonModule,
     ThemeModule,
     MaterialModule,
     NgxJsonViewerModule,
     TableModule,
+    NgxLoadingXModule
   ]
 })
 export class CargaLayoutModule { }
