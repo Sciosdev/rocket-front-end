@@ -6,7 +6,13 @@
 }
 
 :host ::ng-deep .header {
-    background-color: #000000 !important;
+    background-color: #a710ffa6 !important;
     color: rgb(255, 255, 255) !important;
-    font-weight: bold;
 }
+
+.centered {
+   // position: fixed;
+    margin: auto;
+    /* bring your own prefixes */
+    //transform: translate(-50%, -50%);
+  }

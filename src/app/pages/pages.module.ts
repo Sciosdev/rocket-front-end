@@ -17,6 +17,7 @@ import {
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ThemeModule } from '../theme/theme.module';
 import { CargaLayoutModule } from './carga-layout/carga-layout.module';
+import { NgxLoadingXModule } from 'ngx-loading-x';
 
 @NgModule({
   declarations: [PagesComponent],
@@ -33,7 +34,8 @@ import { CargaLayoutModule } from './carga-layout/carga-layout.module';
     NbEvaIconsModule,
     NbIconModule,
     ThemeModule,
-    NbCardModule
+    NbCardModule,
+    NgxLoadingXModule
 ],
   providers: []
 })

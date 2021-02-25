@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbLayoutModule, NbSidebarModule, NbMenuModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 import { ThemeModule } from './theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +13,7 @@ import {
   NbAuthModule,
   NbPasswordAuthStrategy,
   NbAuthJWTToken,
+  NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
 } from '@nebular/auth';
 import { AuthGuard } from './auth.guard';
 
@@ -20,15 +21,30 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import { RoleProvider } from './auth/role.provider';
-import { PrettyPrintJsonPipe } from './pipes/pretty-print-json.pipe';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { NgxLoadingXConfig, NgxLoadingXModule, POSITION, SPINNER } from 'ngx-loading-x';
+import { NbAuthJWTInterceptor } from './services/interceptors/NbAuthJWTInterceptot';
 
+const ngxLoadingXConfig: NgxLoadingXConfig = {
+  show: false,
+  bgBlur: 2,
+  bgColor: 'rgba(40, 40, 40, 0.5)',
+  bgOpacity: 5,
+  bgLogoUrl: '',
+  bgLogoUrlPosition: POSITION.topLeft,
+  bgLogoUrlSize: 100,
+  spinnerType: SPINNER.wanderingCubes,
+  spinnerSize: 120,
+  spinnerColor: '#ff7010',
+  spinnerPosition: POSITION.centerCenter,
+}
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    NgxLoadingXModule.forRoot(ngxLoadingXConfig),
     NgxJsonViewerModule,
     HttpClientModule,
     BrowserModule,
@@ -48,7 +64,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
           baseEndpoint: 'https://18.221.76.172:8443',
           login: {
             // ...
-            endpoint: '/jwtdemo-1/userp',
+            endpoint: '/rocket-back-end/auth/login',
             method: 'POST',
             defaultMessages: ['Sesión iniciada satisfactoriamente'],
             defaultErrors: [
@@ -125,7 +141,19 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
   ],
   providers: [ThemeModule.forRoot().providers,
     AuthGuard,
-    {provide: NbRoleProvider, useClass: RoleProvider}
+    {provide: NbRoleProvider, useClass: RoleProvider},
+    { provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true},
+    {
+      provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
+      useValue: function (req: HttpRequest<any>) {
+        console.log(req.url);
+        if (req.url === 'https://18.221.76.172:8443/rocket-back-end/auth/login') {
+
+          return true;
+        }
+        return false;
+      },
+    },
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

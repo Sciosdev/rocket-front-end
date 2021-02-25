@@ -13,9 +13,13 @@ export class CargaLayoutComponent implements OnInit {
   }
 
   archivoCargado:any;
+  resultado: any;
 
   setArchivoCargado($event) {
     this.archivoCargado = $event;
   }
 
+  setResultado($event) {
+    this.resultado = $event;
+  }
 }

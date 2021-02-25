@@ -1,0 +1,25 @@
+<h2>Resultados de la carga</h2>
+<nb-alert outline="success" *ngIf="resultado">
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Concepto</th>
+            <th scope="col">Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total Exitoso</td>
+            <td>{{resultado.registrosExitosos}}</td>
+          </tr>
+          <tr>
+            <td>Total Error</td>
+            <td>{{resultado.registrosFallidos}}</td>
+          </tr>
+          <tr>
+            <td>Total Omitido</td>
+                <td>{{resultado.registrosOmitidos}}</td>
+          </tr>
+        </tbody>
+      </table>
+</nb-alert>

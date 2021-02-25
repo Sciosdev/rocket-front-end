@@ -4,6 +4,16 @@ export const layout_map = {
         "type": "order",
         "required": ""
     },
+    "OrderKey": {
+        "column_id": "order_key",
+        "type": "order",
+        "required": ""
+    },
+    "IdVendor": {
+        "column_id": "id_vendor",
+        "type": "order",
+        "required": ""
+    },
     "Name": {
         "column_id": "name",
         "type": "order",
@@ -76,7 +86,7 @@ export const layout_map = {
     },
     "Shipping Method": {
         "column_id": "shipping_method",
-        "type": "extra",
+        "type": "order",
         "required": ""
     },
     "Created at": {
@@ -256,7 +266,7 @@ export const layout_map = {
     },
     "Vendor": {
         "column_id": "vendor",
-        "type": "extra",
+        "type": "order",
         "required": ""
     },
     "Tags": {
@@ -266,12 +276,12 @@ export const layout_map = {
     },
     "Risk Level": {
         "column_id": "risk_level",
-        "type": "extra",
+        "type": "order",
         "required": ""
     },
     "Source": {
         "column_id": "source",
-        "type": "extra",
+        "type": "order",
         "required": ""
     },
     "Lineitem discount": {
