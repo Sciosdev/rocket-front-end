@@ -1,10 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { layout_map } from 'src/app/schemas/layout.schema';
 import * as Excel from 'exceljs/dist/exceljs.min.js';
 import { NbStepperComponent } from '@nebular/theme';
 import { RegistroService } from 'src/app/services/registro.service';
-import { map, tap } from 'rxjs/operators';
-import { NbAuthService, NbAuthToken } from '@nebular/auth';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 
@@ -29,8 +27,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   headerExcel: any[];
   procesado: boolean;
   constructor(private stepper: NbStepperComponent,
-    private registrorService: RegistroService,
-    private authService: NbAuthService) { }
+    private registrorService: RegistroService) { }
 
   ngOnInit(): void {
     this.procesado = false;
@@ -48,6 +45,9 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
     this.excelToJson();
   }
 
+  reiniciar() {
+    this.procesado = false;
+  }
 
   public excelToJson() {
     this.flag = false;
@@ -73,7 +73,6 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
     fileReader.onloadend = (e) => {
 
       this.flag = true;
-      console.log(this.jsontext);
 
       let rowNumber = 1;
       this.jsontext.forEach(json => {
@@ -89,37 +88,27 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
 
         for (var key in json) {
 
-          console.log(key);
-
           var type = map[key].type;
           var id = map[key].column_id;
-
           var value;
 
-          if(id === "created_at" || id === "paid_at" || id === "fulfilled_at" || id === "cancelled_at")
-          {
-            console.log(new Date(json[key]).getTime());
+          if (id === "created_at" || id === "paid_at" || id === "fulfilled_at" || id === "cancelled_at")
             value = new Date(json[key]).getTime();
-          } 
           else
-          value = json[key];
-
+            value = json[key];
           registro[type][id] = value;
-
         }
-
         registro["rowNumber"] = rowNumber;
         rowNumber++;
         result.push(registro);
       });
 
-      let peticion = {registro_id : result}
+      let peticion = { registro_id: result }
       this.registerTest(JSON.stringify(peticion));
     }
   }
 
   public registerTest(data) {
-    console.log(JSON.stringify(data));
     this.load = true;
     this.procesado = true;
     this.registrorService.registrarCarga(data).subscribe(
@@ -133,14 +122,13 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
       (error) => {
         console.error('An error occurred: ', error);
         this.load = false;
-        Swal.fire('Error', 'Ocurrio un error inesperado', 'error')
+        Swal.fire('Error', 'El archivo no cumple con el formato, por favor revise que contenga toda la información e intente nuevamente', 'error')
       });
-
   }
+
   previewData() {
     let resultado: any[] = [];
     let headerEx: any[] = [];
-    const map = layout_map;
     const workbook = new Excel.Workbook();
 
     this.nombreArchivo = this.archivoCargado.name;
