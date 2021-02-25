@@ -45,7 +45,7 @@ export const layout_map = {
         "required": ""
     },
     "Accepts Marketing": {
-        "column_id": "accepts_marketing",
+        "column_id": "acepts_marketing",
         "type": "order",
         "required": ""
     },

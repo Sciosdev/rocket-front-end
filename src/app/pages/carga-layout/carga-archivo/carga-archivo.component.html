@@ -1,20 +1,14 @@
 <form #firstForm="ngForm" class="step-container">
-  <div class="jumbotron">
-    <h1 class="display-4">Instrucciones</h1>
-    <hr class="my-4">
-    <ol>
-      <li>
-        <p>Selecciona el archivo con el layout dando clic en el botón con el icono 
-          <nb-icon icon="plus-square-outline"></nb-icon>
-          .
-        </p>
-      </li>
-      <li>
-        <p>Una vez cargado, da clic en continuar para pasar a la previsualización del archivo.</p>
-      </li>
-    </ol>
-  </div>
 
+  <nb-alert outline="info">
+
+    <p>1.- Selecciona el archivo con el layout dando clic en el botón con el icono 
+      <nb-icon icon="plus-square-outline"></nb-icon>
+      .</p>
+  
+    <p>2.- Una vez cargado, da clic en continuar para pasar a la previsualización del archivo.</p>
+  
+  </nb-alert>
   <div class="row mt-4">
     <div class="col-lg-3 col-md-12 col-sm-12">
       <mat-form-field style="width: 100%;">

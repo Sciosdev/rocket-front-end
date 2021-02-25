@@ -1,16 +1,11 @@
-<div class="jumbotron">
-  <h1 class="display-4">Instrucciones</h1>
-  <hr class="my-4">
-  <ol>
-    <li>
-      <p>Revisa que los datos correspondan con el archivo cargado.</p>
-    </li>
-    <li>
-      <p>Una vez verificado que la información es la correcta, da clic en continuar para procesar el
-        archivo.</p>
-    </li>
-  </ol>
-</div>
+<nb-alert outline="info">
+
+  <p>1.- Revisa que los datos correspondan con el archivo cargado.</p>
+
+  <p>2.- Una vez verificado que la información es la correcta, da clic en continuar para procesar el
+    archivo.</p>
+
+</nb-alert>
 
 <p-table [value]="prevRows" [columns]="headerExcel"
   [style]="{'overflow-y': 'hidden', 'display': 'block', 'overflow-x': 'auto', 'white-space': 'nowrap', 'width': '100%'}"
@@ -33,7 +28,7 @@
   </ng-template>
 </p-table>
 <hr class="my-4">
-<button nbButton (click)="register()" type="button" [disabled] = "procesado" status="info">Continuar</button>
+<button nbButton (click)="register()" type="button" [disabled]="procesado" status="info">Continuar</button>
 
 <ngx-loading-x [show]="load">
 </ngx-loading-x>

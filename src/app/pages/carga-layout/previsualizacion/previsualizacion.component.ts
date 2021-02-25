@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { layout_map } from 'src/app/schemas/layout.schema';
 import * as Excel from 'exceljs/dist/exceljs.min.js';
 import { NbStepperComponent } from '@nebular/theme';
@@ -46,98 +46,8 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
 
   register() {
     this.excelToJson();
-
-    // console.log(await this.processExcel());
-    /* var data = this.processExcel();
-    data.then(result => {
-      var jsonArray = new Array(result.length);
-      var index = 0;
-      result.forEach(data => {
-        jsonArray[index] = data;
-        index++;
-      })
-      console.log(jsonArray);
-
-      this.registerTest( result );
-    }) */
-
-    /*  var jsonArray = new Array(resultado.length);
-     var index = 0;
-     resultado.forEach(data => {
-       jsonArray[index] = data;
-       index++;
-     })
- 
-     let data = { "registro_id" : jsonArray };
-     //let json = `[${resultado}]`
-     console.log(resultado);
-     console.log(data);
-     console.log(JSON.stringify(data));
-     this.registerTest(data); */
   }
 
-  async processExcel() {
-    let resultado: any[] = [];
-    const map = layout_map;
-    const workbook = new Excel.Workbook();
-
-    this.nombreArchivo = this.archivoCargado.name;
-
-    const arryBuffer = new Response(this.archivoCargado).arrayBuffer();
-
-    arryBuffer.then(function (data) {
-      let other;
-
-      (async () => {
-        var promise1 = new Promise(function (resolve, reject) {
-          resolve(workbook.xlsx.load(data)
-            .then(function () {
-              const worksheet = workbook.worksheets[0];
-              worksheet.eachRow(function (row, rowNumber) {
-                let registro: any = {
-                  "row_number": "",
-                  "order": {},
-                  "billing_address": {},
-                  "shipping_address": {},
-                  "payment": {},
-                  "extra": {}
-                };
-
-                row.eachCell(function (cell, colNumber) {
-                  var header = worksheet.getRow(2).getCell(colNumber).value;
-                  var type = map[header].type;
-                  var id = map[header].column_id;
-
-                  if (rowNumber > 2) {
-                    registro[type][id] = cell.value;
-                    registro["row_number"] = rowNumber - 2;
-                  }
-                });
-                if (rowNumber > 2)
-                  resultado.push(registro);
-              });
-              console.log("1: " + resultado);
-              return resultado;
-            }));
-        });
-
-        var thenedPromise = promise1.then(function (value) {
-          other = value;
-          console.log("2: " + value); // this logs "foo"
-        });
-
-        await thenedPromise;
-
-        console.log("3: " + other);
-
-        return other;
-      })();
-      return other;
-    }).then((e) => {
-      console.log("4: " + e);
-    });
-
-  }
 
   public excelToJson() {
     this.flag = false;
@@ -151,7 +61,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
       var arr = new Array();
       for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
       var bstr = arr.join("");
-      var workbook = XLSX.read(bstr, { type: "binary" });
+      var workbook = XLSX.read(bstr, { type: "binary", cellDates: true });
       var first_sheet_name = workbook.SheetNames[0];
       var worksheet = workbook.Sheets[first_sheet_name];
 
@@ -184,7 +94,17 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
           var type = map[key].type;
           var id = map[key].column_id;
 
-          registro[type][id] = json[key];
+          var value;
+
+          if(id === "created_at" || id === "paid_at" || id === "fulfilled_at" || id === "cancelled_at")
+          {
+            console.log(new Date(json[key]).getTime());
+            value = new Date(json[key]).getTime();
+          } 
+          else
+          value = json[key];
+
+          registro[type][id] = value;
 
         }
 

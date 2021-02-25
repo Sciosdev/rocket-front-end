@@ -10,11 +10,8 @@
         <app-previsualizacion [archivoCargado] = "archivoCargado" (resultado)=setResultado($event)></app-previsualizacion>
         </nb-step>
   
-        <nb-step label="Procesamiento">
+        <nb-step label="Resultado">
          <app-show-result [resultado] = "resultado"></app-show-result>
-        </nb-step>
-        <nb-step [hidden]="true">
-         
         </nb-step>
       </nb-stepper>
     </nb-card-body>

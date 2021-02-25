@@ -1,6 +1,6 @@
 
 <div class="background">
-    <div class="rastreo">
+    <!-- <div class="rastreo">
         <form>
             <mat-form-field >
                 <mat-label>Localiza tu envío</mat-label>
@@ -8,5 +8,28 @@
                 <button matButton matSuffix type="button" class="p-button-raised p-button-rounded">Buscar</button>
             </mat-form-field>
             </form>
+    </div> -->
+    <div class="step-container">
+    <div class="row mt-4">
+        <div class="col-lg-3 col-md-12 col-sm-12">
+            <form>
+          <mat-form-field style="width: 100%;">
+            <mat-label>Localiza tu envío</mat-label>
+            
+            <input matInput name="label-archivo" type="search" placeholder="Código de rastreo"/>
+    
+            <!--   <button matSuffix nbButton matRipple status=info (click)="finput2.click()">
+              Seleccionar Archivo
+            </button> -->
+          </mat-form-field>
+          </form>
+        </div>
+    
+        <div class="col-md-12 col-lg-9 col-sm-12">
+          <button nbButton matRipple status=info >
+           Buscar
+          </button>
+        </div>
+      </div>
     </div>
 </div>
