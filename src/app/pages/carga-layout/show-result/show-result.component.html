@@ -1,25 +1,35 @@
 <h2>Resultados de la carga</h2>
 <nb-alert outline="success" *ngIf="resultado">
-    <table class="table">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Concepto</th>
-            <th scope="col">Valor</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Total Exitoso</td>
-            <td>{{resultado.registrosExitosos}}</td>
-          </tr>
-          <tr>
-            <td>Total Error</td>
-            <td>{{resultado.registrosFallidos}}</td>
-          </tr>
-          <tr>
-            <td>Total Omitido</td>
-                <td>{{resultado.registrosOmitidos}}</td>
-          </tr>
-        </tbody>
-      </table>
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Concepto</th>
+        <th scope="col">Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Total Exitoso</td>
+        <td>{{resultado.registrosExitosos}}</td>
+      </tr>
+      <tr>
+        <td>Total Error</td>
+        <td>{{resultado.registrosFallidos}}</td>
+      </tr>
+      <tr>
+        <td>Total Omitido</td>
+        <td>{{resultado.registrosOmitidos}}</td>
+      </tr>
+    </tbody>
+  </table>
+</nb-alert>
+
+<nb-alert outline="danger" *ngIf="errores">
+  <span *ngFor="let error of errores">
+    <b>Error en la fila [{{error.rowNumber}}] </b>:
+    Los siguientes campos son requeridos:
+    <ul>
+      <li *ngFor="let column of error.errors">{{column}}</li>
+    </ul>
+  </span>
 </nb-alert>

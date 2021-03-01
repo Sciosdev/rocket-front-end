@@ -5,6 +5,7 @@ import { NbStepperComponent } from '@nebular/theme';
 import { RegistroService } from 'src/app/services/registro.service';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 
 @Component({
   selector: 'app-previsualizacion',
@@ -17,9 +18,12 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   public flag = false;
   public arrayBuffer;
   public jsontext: any[];
+  public erroresArr: any[] = [];
+  public user;
 
   @Input() archivoCargado: any;
   @Output() resultado: any = new EventEmitter<any>();;
+  @Output() errores: any = new EventEmitter<any[]>();
 
   nombreArchivo: string;
   resultJson: any;
@@ -27,17 +31,26 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   headerExcel: any[];
   procesado: boolean;
   constructor(private stepper: NbStepperComponent,
-    private registrorService: RegistroService) { }
+    private registrorService: RegistroService,
+    private authService: NbAuthService) { }
 
   ngOnInit(): void {
     this.procesado = false;
+    this.authService.onTokenChange()
+      .subscribe((token: NbAuthJWTToken) => {
+
+        if (token.isValid()) {
+          this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+
+        }
+
+      });
   }
 
   ngOnChanges(): void {
     if (!this.archivoCargado) {
       return;
     }
-    console.log(this.archivoCargado);
     this.previewData();
   }
 
@@ -73,8 +86,9 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
     fileReader.onloadend = (e) => {
 
       this.flag = true;
-
+      let errors: any[] = [];
       let rowNumber = 1;
+
       this.jsontext.forEach(json => {
 
         let registro: any = {
@@ -86,26 +100,66 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
           "extra": {}
         };
 
-        for (var key in json) {
+        let response = this.validateRequired(json);
 
-          var type = map[key].type;
-          var id = map[key].column_id;
-          var value;
+        if (response.error) {
+          errors.push({ rowNumber: rowNumber, errors: response.columns });
+          rowNumber++;
+        } else {
+          for (var key in json) {
+            try {
 
-          if (id === "created_at" || id === "paid_at" || id === "fulfilled_at" || id === "cancelled_at")
-            value = new Date(json[key]).getTime();
-          else
-            value = json[key];
-          registro[type][id] = value;
+              if (Object.keys(layout_map).includes(key)) {
+
+                var type = map[key].type;
+                var id = map[key].column_id;
+                var value;
+
+                if (id === "created_at" || id === "paid_at" || id === "fulfilled_at" || id === "cancelled_at")
+                  value = new Date(json[key]).getTime();
+                else
+                  value = json[key];
+                registro[type][id] = value;
+              }
+
+            } catch (e) {
+              console.error(e);
+            }
+          }
+          registro["rowNumber"] = rowNumber;
+          rowNumber++;
+
+          result.push(registro);
         }
-        registro["rowNumber"] = rowNumber;
-        rowNumber++;
-        result.push(registro);
+
       });
 
-      let peticion = { registro_id: result }
+      this.errores.emit(errors);
+      let peticion = { registro_id: result, loggedUser: this.user.usuario }
       this.registerTest(JSON.stringify(peticion));
     }
+  }
+
+  private validateRequired(json) {
+    let reqArray = [];
+    let leftColumns = [];
+    let hasErrors = false;
+
+    Object.keys(layout_map).forEach(key => {
+      if (layout_map[key].required && !layout_map[key].nullable)
+        reqArray.push(key);
+    });
+
+    reqArray.forEach(key => {
+      if (!Object.keys(json).includes(key)) {
+        leftColumns.push(key);
+        hasErrors = true;
+      }
+    });
+
+
+    return { error: hasErrors, columns: leftColumns };
+
   }
 
   public registerTest(data) {
@@ -114,13 +168,11 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
     this.registrorService.registrarCarga(data).subscribe(
 
       (ret) => {
-        console.log('Test API OK: ', ret);
         this.load = false;
         this.stepper.next();
         this.resultado.emit(ret);
       },
       (error) => {
-        console.error('An error occurred: ', error);
         this.load = false;
         Swal.fire('Error', 'El archivo no cumple con el formato, por favor revise que contenga toda la información e intente nuevamente', 'error')
       });
