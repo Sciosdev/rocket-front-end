@@ -7,7 +7,8 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 })
 export class ShowResultComponent implements OnInit, OnChanges {
 
-  @Input() resultado: any; 
+  @Input() resultado: any;
+  @Input() errores: any[];
 
   constructor() { }
 
@@ -15,8 +16,10 @@ export class ShowResultComponent implements OnInit, OnChanges {
   }
   
   ngOnChanges(): void {
-    if (!this.resultado) {
+    if (!this.resultado && !this.errores) {
       return;
+    } else {
+      this.resultado.registrosFallidos += this.errores.length;
     }
   }
 }
