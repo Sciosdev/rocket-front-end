@@ -16,7 +16,7 @@ export class RegistroService {
 
   registrarCarga(data:any) {
   
-    const url = this.URL_SERVICIOS + '/rocket-back-end/registrar';
+    const url = this.URL_SERVICIOS + '/rocket-back-end-qa/registrar';
     return this.http.post(url,data,this.getOptions());
   }
 

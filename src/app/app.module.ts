@@ -64,7 +64,7 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
           baseEndpoint: 'https://18.221.76.172:8443',
           login: {
             // ...
-            endpoint: '/rocket-back-end/auth/login',
+            endpoint: '/rocket-back-end-qa/auth/login',
             method: 'POST',
             defaultMessages: ['Sesión iniciada satisfactoriamente'],
             defaultErrors: [
@@ -147,7 +147,7 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
       provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
       useValue: function (req: HttpRequest<any>) {
         console.log(req.url);
-        if (req.url === 'https://18.221.76.172:8443/rocket-back-end/auth/login') {
+        if (req.url === 'https://18.221.76.172:8443/rocket-back-end-qa/auth/login') {
 
           return true;
         }
