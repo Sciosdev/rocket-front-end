@@ -9,22 +9,22 @@
     </thead>
     <tbody>
       <tr>
-        <td>Total Exitoso</td>
+        <td>Registros almacenados en base</td>
         <td>{{resultado.registrosExitosos}}</td>
       </tr>
       <tr>
-        <td>Total Error</td>
+        <td>Registros con error</td>
         <td>{{resultado.registrosFallidos}}</td>
       </tr>
       <tr>
-        <td>Total Omitido</td>
-        <td>{{resultado.registrosOmitidos}}</td>
+        <td>Registros omitidos</td>
+        <td>{{resultado.registrosOmitidos + errores.length}}</td>
       </tr>
     </tbody>
   </table>
 </nb-alert>
 
-<nb-alert outline="danger" *ngIf="errores">
+<nb-alert outline="danger" *ngIf="errores && false">
   <span *ngFor="let error of errores">
     <b>Error en la fila [{{error.rowNumber}}] </b>:
     Los siguientes campos son requeridos:
