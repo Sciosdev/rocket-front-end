@@ -16,10 +16,8 @@ export class ShowResultComponent implements OnInit, OnChanges {
   }
   
   ngOnChanges(): void {
-    if (!this.resultado && !this.errores) {
+    if (this.resultado != null  && this.errores != null) {
       return;
-    } else {
-      this.resultado.registrosFallidos += this.errores.length;
     }
   }
 }

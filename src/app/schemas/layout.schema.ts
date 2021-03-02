@@ -6,10 +6,10 @@ export const layout_map = {
         "nullable": false
     },
     "OrderKey": {
-        "column_id": "order_key",
+        "column_id": "orderKey",
         "type": "order",
         "required": true,
-        "nullable": true
+        "nullable": false
     },
     "IdVendor": {
         "column_id": "id_vendor",
