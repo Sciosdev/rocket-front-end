@@ -36,6 +36,7 @@ import {
   NbThemeModule,
   NbIconModule,
   NbBadgeModule,
+  
 } from '@nebular/theme';
 import { MaterialModule } from '../material/material.module';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
@@ -51,6 +52,10 @@ import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
 import { MATERIAL_LIGHT_THEME } from './styles/material/theme.material-light';
 import { MATERIAL_DARK_THEME } from './styles/material/theme.material-dark';
+import { MATERIAL_DARK_BLUE_THEME } from './styles/material/theme.material-dark-blue';
+import { FooterComponent } from './footer/footer.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NbSecurityModule } from '@nebular/security';
 
 
 /**
@@ -88,7 +93,8 @@ const NB_MODULES = [
   NbTooltipModule,
   NbEvaIconsModule,
   NbIconModule,
-  NbBadgeModule
+  NbBadgeModule,
+  NbSecurityModule
 ];
 
 /**
@@ -98,7 +104,7 @@ const NB_THEME_PROVIDERS = [
   ...NbThemeModule.forRoot(
     {
       name: 'material-light',
-    }, [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME, MATERIAL_LIGHT_THEME, MATERIAL_DARK_THEME ]
+    }, [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME, MATERIAL_LIGHT_THEME, MATERIAL_DARK_THEME, MATERIAL_DARK_BLUE_THEME ]
   ).providers,
   ...NbSidebarModule.forRoot().providers,
   ...NbMenuModule.forRoot().providers,
@@ -108,9 +114,9 @@ const NB_THEME_PROVIDERS = [
 ];
 
 @NgModule({
-  declarations: [HeaderComponent],
-  imports: [MatRippleModule, ...BASE_MODULES, ...NB_MODULES],
-  exports: [MatRippleModule, ...BASE_MODULES, ...NB_MODULES, HeaderComponent],
+  declarations: [HeaderComponent, FooterComponent],
+  imports: [MatRippleModule, ...BASE_MODULES, ...NB_MODULES, FontAwesomeModule],
+  exports: [MatRippleModule, ...BASE_MODULES, ...NB_MODULES, HeaderComponent, FooterComponent],
 })
 
 

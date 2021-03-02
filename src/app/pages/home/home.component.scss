@@ -5,3 +5,95 @@
     margin-top: 1rem;
   }
 }
+
+.parent {
+  position: relative;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  border: 1px purple solid;
+  align-items: baseline;
+
+}
+.image1 {
+  position: relative;
+  top: 0;
+  left: 0;
+  border: 1px red solid;
+}
+.image2 {
+  position: absolute;
+ 
+  left: 25%;
+  border: 1px green solid;
+}
+.image3 {
+  position: absolute;
+ 
+  left: 60%;
+  border: 1px blue solid;
+}
+
+
+.background {
+  background-image: url("../../../assets/images/fondo.png");
+  height: 100%;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: relative;
+}
+
+
+.rastreo {
+
+  width: 100%;
+  height: 150px;
+  position: relative;
+  float: right;
+}
+
+.form-inline [fullWidth] {
+  flex: 1;
+}
+
+.form-inline > * {
+  margin: 0 1.5rem 1.5rem 0;
+}
+
+nb-card.inline-form-card nb-card-body {
+  padding-bottom: 0;
+}
+
+
+nb-card-body {
+  overflow: visible;
+  padding-top: 0;
+
+  > * {
+    margin-top: 1rem;
+  }
+}
+
+.full-name-inputs,
+.validation-checkboxes {
+  display: flex;
+  margin: 0 -0.5rem;
+
+  > * {
+    margin: 0 0.5rem;
+  }
+}
+
+.checkbox-radio {
+  display: flex;
+}
+
+.demo-items {
+  flex: 1 0 33%;
+}
+
+@media screen and (max-width:1200px){
+  .background { width: 1000px; /* fixed width under 700px */ }
+}

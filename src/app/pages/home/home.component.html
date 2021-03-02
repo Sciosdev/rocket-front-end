@@ -1,30 +1,22 @@
-<nb-card>
-    <nb-card-header>Progress Bar Status</nb-card-header>
-    <nb-card-body>
-      <nb-progress-bar [value]="20" status="primary">primary</nb-progress-bar>
-      <nb-progress-bar [value]="40" status="info">info</nb-progress-bar>
-      <nb-progress-bar [value]="60" status="success">success</nb-progress-bar>
-      <nb-progress-bar [value]="80" status="warning">warning</nb-progress-bar>
-      <nb-progress-bar [value]="100" status="danger">danger</nb-progress-bar>
-    </nb-card-body>
-  </nb-card>
-  
-  <nb-card>
-    <nb-card-header>Progress Bar Size</nb-card-header>
-    <nb-card-body>
-      <nb-progress-bar [value]="20" size="tiny">tiny</nb-progress-bar>
-      <nb-progress-bar [value]="40" size="small">small</nb-progress-bar>
-      <nb-progress-bar [value]="60" size="medium">medium (default)</nb-progress-bar>
-      <nb-progress-bar [value]="80" size="large">large</nb-progress-bar>
-      <nb-progress-bar [value]="100" size="giant">giant</nb-progress-bar>
-    </nb-card-body>
-  </nb-card>
-  
-  <nb-card>
-    <nb-card-header>Progress Bar Value</nb-card-header>
-    <nb-card-body>
-      <nb-progress-bar [value]="40" status="primary" [displayValue]="true"></nb-progress-bar>
-      <nb-progress-bar [value]="60" status="primary">Custom text</nb-progress-bar>
-    </nb-card-body>
-  </nb-card>
-  
+
+<div class="background">
+    <div class="step-container">
+    <div class="row mt-4">
+        <div class="col-lg-3 col-md-12 col-sm-12">
+            <form>
+          <mat-form-field style="width: 100%;">
+            <mat-label>Localiza tu envío</mat-label>
+            <input matInput name="label-archivo" type="search" placeholder="Código de rastreo"/>
+          </mat-form-field>
+          </form>
+        </div>
+    
+        <div class="col-md-12 col-lg-9 col-sm-12">
+          <button mat-raised-button color="accent" matRipple>
+            <nb-icon icon="search-outline"></nb-icon>
+           Buscar
+          </button>
+        </div>
+      </div>
+    </div>
+</div>

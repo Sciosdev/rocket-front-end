@@ -11,6 +11,7 @@
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
 @import '~bootstrap/scss/grid';
+@import "~bootstrap/scss/bootstrap";
 
 @import './material/angular-material';
 
@@ -20,6 +21,7 @@
 @import './layout';
 @import './overrides';
 @import './material/material-overrides';
+@import '~@nebular/auth/styles/globals';
 
 // install the framework and custom global styles
 @include nb-install() {
@@ -29,10 +31,15 @@
   // framework global styles
   @include nb-theme-global();
 
+  //framework auth styles
+  @include nb-auth-global();
+
   @include ngx-layout();
   // loading progress bar
   @include ngx-pace-theme();
 
   @include nb-overrides();
   @include material-overrides();
+
+  
 };

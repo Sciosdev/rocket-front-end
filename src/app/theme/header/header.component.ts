@@ -4,6 +4,8 @@ import { Subject, Observable } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
 import { RippleService } from 'src/app/core/utils/ripple.service';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +15,8 @@ import { RippleService } from 'src/app/core/utils/ripple.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   public readonly materialTheme$: Observable<boolean>;
 
+  user;
+
   themes = [
     {
       value: 'material-light',
@@ -21,22 +25,43 @@ export class HeaderComponent implements OnInit, OnDestroy {
     {
       value: 'material-dark',
       name: 'Oscuro',
+    },
+    {
+      value: 'material-dark-blue',
+      name: 'Azul Oscuro',
     }
   ];
 
   currentTheme = 'default';
+
+  userMenu = [
+   
+    { title: 'Cerrar sesión', link: '/auth/logout' },
+  ];
 
   constructor(
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private rippleService: RippleService,
+    private authService: NbAuthService,
+    private router: Router
   ) {
     this.materialTheme$ = this.themeService.onThemeChange()
       .pipe(map(theme => {
         const themeName: string = theme?.name || '';
         return themeName.startsWith('material');
       }));
+
+      this.authService.onTokenChange()
+      .subscribe((token: NbAuthJWTToken) => {
+
+        if (token.isValid()) {
+          this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+
+        }
+
+      });
    }
   private destroy$: Subject<void> = new Subject<void>();
   ngOnInit() {
@@ -60,6 +85,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  goToLogin() {
+    this.router.navigateByUrl("/auth/login");
+  }
   /**
    * Redirecciona a home
    */

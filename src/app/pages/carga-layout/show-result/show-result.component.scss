@@ -1,0 +1,18 @@
+:host ::ng-deep {    
+    .p-datatable table {
+        table-layout: inherit !important;
+        white-space: nowrap
+    }
+}
+
+:host ::ng-deep .header {
+    background-color: #a710ffa6 !important;
+    color: rgb(255, 255, 255) !important;
+}
+
+.centered {
+   // position: fixed;
+    margin: auto;
+    /* bring your own prefixes */
+    //transform: translate(-50%, -50%);
+  }

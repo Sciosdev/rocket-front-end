@@ -1,5 +1,5 @@
 @mixin material-overrides() {
-  @include nb-for-themes(material-dark, material-light) {
+  @include nb-for-themes(material-dark, material-dark-blue, material-light) {
     nb-layout-header {
       nb-actions, .logo-container {
         nb-icon, .user-name {
