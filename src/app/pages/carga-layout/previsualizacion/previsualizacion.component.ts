@@ -100,7 +100,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
           "extra": {}
         };
 
-        let response = this.validateRequired(json);
+        let response = this.validateRequiredAnNullable(json);
 
         if (response.error) {
           errors.push({ rowNumber: rowNumber, errors: response.columns });
@@ -140,7 +140,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
     }
   }
 
-  private validateRequired(json) {
+  private validateRequiredAnNullable(json) {
     let reqArray = [];
     let leftColumns = [];
     let hasErrors = false;
