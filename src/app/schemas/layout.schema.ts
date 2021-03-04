@@ -5,18 +5,6 @@ export const layout_map = {
         "required": true,
         "nullable": false
     },
-    "OrderKey": {
-        "column_id": "orderKey",
-        "type": "order",
-        "required": true,
-        "nullable": false
-    },
-    "IdVendor": {
-        "column_id": "id_vendor",
-        "type": "order",
-        "required": true,
-        "nullable": true
-    },
     "Name": {
         "column_id": "name",
         "type": "order",
