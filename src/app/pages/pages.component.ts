@@ -43,9 +43,14 @@ export class PagesComponent implements OnInit {
   }
 
   authMenuItem(menuItem: NbMenuItem) {
+    menuItem.hidden = true;
     if (menuItem.data && menuItem.data['permission'] && menuItem.data['resource']) {
-      this.accessChecker.isGranted(menuItem.data['permission'], menuItem.data['resource']).subscribe(granted => {
-        menuItem.hidden = !granted;
+
+      menuItem.data['resource'].forEach(element => {   
+        this.accessChecker.isGranted(menuItem.data['permission'], element).subscribe(granted => {
+          if(granted)
+            menuItem.hidden = false;
+        });
       });
     } else {
       menuItem.hidden = true;
@@ -53,6 +58,8 @@ export class PagesComponent implements OnInit {
     if (!menuItem.hidden && menuItem.children != null) {
       menuItem.children.forEach(item => {
         if (item.data && item.data['permission'] && item.data['resource']) {
+
+
           this.accessChecker.isGranted(item.data['permission'], item.data['resource']).subscribe(granted => {
             item.hidden = !granted;
           });
