@@ -24,6 +24,7 @@ import { RoleProvider } from './auth/role.provider';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { NgxLoadingXConfig, NgxLoadingXModule, POSITION, SPINNER } from 'ngx-loading-x';
 import { NbAuthJWTInterceptor } from './services/interceptors/NbAuthJWTInterceptot';
+import { environment } from 'src/environments/environment';
 
 const ngxLoadingXConfig: NgxLoadingXConfig = {
   show: false,
@@ -61,10 +62,10 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
-          baseEndpoint: 'https://18.221.76.172:8443',
+          baseEndpoint: environment.endpoint,
           login: {
             // ...
-            endpoint: '/rocket-back-end/auth/login',
+            endpoint: '/auth/login',
             method: 'POST',
             defaultMessages: ['Sesión iniciada satisfactoriamente'],
             defaultErrors: [
@@ -72,7 +73,7 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
             ],
             redirect: {
               failure: '/auth/login',
-              success: '/pages/home',
+              success: '/intranet/inicio',
             },
           },
           register: {
@@ -92,7 +93,7 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
             requireValidToken: true,
 
             redirect: {
-              failure: '/pages',
+              failure: '/intranet',
               success: '/auth/login',
             },
           },
@@ -117,21 +118,22 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
       accessControl: {
         guest: {
           menu: ['guest'],
-          view: ['home'],
+          view: ['guest'],
         },
         messenger: {
           parent: 'guest',
-          menu: ['user'],
+          menu: ['messenger'],
+          view: ['messenger'],
         },
         customer: {
           parent: 'guest',
-          menu: ['user'],
-          view: ['layout'],
+          menu: ['customer'],
+          view: ['customer'],
         },
         admin: {
           parent: 'guest',
           menu: ['admin'],
-          view: ['layout'],
+          view: ['admin'],
         },
         full: {
           parent: 'admin',
@@ -147,7 +149,7 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
       provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
       useValue: function (req: HttpRequest<any>) {
         console.log(req.url);
-        if (req.url === 'https://18.221.76.172:8443/rocket-back-end/auth/login') {
+        if (req.url === environment.endpoint + '/auth/login') {
 
           return true;
         }

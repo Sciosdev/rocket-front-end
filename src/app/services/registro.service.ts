@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NbTokenService, NbAuthService, NbAuthToken } from '@nebular/auth';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { NbTokenService, NbAuthService, NbAuthToken } from '@nebular/auth';
 
 export class RegistroService {
 
-  URL_SERVICIOS = "https://18.221.76.172:8443";
+  URL_SERVICIOS = environment.endpoint;
 
   constructor(public http: HttpClient,
               public tokenService: NbTokenService,
@@ -16,7 +17,7 @@ export class RegistroService {
 
   registrarCarga(data:any) {
   
-    const url = this.URL_SERVICIOS + '/rocket-back-end/registrar';
+    const url = this.URL_SERVICIOS + '/registrar';
     return this.http.post(url,data,this.getOptions());
   }
 
