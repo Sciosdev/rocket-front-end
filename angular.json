@@ -90,6 +90,9 @@
           "configurations": {
             "production": {
               "browserTarget": "rocket-front-end:build:production"
+            },
+            "qa": {
+              "browserTarget": "rocket-front-end:build:qa"
             }
           }
         },
