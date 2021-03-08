@@ -124,16 +124,19 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
           parent: 'guest',
           menu: ['messenger'],
           view: ['messenger'],
+          filtro: ['messenger']
         },
         customer: {
           parent: 'guest',
           menu: ['customer'],
           view: ['customer'],
+          filtro: ['customer']
         },
         admin: {
           parent: 'guest',
           menu: ['admin'],
           view: ['admin'],
+          filtro: ['admin']
         },
         full: {
           parent: 'admin',
@@ -148,7 +151,7 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
     {
       provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
       useValue: function (req: HttpRequest<any>) {
-        console.log(req.url);
+        //console.log(req.url);
         if (req.url === environment.endpoint + '/auth/login') {
 
           return true;

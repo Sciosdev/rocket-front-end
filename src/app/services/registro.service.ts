@@ -12,21 +12,29 @@ export class RegistroService {
   URL_SERVICIOS = environment.endpoint;
 
   constructor(public http: HttpClient,
-              public tokenService: NbTokenService,
-              public authService: NbAuthService) { }
+    public tokenService: NbTokenService,
+    public authService: NbAuthService) { }
 
-  registrarCarga(data:any) {
-  
-    const url = this.URL_SERVICIOS + '/registrar';
-    return this.http.post(url,data,this.getOptions());
+  registrarCarga(data: any) {
+
+    const url = this.URL_SERVICIOS + '/registro';
+    return this.http.post(url, data, this.getOptions());
   }
 
-  private getOptions(){
-     
+  obtenerRegistros(user: any) {
+
+    const url = this.URL_SERVICIOS + '/registro/' + user;
+    return this.http.get(url, this.getOptions());
+
+  }
+
+  private getOptions() {
+
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
-    'Accepts': 'application/json'},);
-     let options = { headers: headers };
+      'Accepts': 'application/json'
+    });
+    let options = { headers: headers };
     return options;
-      }
+  }
 }

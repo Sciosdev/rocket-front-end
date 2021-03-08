@@ -19,6 +19,7 @@ import { ThemeModule } from '../theme/theme.module';
 import { CargaLayoutModule } from './carga-layout/carga-layout.module';
 import { NgxLoadingXModule } from 'ngx-loading-x';
 import { ConsultaInformacionModule } from './consulta-informacion/consulta-informacion.module';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [PagesComponent],
@@ -37,7 +38,8 @@ import { ConsultaInformacionModule } from './consulta-informacion/consulta-infor
     ThemeModule,
     NbCardModule,
     NgxLoadingXModule,
-    ConsultaInformacionModule
+    ConsultaInformacionModule,
+    NgxSpinnerModule
 ],
   providers: []
 })

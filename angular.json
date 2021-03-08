@@ -32,7 +32,7 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/app/theme/styles/styles.scss",
-              "./node_modules/primeng/resources/themes/md-light-indigo/theme.css",
+              "./node_modules/primeng/resources/themes/saga-orange/theme.css",
               "./node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": []
@@ -79,6 +79,14 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ]
             }
           }
         },
@@ -93,6 +101,9 @@
             },
             "qa": {
               "browserTarget": "rocket-front-end:build:qa"
+            },
+            "local": {
+              "browserTarget": "rocket-front-end:build:local"
             }
           }
         },
@@ -116,7 +127,7 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss",
-              "./node_modules/primeng/resources/themes/md-light-indigo/theme.css",
+              "./node_modules/primeng/resources/themes/saga-orange/theme.css",
               "./node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": []
