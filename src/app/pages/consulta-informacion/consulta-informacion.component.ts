@@ -9,7 +9,12 @@ export class ConsultaInformacionComponent implements OnInit {
 
   constructor() { }
 
+  registros: any[];
+
   ngOnInit(): void {
   }
-
+  setRegistros($event) {
+    this.registros = $event;
+  }
+  
 }
