@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { NbStepperComponent } from '@nebular/theme';
 
 @Component({
   selector: 'app-show-result',

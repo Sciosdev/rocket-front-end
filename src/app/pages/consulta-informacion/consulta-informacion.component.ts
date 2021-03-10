@@ -10,11 +10,15 @@ export class ConsultaInformacionComponent implements OnInit {
   constructor() { }
 
   registros: any[];
+  loading: boolean;
 
   ngOnInit(): void {
   }
   setRegistros($event) {
     this.registros = $event;
+  }
+  setLoading($event) {
+    this.loading = $event;
   }
   
 }

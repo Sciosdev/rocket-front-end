@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,6 +26,9 @@ import { NgxLoadingXConfig, NgxLoadingXModule, POSITION, SPINNER } from 'ngx-loa
 import { NbAuthJWTInterceptor } from './services/interceptors/NbAuthJWTInterceptot';
 import { environment } from 'src/environments/environment';
 
+import es from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+
 const ngxLoadingXConfig: NgxLoadingXConfig = {
   show: false,
   bgBlur: 2,
@@ -39,6 +42,8 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
   spinnerColor: '#ff7010',
   spinnerPosition: POSITION.centerCenter,
 }
+
+registerLocaleData(es);
 
 @NgModule({
   declarations: [
@@ -159,6 +164,7 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
         return false;
       },
     },
+    { provide: LOCALE_ID, useValue: 'es-MX' }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
