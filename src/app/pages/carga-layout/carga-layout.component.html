@@ -1,19 +1,23 @@
 <nb-card>
-    <nb-card-body style="padding: 50px;">
-      <nb-stepper #stepper disableStepNavigation>
-  
-        <nb-step label="Carga de archivo" >
-         <app-carga-archivo (archivoCargado) = setArchivoCargado($event)></app-carga-archivo>
-        </nb-step>
-  
-        <nb-step label="Previsualización">
-        <app-previsualizacion [archivoCargado] = "archivoCargado" (resultado)=setResultado($event) (errores)="setErrores($event)"></app-previsualizacion>
-        </nb-step>
-  
-        <nb-step label="Resultado">
-         <app-show-result [resultado] = "resultado" [errores]="errores"></app-show-result>
-        </nb-step>
-      </nb-stepper>
-    </nb-card-body>
-  </nb-card>
-  
+  <nb-card-body style="padding: 50px;">
+    <nb-stepper #stepper disableStepNavigation>
+
+      <nb-step label="Carga de archivo">
+        <app-carga-archivo (archivoCargado)=setArchivoCargado($event)></app-carga-archivo>
+      </nb-step>
+
+      <nb-step label="Previsualización">
+        <app-previsualizacion [archivoCargado]="archivoCargado" (resultado)=setResultado($event)
+          (errores)="setErrores($event)"></app-previsualizacion>
+      </nb-step>
+
+      <nb-step label="Resultado">
+        <app-show-result [resultado]="resultado" [errores]="errores"></app-show-result>
+        <button mat-raised-button color="primary" (click)="stepper.reset()" type="button" [ngStyle]="{'float':'right'}">
+          <nb-icon icon="arrow-circle-right-outline"></nb-icon>
+          Finalizar
+        </button>
+      </nb-step>
+    </nb-stepper>
+  </nb-card-body>
+</nb-card>

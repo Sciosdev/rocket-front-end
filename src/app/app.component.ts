@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Subject } from 'rxjs';
-import { SessionServiceService } from './services/session-service.service';
 
 @Component({
   selector: 'app-root',
@@ -13,22 +12,15 @@ export class AppComponent {
 
   private destroyed$ = new Subject();
 
-  constructor(private sessionServiceService:SessionServiceService){
+  constructor(){
 
   }
 
 ngOnInit() {
-    this
-        .sessionServiceService
-        .sessionWarningTimer$
-        .subscribe(() => this.displaySessionWarning());
 }
 
 ngOnDestroy() {
     this.destroyed$.next();
 }
 
-displaySessionWarning() {
-    alert("Sesion expirada");
-}
 }

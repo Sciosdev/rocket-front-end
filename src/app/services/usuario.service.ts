@@ -16,13 +16,13 @@ export class UsuarioService {
 
   obtenerRepartidores() {
 
-    const url = this.URL_SERVICIOS + '/consulta/repartidor';
+    const url = this.URL_SERVICIOS + '/repartidor';
     return this.http.get(url, this.getOptions());
 
   }
   obtenerVendedores() {
 
-    const url = this.URL_SERVICIOS + '/consulta/vendedor';
+    const url = this.URL_SERVICIOS + '/vendedor';
     return this.http.get(url, this.getOptions());
 
   }

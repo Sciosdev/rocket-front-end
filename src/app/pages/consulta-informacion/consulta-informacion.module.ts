@@ -6,6 +6,8 @@ import { MaterialModule } from 'src/app/material/material.module';
 import { ThemeModule } from 'src/app/theme/theme.module';
 import { ResultadoConsultaComponent } from './resultado-consulta/resultado-consulta.component';
 import {TableModule} from 'primeng/table';
+import { NbDatepickerModule } from '@nebular/theme';
+import { NgxLoadingXModule } from 'ngx-loading-x';
 
 
 
@@ -15,7 +17,9 @@ import {TableModule} from 'primeng/table';
     CommonModule,
     MaterialModule,
     ThemeModule,
-    TableModule
+    TableModule,
+    NbDatepickerModule.forRoot(),
+    NgxLoadingXModule
   ]
 })
 export class ConsultaInformacionModule { }
