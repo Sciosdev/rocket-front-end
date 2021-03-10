@@ -135,7 +135,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
       });
 
       this.errores.emit(errors);
-      let peticion = { registro: result, loggedUser: this.user.usuario }
+      let peticion = { registro: result, idVendor: this.user.usuario }
       this.registerTest(JSON.stringify(peticion));
     }
   }

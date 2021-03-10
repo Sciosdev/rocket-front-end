@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { NbAccessChecker } from '@nebular/security';
+import { NbCalendarRange, NbDateService } from '@nebular/theme';
+import { EstatusService } from 'src/app/services/estatus.service';
+import { RegistroService } from 'src/app/services/registro.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-filtro',
@@ -7,9 +13,102 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FiltroComponent implements OnInit {
 
-  constructor() { }
+  @Output() registros: any = new EventEmitter<any[]>();
+  @Output() loading: any = new EventEmitter<boolean>();
 
-  ngOnInit(): void {
+  users_combo: any[] = [];
+  range: NbCalendarRange<Date>;
+  checked: boolean = false;
+  estatus: any[] = [];
+  selectedEstatus:any;
+
+  constructor(public accessChecker: NbAccessChecker,
+    private authService: NbAuthService,
+    private registroService: RegistroService,
+    private usuarioService: UsuarioService,
+    private estatusService: EstatusService,
+    protected dateService: NbDateService<Date>) {
+    this.range = {
+      start: this.dateService.addDay(this.monthStart, 1),
+      end: this.dateService.addDay(this.monthEnd, -1),
+    };
   }
 
+  get monthStart(): Date {
+    return this.dateService.getMonthStart(new Date());
+  }
+
+  get monthEnd(): Date {
+    return this.dateService.getMonthEnd(new Date());
+  }
+
+  ngOnInit(): void {
+
+    this.estatusService.obtenerEstatus().subscribe(
+      (resp: any[]) => {
+        this.estatus = resp;
+      }
+    );
+
+    this.usuarioService.obtenerRepartidores().subscribe(
+      (resp: any[]) => {
+        resp.forEach(element => {
+          this.users_combo.push(element);
+        })
+      }
+    );
+    this.usuarioService.obtenerVendedores().subscribe(
+      (resp: any[]) => {
+        resp.forEach(element => {
+          this.users_combo.push(element);
+        })
+      }
+    );
+
+    this.authService.onTokenChange()
+      .subscribe((token: NbAuthJWTToken) => {
+
+        if (token.isValid()) {
+          let user = token.getPayload();
+          this.loggedUser = user.usuario;
+        }
+
+      });
+  }
+
+  loggedUser: any;
+
+  hasAccess(permission, resources: any[]) {
+    let access = false;
+    resources.forEach(element => {
+      this.accessChecker.isGranted(permission, element).subscribe(granted => {
+        if (granted)
+          access = true;
+      });
+    });
+
+    return access;
+  }
+
+  obtenerRegistros() {
+    this.loading.emit(true);
+    if(this.checked){
+      this.registroService.obtenerRegistrosPorFecha(this.loggedUser, this.range.start, this.range.end, this.selectedEstatus).subscribe(
+        response => {
+          this.registros.emit(response);
+          this.loading.emit(false);
+
+        }
+      );
+    }else {
+      this.registroService.obtenerRegistros(this.loggedUser, this.selectedEstatus).subscribe(
+        response => {
+          this.registros.emit(response);
+          this.loading.emit(false);
+
+        }
+      )
+    }
+
+  }
 }

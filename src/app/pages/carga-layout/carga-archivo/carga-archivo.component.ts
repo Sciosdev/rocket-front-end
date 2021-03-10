@@ -1,5 +1,4 @@
-import { analyzeAndValidateNgModules } from '@angular/compiler';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output,  } from '@angular/core';
 
 
 @Component({
@@ -50,7 +49,10 @@ export class CargaArchivoComponent implements OnInit {
   ngOnInit() {
     this.hasHeader = false;
     this.fileLoaded = false;
+    console.log("OnInit");
   }
+
+
 
   setHasHeader(hasHeader: boolean) {
     this.hasHeader = hasHeader;

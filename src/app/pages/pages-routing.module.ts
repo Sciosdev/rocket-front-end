@@ -20,7 +20,7 @@ const routes: Routes = [{
       path: 'carga-layout',
       component: CargaLayoutComponent,
       data: {
-        resource: ['admin'],
+        resource: ['messenger', 'customer'],
       },
       canActivate: [AuthGuard],
     },
@@ -29,7 +29,7 @@ const routes: Routes = [{
       component: ConsultaInformacionComponent,
       canActivate: [AuthGuard],
       data: {
-        resource: ['messenger', 'customer', 'admin'],
+        resource: ['messenger', 'customer','admin'],
       },
     },
     {
