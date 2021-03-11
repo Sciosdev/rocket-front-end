@@ -28,6 +28,8 @@ import { environment } from 'src/environments/environment';
 
 import es from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
+import { getLatamPaginatorIntl } from './paginator/mx-paginator.intl';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 
 const ngxLoadingXConfig: NgxLoadingXConfig = {
   show: false,
@@ -164,7 +166,8 @@ registerLocaleData(es);
         return false;
       },
     },
-    { provide: LOCALE_ID, useValue: 'es-MX' }
+    { provide: LOCALE_ID, useValue: 'es-MX' },
+    { provide: MatPaginatorIntl, useValue: getLatamPaginatorIntl() }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

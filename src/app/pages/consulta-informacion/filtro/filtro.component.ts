@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { NbAccessChecker } from '@nebular/security';
 import { NbCalendarRange, NbDateService } from '@nebular/theme';
@@ -22,6 +23,10 @@ export class FiltroComponent implements OnInit {
   estatus: any[] = [];
   selectedEstatus:any;
 
+  selectFormControl = new FormControl('', Validators.required);
+  usuarioFormControl = new FormControl('', Validators.required);
+  adminFormControl = new FormControl('', Validators.required);
+  
   constructor(public accessChecker: NbAccessChecker,
     private authService: NbAuthService,
     private registroService: RegistroService,
@@ -44,6 +49,7 @@ export class FiltroComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.usuarioFormControl.disable();
     this.estatusService.obtenerEstatus().subscribe(
       (resp: any[]) => {
         this.estatus = resp;
@@ -71,6 +77,7 @@ export class FiltroComponent implements OnInit {
         if (token.isValid()) {
           let user = token.getPayload();
           this.loggedUser = user.usuario;
+          this.usuarioFormControl.setValue(user.nombre);
         }
 
       });
@@ -88,6 +95,15 @@ export class FiltroComponent implements OnInit {
     });
 
     return access;
+  }
+
+  validateInput(permission, resources: any[]){
+    if(this.hasAccess(permission, resources)){
+      return this.usuarioFormControl.hasError("required") || this.selectFormControl.hasError("required");
+    } else
+    {
+      return this.adminFormControl.hasError("required") || this.selectFormControl.hasError("required");
+    }
   }
 
   obtenerRegistros() {
