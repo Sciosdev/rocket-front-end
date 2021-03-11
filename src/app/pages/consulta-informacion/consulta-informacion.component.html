@@ -1,12 +1,12 @@
 <nb-alert outline="info">
 <form>
-    <app-filtro class="ml-3 " (registros) = setRegistros($event) (loading) = setLoading($event)></app-filtro>
+    <app-filtro (registros) = setRegistros($event) (loading) = setLoading($event)></app-filtro>
 </form>
 
 </nb-alert>
 
 <nb-alert outline="info" *ngIf="registros!=null"> 
-    <app-resultado-consulta class="ml-3 " [registros] = "registros" ></app-resultado-consulta>
+    <app-resultado-consulta [registros] = "registros" ></app-resultado-consulta>
 </nb-alert>
 
 
