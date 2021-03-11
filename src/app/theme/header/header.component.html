@@ -18,7 +18,7 @@
       matRipple
       [matRippleUnbounded]="true"
       [matRippleCentered]="true">
-      <nb-user [name]="user?.nombre" color="#cccccc" [nbContextMenu]="userMenu" *ngIf="user"></nb-user>
+      <nb-user [name]="user?.fullname" color="#cccccc" [nbContextMenu]="userMenu" *ngIf="user"></nb-user>
       <button  mat-raised-button color="warn"  type="button" (click)="goToLogin()" *ngIf="!user">
         <nb-icon icon="log-in-outline"></nb-icon>
         Iniciar Sesión</button>

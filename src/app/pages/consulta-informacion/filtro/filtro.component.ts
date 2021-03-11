@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
 import { NbAccessChecker } from '@nebular/security';
 import { NbCalendarRange, NbDateService } from '@nebular/theme';
 import { EstatusService } from 'src/app/services/estatus.service';
@@ -72,12 +72,12 @@ export class FiltroComponent implements OnInit {
     );
 
     this.authService.onTokenChange()
-      .subscribe((token: NbAuthJWTToken) => {
+      .subscribe((token: NbAuthOAuth2JWTToken) => {
 
         if (token.isValid()) {
-          let user = token.getPayload();
-          this.loggedUser = user.usuario;
-          this.usuarioFormControl.setValue(user.nombre);
+          let user = token.getAccessTokenPayload();
+          this.loggedUser = user.user_name;
+          this.usuarioFormControl.setValue(user.fullname);
         }
 
       });

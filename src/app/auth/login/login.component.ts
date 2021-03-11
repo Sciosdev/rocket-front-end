@@ -26,7 +26,7 @@ export class LoginComponent extends NbLoginComponent {
     
     /*** Asignamos las variables de usuario y contraseña */
     
-    this.user.user = this.nameFormControl.value;
+    this.user.email = this.nameFormControl.value;
     this.user.password = this.passwordFormControl.value;
 
     const _this = this;
