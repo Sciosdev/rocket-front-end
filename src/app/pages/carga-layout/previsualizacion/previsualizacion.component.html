@@ -7,7 +7,7 @@
     archivo.</p>
 
 </nb-alert>
-<nb-alert outline="success" *ngIf="resultado" [ngStyle]="{'background-color':'white'}">
+<div class="mat-elevation-z8">
   <p-table [value]="prevRows" [columns]="headerExcel"
     [style]="{'overflow-y': 'hidden', 'display': 'block', 'overflow-x': 'auto', 'white-space': 'nowrap', 'width': '100%'}"
     scrollHeight="200px" [rowHover]="true" styleClass="p-datatable-striped">
@@ -29,7 +29,7 @@
       </tr>
     </ng-template>
   </p-table>
-</nb-alert>
+</div>
 <hr class="my-4">
 
 <button mat-raised-button color="warn" nbStepperPrevious (click)="reiniciar()" type="button">
