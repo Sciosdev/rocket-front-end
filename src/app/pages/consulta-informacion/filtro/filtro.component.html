@@ -1,6 +1,6 @@
 <div class="d-flex flex-row align-items-center flex-wrap">
   <div class="mr-auto p-2">
-    <mat-form-field appearance="standard" *ngIf="!hasAccess('filtro', ['messenger'])">
+    <mat-form-field appearance="standard" *ngIf="!hasAccess('filtro', ['messenger','customer'])">
       <mat-label>Vendedor / Repartidor</mat-label>
       <mat-select [(value)]="loggedUser" [formControl]="adminFormControl" required>
         <mat-option *ngFor="let user of users_combo" [value]="user.user">
@@ -12,7 +12,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="standard" *ngIf="hasAccess('filtro', ['messenger'])">
+    <mat-form-field appearance="standard" *ngIf="hasAccess('filtro', ['messenger','customer'])">
       <mat-label>Vendedor / Repartidor</mat-label>
       <input matInput [formControl]="usuarioFormControl" required>
       <mat-error *ngIf="usuarioFormControl.hasError('required')">
@@ -46,7 +46,7 @@
  
   </div>
     <div class="ml-auto p-2">
-    <button mat-raised-button color="accent" matRipple (click)="obtenerRegistros()" [disabled]="validateInput('filtro', ['messenger'])">
+    <button mat-raised-button color="accent" matRipple (click)="obtenerRegistros()" [disabled]="validateInput('filtro', ['messenger','customer'])">
       <nb-icon icon="search-outline"></nb-icon>
       Traer Registros
     </button>
