@@ -1,0 +1,9 @@
+<nb-card>
+    <nb-card-body>
+        <p-calendar [(ngModel)]="data" [inline]="true" [showTime]="true" [hourFormat]="'12'"></p-calendar>
+        <div mat-dialog-actions>
+            <button mat-button (click)="cancel()">Cancelar</button>
+            <button mat-button (click)="submit(data)">Aceptar</button>
+        </div>
+    </nb-card-body>
+</nb-card>

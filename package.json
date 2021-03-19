@@ -43,6 +43,7 @@
     "ngx-loading-x": "^1.0.3",
     "ngx-spinner": "^10.0.1",
     "popper.js": "^1.16.1",
+    "primeicons": "^4.1.0",
     "primeng": "^11.2.3",
     "rxjs": "~6.6.0",
     "sweetalert2": "^10.14.0",

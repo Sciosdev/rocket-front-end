@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NbSidebarService, NbMenuService, NbThemeService } from '@nebular/theme';
-import { Subject, Observable } from 'rxjs';
+import { NbSidebarService, NbMenuService, NbThemeService, NbDateService } from '@nebular/theme';
+import { Subject, Observable, timer } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
 import { RippleService } from 'src/app/core/utils/ripple.service';
-import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
 import { Router } from '@angular/router';
 
 @Component({
@@ -35,17 +35,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentTheme = 'default';
 
   userMenu = [
-   
+
     { title: 'Cerrar sesión', link: '/auth/logout' },
   ];
 
+  expDate;
   constructor(
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private rippleService: RippleService,
     private authService: NbAuthService,
-    private router: Router
+    private router: Router,
+    private dateService: NbDateService<Date>
   ) {
     this.materialTheme$ = this.themeService.onThemeChange()
       .pipe(map(theme => {
@@ -53,16 +55,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
         return themeName.startsWith('material');
       }));
 
-      this.authService.onTokenChange()
-      .subscribe((token: NbAuthJWTToken) => {
+    this.authService.onTokenChange()
+      .subscribe((token: NbAuthOAuth2JWTToken) => {
 
         if (token.isValid()) {
-          this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+          this.user = token.getAccessTokenPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+          this.expDate = token.getTokenExpDate();
 
         }
 
       });
-   }
+  }
+ delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
+  public remainingTime() {
+
+    var dif = this.expDate.getTime() - this.dateService.today().getTime();
+
+    var Seconds_from_T1_to_T2 = dif / 1000;
+    var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2); 
+
+
+    
+    return Math.floor(Seconds_Between_Dates);
+    
+  }
+
   private destroy$: Subject<void> = new Subject<void>();
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
@@ -72,8 +92,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         map(({ name }) => name),
         takeUntil(this.destroy$),
       )
-      .subscribe(themeName => {this.currentTheme = themeName;
-        this.rippleService.toggle(themeName?.startsWith('material'));});
+      .subscribe(themeName => {
+        this.currentTheme = themeName;
+        this.rippleService.toggle(themeName?.startsWith('material'));
+      });
   }
 
   /**
