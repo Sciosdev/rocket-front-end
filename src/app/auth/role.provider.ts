@@ -16,7 +16,13 @@ export class RoleProvider implements NbRoleProvider {
     return this.authService.onTokenChange()
       .pipe(
         map((token: NbAuthOAuth2JWTToken) => {
-          console.log(token);
+
+         /*  if (token)
+            if (!token.isValid()) {
+              this.authService.refreshToken('oauth').subscribe((newToken: any) => {
+                token = newToken;
+              });
+            } */
           return token.isValid() ? token.getAccessTokenPayload()['authorities'] : 'guest';
         }),
       );

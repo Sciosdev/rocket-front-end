@@ -74,8 +74,10 @@ registerLocaleData(es);
     NbAuthModule.forRoot({
       strategies: [NbOAuth2AuthStrategy.setup({
         name: 'oauth',
-        clientId: 'foo',
-        clientSecret: 'foosecret',
+        clientId: 'rocketApp',
+        clientSecret: 'mE8_vt2852d_f@B',
+       // clientId: 'foo',
+       // clientSecret: 'foosecret',
         baseEndpoint: environment.endpoint,
         clientAuthMethod: NbOAuth2ClientAuthMethod.BASIC,
 
@@ -90,47 +92,9 @@ registerLocaleData(es);
           endpoint: '/oauth/token',
           grantType: NbOAuth2GrantType.REFRESH_TOKEN,
         },
-      }),
-      NbPasswordAuthStrategy.setup({
-        name: 'email',
-        baseEndpoint: environment.endpoint,
-        login: {
-          // ...
-          endpoint: '/auth/login',
-          method: 'POST',
-          defaultMessages: ['Sesión iniciada satisfactoriamente'],
-          defaultErrors: [
-            'Combinación usuario/constraseña incorrecta, por favor intenta nuevamente.',
-          ],
-          redirect: {
-            failure: '/auth/login',
-            success: '/intranet/inicio',
-          },
-        },
-        register: {
-          // ...
-          endpoint: '/api/auth/new',
-          method: 'POST',
-          defaultMessages: ['Usuario registrado satisfactoriamente'],
-          // defaultErrors: [
-          //   'Combinación usuario/constraseña incorrecta, por favor intenta nuevamente.',
-          // ],
-          redirect: {
-            failure: '/auth/register',
-            success: '/auth/login',
-          },
-        },
-        logout: {
-          requireValidToken: true,
-
-          redirect: {
-            failure: '/intranet',
-            success: '/auth/login',
-          },
-        },
-        token: {
-          class: NbAuthJWTToken,
-          key: 'token',
+        redirect: {
+          success: '/intranet/inicio',
+          failure: '/auth/login'
         },
       }),
       ],
