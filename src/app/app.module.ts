@@ -11,9 +11,11 @@ import { ThemeModule } from './theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   NbAuthModule,
-  NbPasswordAuthStrategy,
-  NbAuthJWTToken,
   NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
+  NbOAuth2AuthStrategy,
+  NbOAuth2GrantType,
+  NbOAuth2ClientAuthMethod,
+  NbAuthOAuth2JWTToken,
 } from '@nebular/auth';
 import { AuthGuard } from './auth.guard';
 
@@ -66,58 +68,39 @@ registerLocaleData(es);
     ThemeModule,
     NgbModule,
     NbAuthModule.forRoot({
-      strategies: [
-        NbPasswordAuthStrategy.setup({
-          name: 'email',
-          baseEndpoint: environment.endpoint,
-          login: {
-            // ...
-            endpoint: '/auth/login',
-            method: 'POST',
-            defaultMessages: ['Sesión iniciada satisfactoriamente'],
-            defaultErrors: [
-              'Combinación usuario/constraseña incorrecta, por favor intenta nuevamente.',
-            ],
-            redirect: {
-              failure: '/auth/login',
-              success: '/intranet/inicio',
-            },
-          },
-          register: {
-            // ...
-            endpoint: '/api/auth/new',
-            method: 'POST',
-            defaultMessages: ['Usuario registrado satisfactoriamente'],
-            // defaultErrors: [
-            //   'Combinación usuario/constraseña incorrecta, por favor intenta nuevamente.',
-            // ],
-            redirect: {
-              failure: '/auth/register',
-              success: '/auth/login',
-            },
-          },
-          logout: {
-            requireValidToken: true,
-
-            redirect: {
-              failure: '/intranet',
-              success: '/auth/login',
-            },
-          },
-          token: {
-            class: NbAuthJWTToken,
-            key: 'token',
-          },
-        }),
+      strategies: [NbOAuth2AuthStrategy.setup({
+        name: 'oauth',
+        clientId: environment.clientId,
+        clientSecret: environment.clientSecret,
+        baseEndpoint: environment.endpoint,
+        clientAuthMethod: NbOAuth2ClientAuthMethod.BASIC,
+        token: {
+          endpoint: '/oauth/token',
+          class: NbAuthOAuth2JWTToken,
+          grantType: NbOAuth2GrantType.PASSWORD
+        },
+        refresh: {
+          endpoint: '/oauth/token',
+          grantType: NbOAuth2GrantType.REFRESH_TOKEN,
+        },
+        redirect: {
+          success: '/intranet/inicio',
+          failure: '/auth/login'
+        },
+      }),
       ],
       forms: {
+        login: {
+          strategy: 'oauth'
+        },
         logout: {
-          redirectDelay: 500,
-          strategy: 'email',
+          redirectDelay: 200,
+          strategy: 'oauth',
         },
         register: {
           redirectDelay: 500,
         },
+
       },
     }),
     FontAwesomeModule,
@@ -148,26 +131,27 @@ registerLocaleData(es);
         full: {
           parent: 'admin',
         },
-    }}),
-  
+      }
+    }),
+
   ],
   providers: [ThemeModule.forRoot().providers,
     AuthGuard,
-    {provide: NbRoleProvider, useClass: RoleProvider},
-    { provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true},
-    {
-      provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
-      useValue: function (req: HttpRequest<any>) {
-        //console.log(req.url);
-        if (req.url === environment.endpoint + '/auth/login') {
+  { provide: NbRoleProvider, useClass: RoleProvider },
+  { provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true },
+  {
+    provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
+    useValue: function (req: HttpRequest<any>) {
+      //console.log(req.url);
+      if (req.url === environment.endpoint + '/auth/login' || req.url === environment.endpoint + '/oauth/token' || req.url === environment.endpoint + '/oauth/suthorize') {
 
-          return true;
-        }
-        return false;
-      },
+        return true;
+      }
+      return false;
     },
-    { provide: LOCALE_ID, useValue: 'es-MX' },
-    { provide: MatPaginatorIntl, useValue: getLatamPaginatorIntl() }
+  },
+  { provide: LOCALE_ID, useValue: 'es-MX' },
+  { provide: MatPaginatorIntl, useValue: getLatamPaginatorIntl() }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

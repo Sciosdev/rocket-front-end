@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  endpoint: "http://localhost:8080/rocket-1",
+  endpoint: "http://localhost:8080/rocket-1.1.0-SNAPSHOT",
+  clientId: "foo",
+  clientSecret: "foosecret" 
+
 };
 
 /*

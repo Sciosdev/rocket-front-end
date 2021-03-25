@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Estatus } from 'src/app/models/estatus.model';
+import { RegistroTable } from 'src/app/models/registro.table.model';
 
 @Component({
   selector: 'app-consulta-informacion',
@@ -7,10 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConsultaInformacionComponent implements OnInit {
 
-  constructor() { }
+  constructor(){ }
 
-  registros: any[];
+  registros:  RegistroTable[];
   loading: boolean;
+  vendor: String;
+  estatus: Estatus;
 
   ngOnInit(): void {
   }
@@ -20,5 +24,10 @@ export class ConsultaInformacionComponent implements OnInit {
   setLoading($event) {
     this.loading = $event;
   }
-  
+  setVendor($event) {
+    this.vendor = $event;
+  }
+  setEstatus($event) {
+    this.estatus = $event;
+  }
 }

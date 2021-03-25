@@ -5,7 +5,7 @@ import { NbStepperComponent } from '@nebular/theme';
 import { RegistroService } from 'src/app/services/registro.service';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
-import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
 
 @Component({
   selector: 'app-previsualizacion',
@@ -37,13 +37,10 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.procesado = false;
     this.authService.onTokenChange()
-      .subscribe((token: NbAuthJWTToken) => {
-
+      .subscribe((token: NbAuthOAuth2JWTToken) => {
         if (token.isValid()) {
-          this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
-
+          this.user = token.getAccessTokenPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
         }
-
       });
   }
 
@@ -135,7 +132,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
       });
 
       this.errores.emit(errors);
-      let peticion = { registro: result, idVendor: this.user.usuario }
+      let peticion = { registro: result, idVendor: this.user.user_name }
       this.registerTest(JSON.stringify(peticion));
     }
   }

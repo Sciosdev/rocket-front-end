@@ -1,32 +1,38 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
 import { NbAccessChecker } from '@nebular/security';
 import { NbCalendarRange, NbDateService } from '@nebular/theme';
+import { Estatus } from 'src/app/models/estatus.model';
+import { RegistroTable } from 'src/app/models/registro.table.model';
 import { EstatusService } from 'src/app/services/estatus.service';
 import { RegistroService } from 'src/app/services/registro.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-filtro',
   templateUrl: './filtro.component.html',
   styleUrls: ['./filtro.component.scss']
 })
-export class FiltroComponent implements OnInit {
+export class FiltroComponent implements OnInit, OnChanges {
 
-  @Output() registros: any = new EventEmitter<any[]>();
+  @Output() registros: any = new EventEmitter<RegistroTable[]>();
   @Output() loading: any = new EventEmitter<boolean>();
+  @Output() vendor: any = new EventEmitter<String>();
+  @Output() sEstatus: any = new EventEmitter<Estatus>();
 
   users_combo: any[] = [];
   range: NbCalendarRange<Date>;
   checked: boolean = false;
   estatus: any[] = [];
-  selectedEstatus:any;
+  selectedEstatus: Estatus;
 
   selectFormControl = new FormControl('', Validators.required);
   usuarioFormControl = new FormControl('', Validators.required);
   adminFormControl = new FormControl('', Validators.required);
-  
+  isAdmin: boolean;
+  access: boolean;
   constructor(public accessChecker: NbAccessChecker,
     private authService: NbAuthService,
     private registroService: RegistroService,
@@ -34,13 +40,33 @@ export class FiltroComponent implements OnInit {
     private estatusService: EstatusService,
     protected dateService: NbDateService<Date>) {
     this.range = {
-      start: this.dateService.addDay(this.monthStart, 1),
-      end: this.dateService.addDay(this.monthEnd, -1),
+      start: this.monthStart,
+      end: this.monthEnd,
     };
+  }
+  ngOnChanges(): void {
+    this.authService.isAuthenticatedOrRefresh().subscribe(
+      authenticated => {
+        if (authenticated) {
+          this.authService.getToken().subscribe(
+            (token: NbAuthOAuth2JWTToken) => {
+              if (token.isValid()) {
+                let user = token.getAccessTokenPayload();
+                this.loggedUser = user.user_name;
+                this.usuarioFormControl.setValue(user.fullname);
+                this.isAdmin = this.hasAccess('filtro',['admin']);
+              }
+            }
+          );
+        }
+      }
+    );
+
+
   }
 
   get monthStart(): Date {
-    return this.dateService.getMonthStart(new Date());
+    return this.dateService.today();
   }
 
   get monthEnd(): Date {
@@ -51,7 +77,7 @@ export class FiltroComponent implements OnInit {
 
     this.usuarioFormControl.disable();
     this.estatusService.obtenerEstatus().subscribe(
-      (resp: any[]) => {
+      (resp: Estatus[]) => {
         this.estatus = resp;
       }
     );
@@ -71,16 +97,25 @@ export class FiltroComponent implements OnInit {
       }
     );
 
-    this.authService.onTokenChange()
-      .subscribe((token: NbAuthJWTToken) => {
 
-        if (token.isValid()) {
-          let user = token.getPayload();
-          this.loggedUser = user.usuario;
-          this.usuarioFormControl.setValue(user.nombre);
+    this.authService.isAuthenticatedOrRefresh().subscribe(
+      authenticated => {
+        if (authenticated) {
+          this.authService.getToken().subscribe(
+            (token: NbAuthOAuth2JWTToken) => {
+              if (token.isValid()) {
+                let user = token.getAccessTokenPayload();
+                this.loggedUser = user.user_name;
+                this.usuarioFormControl.setValue(user.fullname);
+                this.isAdmin = this.hasAccess('filtro',['admin']);
+              }
+            }
+          );
         }
+      }
+    );
 
-      });
+   
   }
 
   loggedUser: any;
@@ -97,28 +132,38 @@ export class FiltroComponent implements OnInit {
     return access;
   }
 
-  validateInput(permission, resources: any[]){
-    if(this.hasAccess(permission, resources)){
+  validateInput() {
+    if (!this.isAdmin) {
       return this.usuarioFormControl.hasError("required") || this.selectFormControl.hasError("required");
-    } else
-    {
+    } else {
       return this.adminFormControl.hasError("required") || this.selectFormControl.hasError("required");
     }
   }
 
   obtenerRegistros() {
     this.loading.emit(true);
-    if(this.checked){
-      this.registroService.obtenerRegistrosPorFecha(this.loggedUser, this.range.start, this.range.end, this.selectedEstatus).subscribe(
-        response => {
-          this.registros.emit(response);
-          this.loading.emit(false);
+    this.vendor.emit(this.loggedUser);
+    this.sEstatus.emit(this.selectedEstatus);
+    if (this.checked) {
 
-        }
-      );
-    }else {
-      this.registroService.obtenerRegistros(this.loggedUser, this.selectedEstatus).subscribe(
-        response => {
+      if (this.range.start == undefined || this.range.end == undefined) {
+        this.loading.emit(false);
+        Swal.fire('Error', 'Por favor asegurese que el rango de fechas es correcto', 'error');
+
+      } else {
+        this.registroService.obtenerRegistrosPorFecha(this.loggedUser, this.range.start, this.range.end, this.selectedEstatus.id).subscribe(
+          (response: RegistroTable[] )=> {
+            this.registros.emit(response);
+            this.loading.emit(false);
+
+          }
+        );
+      }
+
+
+    } else {
+      this.registroService.obtenerRegistros(this.loggedUser, this.selectedEstatus.id).subscribe(
+        (response: RegistroTable[] ) => {
           this.registros.emit(response);
           this.loading.emit(false);
 

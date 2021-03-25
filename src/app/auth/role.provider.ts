@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { NbAuthService, NbAuthJWTToken, NbAuthOAuth2JWTToken } from '@nebular/auth';
 import { NbRoleProvider } from '@nebular/security';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,8 +15,15 @@ export class RoleProvider implements NbRoleProvider {
   getRole(): Observable<string> {
     return this.authService.onTokenChange()
       .pipe(
-        map((token: NbAuthJWTToken) => {
-          return token.isValid() ? token.getPayload()['authorities'] : 'guest';
+        map((token: NbAuthOAuth2JWTToken) => {
+
+         /*  if (token)
+            if (!token.isValid()) {
+              this.authService.refreshToken('oauth').subscribe((newToken: any) => {
+                token = newToken;
+              });
+            } */
+          return token.isValid() ? token.getAccessTokenPayload()['authorities'] : 'guest';
         }),
       );
   }

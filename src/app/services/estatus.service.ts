@@ -19,6 +19,14 @@ export class EstatusService {
 
   }
 
+  obtenerEstatusSiguiente(idEstatus: number) {
+
+    const url = this.URL_SERVICIOS + '/estatus/' + idEstatus + '/siguiente/';
+    const options = { headers: this.getHeaders() };
+    return this.http.get(url, options);
+
+  }
+
 
   private getHeaders() {
 

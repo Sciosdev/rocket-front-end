@@ -11,8 +11,9 @@ import { tap } from 'rxjs/operators';
 export class AuthGuard implements CanActivate {
   constructor(private authService: NbAuthService, private router: Router,private accessChecker: NbAccessChecker) {}
   canActivate(route: ActivatedRouteSnapshot) {
+    //console.log("validando desde el guardian");
       let access = false;
-      return this.authService.isAuthenticated().pipe(
+      return this.authService.isAuthenticatedOrRefresh().pipe(
       tap(authenticated => {
 
         if (!authenticated) {

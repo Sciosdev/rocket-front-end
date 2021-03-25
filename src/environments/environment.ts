@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   endpoint: "https://18.221.76.172:8443/rocket-back-end",
+  clientId: "foo",
+  clientSecret: "foosecret" 
 };
 
 /*

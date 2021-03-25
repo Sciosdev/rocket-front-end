@@ -26,7 +26,7 @@
     white-space: nowrap;
     overflow: hidden;
     vertical-align: middle;
-    
+    border: 1px solid rgb(255, 150, 102);
   }
   
   .mat-row,
@@ -43,4 +43,9 @@
   .mat-header-row{
     background-color: #ff7010 !important;
    
+  }
+
+  .mat-cell:first-of-type {
+    padding: 0px 10px;
+    text-align: center;
   }

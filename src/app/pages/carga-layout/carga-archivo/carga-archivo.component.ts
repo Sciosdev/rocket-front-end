@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output,  } from '@angular/core';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -49,7 +50,7 @@ export class CargaArchivoComponent implements OnInit {
   ngOnInit() {
     this.hasHeader = false;
     this.fileLoaded = false;
-    console.log("OnInit");
+    //console.log("OnInit");
   }
 
 
@@ -64,13 +65,25 @@ export class CargaArchivoComponent implements OnInit {
       this.resultJson = [];
       this.nombreArchivo = 'Ningún archivo seleccionado';
       console.error("no se cargo el archivo")
+      Swal.fire('Error al cargar', 'Ocurrió un error al cargar el archivo', 'error');
       return;
     }
    
     const target: DataTransfer = <DataTransfer>(event.target);
     
     if (target.files.length !== 1) {
+      this.resultJson = [];
+      this.nombreArchivo = 'Ningún archivo seleccionado';
+      Swal.fire('Error al cargar', 'No se puede cargar más de un archivo', 'error');
       throw new Error('Cannot use multiple files');
+    }
+
+    console.log(target.files[0].type);
+    if (target.files[0].type != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
+      this.resultJson = [];
+      this.nombreArchivo = 'Ningún archivo seleccionado';
+      Swal.fire('Error al cargar', 'Por favor seleccione el tipo de archivo correcto (.xlsx)', 'error');
+      return;
     }
 
     this.fileLoaded = true;
