@@ -31,7 +31,8 @@ export class FiltroComponent implements OnInit, OnChanges {
   selectFormControl = new FormControl('', Validators.required);
   usuarioFormControl = new FormControl('', Validators.required);
   adminFormControl = new FormControl('', Validators.required);
-
+  isAdmin: boolean;
+  access: boolean;
   constructor(public accessChecker: NbAccessChecker,
     private authService: NbAuthService,
     private registroService: RegistroService,
@@ -43,8 +44,23 @@ export class FiltroComponent implements OnInit, OnChanges {
       end: this.monthEnd,
     };
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+  ngOnChanges(): void {
+    this.authService.isAuthenticatedOrRefresh().subscribe(
+      authenticated => {
+        if (authenticated) {
+          this.authService.getToken().subscribe(
+            (token: NbAuthOAuth2JWTToken) => {
+              if (token.isValid()) {
+                let user = token.getAccessTokenPayload();
+                this.loggedUser = user.user_name;
+                this.usuarioFormControl.setValue(user.fullname);
+                this.isAdmin = this.hasAccess('filtro',['admin']);
+              }
+            }
+          );
+        }
+      }
+    );
 
 
   }
@@ -91,12 +107,15 @@ export class FiltroComponent implements OnInit, OnChanges {
                 let user = token.getAccessTokenPayload();
                 this.loggedUser = user.user_name;
                 this.usuarioFormControl.setValue(user.fullname);
+                this.isAdmin = this.hasAccess('filtro',['admin']);
               }
             }
           );
         }
       }
     );
+
+   
   }
 
   loggedUser: any;
@@ -113,8 +132,8 @@ export class FiltroComponent implements OnInit, OnChanges {
     return access;
   }
 
-  validateInput(permission, resources: any[]) {
-    if (this.hasAccess(permission, resources)) {
+  validateInput() {
+    if (!this.isAdmin) {
       return this.usuarioFormControl.hasError("required") || this.selectFormControl.hasError("required");
     } else {
       return this.adminFormControl.hasError("required") || this.selectFormControl.hasError("required");

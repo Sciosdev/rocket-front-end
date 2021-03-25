@@ -3,8 +3,10 @@ import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnCha
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
 import { NbAccessChecker } from '@nebular/security';
 import { NbDialogService } from '@nebular/theme';
+import { PrimeNGConfig } from 'primeng/api';
 
 import { Estatus } from 'src/app/models/estatus.model';
 import { Registro } from 'src/app/models/registro.model';
@@ -26,8 +28,8 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   @Input() vendor;
   @Input() sEstatus: Estatus;
 
-  @Output() regis:any = new EventEmitter<RegistroTable[]>();
-  @Output() loading:any = new EventEmitter<boolean>();
+  @Output() regis: any = new EventEmitter<RegistroTable[]>();
+  @Output() loading: any = new EventEmitter<boolean>();
 
   columns;
 
@@ -38,12 +40,17 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   allowMultiSelect = true;
   selection: SelectionModel<any>;
   ToBeScheduled: RegistroTable[] = [];
+
+  loggedUser;
+  isCustomer;
+  access: boolean;
   constructor(public accessChecker: NbAccessChecker,
     private dialogService: NbDialogService,
     private registroService: RegistroService,
-    private estatusService: EstatusService,
+    private authService: NbAuthService,
     protected cd: ChangeDetectorRef,
-    private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar,
+    private primeNGConfig: PrimeNGConfig) {
     this.selection = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);
   }
 
@@ -54,7 +61,21 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   }
 
   ngOnInit(): void {
-    if (this.canRender("filtro", ["customer"]))
+    this.primeNGConfig.setTranslation(
+      {
+        dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+        dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+        dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
+        today: 'Hoy',
+        clear: 'Limpiar',
+      }
+    );
+
+    this.loadAccess();
+    this.loadUser();
+    if (this.canRender())
       this.columns = ['select', 'OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled'];
     else
       this.columns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled'];
@@ -66,7 +87,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.dataSource.paginator = this.paginator;
     this.selection.clear();
     this.ToBeScheduled = [];
-    if (this.canRender("filtro", ["customer"]))
+    if (this.canRender())
       this.columns = ['select', 'OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled'];
     else
       this.columns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled'];
@@ -128,7 +149,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
       scheduleServiceInDto.orderkey = registro.orderkey;
       scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
       scheduleServiceInDto.vendor = this.vendor;
-
+      scheduleServiceInDto.user = this.loggedUser;
       agenda.push(scheduleServiceInDto);
     });
 
@@ -154,21 +175,49 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   hasAccess(permission, resources: any[]) {
     let access = false;
-    resources.forEach(element => {
-      this.accessChecker.isGranted(permission, element).subscribe(granted => {
-        if (granted)
-          access = true;
+    this.authService.isAuthenticatedOrRefresh().subscribe(
+      authenticated => {
+        if (authenticated) {
+          resources.forEach(element => {
+            this.accessChecker.isGranted(permission, element).subscribe(granted => {
+              if (granted)
+                access = true;
+            });
+          });
+        } else {
+          access = false;
+        }
       });
-    });
-
     return access;
+
   }
 
-  canRender(permission, resources: any[]) {
-    if (this.hasAccess(permission, resources)) {
+  loadAccess(){
+    this.access = this.hasAccess('filtro', ['customer']);
+  }
+  
+  canRender() {
+    if (this.access) {
       return this.sEstatus.tipo === "inicial";
     } else {
       return false;
     }
+  }
+
+  loadUser() {
+    this.authService.isAuthenticatedOrRefresh().subscribe(
+      authenticated => {
+        if (authenticated) {
+          this.authService.getToken().subscribe(
+            (token: NbAuthOAuth2JWTToken) => {
+              if (token.isValid()) {
+                let user = token.getAccessTokenPayload();
+                this.loggedUser = user.user_name;
+              }
+            }
+          );
+        }
+      }
+    );
   }
 }

@@ -11,13 +11,9 @@ import { ThemeModule } from './theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   NbAuthModule,
-  NbPasswordAuthStrategy,
-  NbAuthJWTToken,
   NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
   NbOAuth2AuthStrategy,
   NbOAuth2GrantType,
-  NbAuthOAuth2Token,
-  NbOAuth2ResponseType,
   NbOAuth2ClientAuthMethod,
   NbAuthOAuth2JWTToken,
 } from '@nebular/auth';
@@ -74,20 +70,15 @@ registerLocaleData(es);
     NbAuthModule.forRoot({
       strategies: [NbOAuth2AuthStrategy.setup({
         name: 'oauth',
-        clientId: 'rocketApp',
-        clientSecret: 'mE8_vt2852d_f@B',
-       // clientId: 'foo',
-       // clientSecret: 'foosecret',
+        clientId: environment.clientId,
+        clientSecret: environment.clientSecret,
         baseEndpoint: environment.endpoint,
         clientAuthMethod: NbOAuth2ClientAuthMethod.BASIC,
-
         token: {
           endpoint: '/oauth/token',
           class: NbAuthOAuth2JWTToken,
-          grantType: NbOAuth2GrantType.PASSWORD,
-          requireValidToken: true,
+          grantType: NbOAuth2GrantType.PASSWORD
         },
-
         refresh: {
           endpoint: '/oauth/token',
           grantType: NbOAuth2GrantType.REFRESH_TOKEN,
@@ -103,12 +94,13 @@ registerLocaleData(es);
           strategy: 'oauth'
         },
         logout: {
-          redirectDelay: 500,
+          redirectDelay: 5000,
           strategy: 'oauth',
         },
         register: {
           redirectDelay: 500,
         },
+
       },
     }),
     FontAwesomeModule,
@@ -150,7 +142,7 @@ registerLocaleData(es);
   {
     provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
     useValue: function (req: HttpRequest<any>) {
-      console.log(req.url);
+      //console.log(req.url);
       if (req.url === environment.endpoint + '/auth/login' || req.url === environment.endpoint + '/oauth/token' || req.url === environment.endpoint + '/oauth/suthorize') {
 
         return true;

@@ -53,6 +53,9 @@ export class LogoutComponent extends NbLogoutComponent  {
       .pipe(
         delay(this.redirectDelay),
       )
-      .subscribe((result: NbAuthResult) => this.router.navigate(['/intranet/inicio']));
+      .subscribe((result: NbAuthResult) => {
+        console.log(result);
+        this.router.navigate(['/intranet/inicio'])
+      });
   }
 }

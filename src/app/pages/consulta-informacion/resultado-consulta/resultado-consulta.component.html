@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-end" *ngIf="canRender('filtro', ['customer'])" >
+<div class="d-flex justify-content-end" *ngIf="canRender()" >
   <div class="p-2">
     <button mat-raised-button color="accent" matRipple [disabled]="selection.selected.length == 0" (click)="solicitarAgenda()">
       <nb-icon icon="calendar-outline"></nb-icon>
@@ -22,7 +22,7 @@
 <div class="mat-elevation-z8">
   <mat-table [dataSource]="dataSource">
 
-    <ng-container matColumnDef="select" *ngIf="canRender('filtro', ['customer'])">
+    <ng-container matColumnDef="select" *ngIf="canRender()">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
           [indeterminate]="selection.hasValue() && !isAllSelected()">
