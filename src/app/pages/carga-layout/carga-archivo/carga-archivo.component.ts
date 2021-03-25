@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output,  } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges,  } from '@angular/core';
+import { NbStepperComponent } from '@nebular/theme';
 import Swal from 'sweetalert2';
 
 
@@ -7,7 +8,7 @@ import Swal from 'sweetalert2';
   templateUrl: './carga-archivo.component.html',
   styleUrls: ['./carga-archivo.component.scss']
 })
-export class CargaArchivoComponent implements OnInit {
+export class CargaArchivoComponent implements OnInit, OnChanges {
 
   @Output() archivoCargado = new EventEmitter<any>();
 
@@ -19,7 +20,7 @@ export class CargaArchivoComponent implements OnInit {
   /**
    * Bandera que indica si se obtuvo un resultado
    */
-  fileLoaded = false;
+  
 
   hasHeader: boolean;
 
@@ -42,9 +43,23 @@ export class CargaArchivoComponent implements OnInit {
    */
   jsonAsText: string;
 
+  fileLoaded:boolean;
 
-  constructor() {
+  constructor(private stepper: NbStepperComponent) {
 
+  }
+
+  siguiente(){
+    this.nombreArchivo = 'Ningún archivo seleccionado';
+    this.fileLoaded = false;
+    this.stepper.next();
+  }
+
+  ngOnChanges(): void {
+
+    if(!this.fileLoaded){
+      this.nombreArchivo = 'Ningún archivo seleccionado';
+    }
   }
 
   ngOnInit() {

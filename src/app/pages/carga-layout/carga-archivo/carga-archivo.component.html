@@ -35,7 +35,7 @@
     </div>
   </nb-alert>
   <hr class="my-4">
-  <button mat-raised-button color="primary" nbStepperNext type="button" [disabled]="!fileLoaded"
+  <button mat-raised-button color="primary" (click)="siguiente()" type="button" [disabled]="!fileLoaded"
     [ngStyle]="{'float':'right'}">
     Continuar
     <nb-icon icon="arrow-circle-right-outline"></nb-icon>

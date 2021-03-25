@@ -3,7 +3,7 @@
     <nb-stepper #stepper disableStepNavigation>
 
       <nb-step label="Carga de archivo">
-        <app-carga-archivo (archivoCargado)=setArchivoCargado($event)></app-carga-archivo>
+        <app-carga-archivo (archivoCargado)=setArchivoCargado($event) ></app-carga-archivo>
       </nb-step>
 
       <nb-step label="Previsualización">
@@ -12,11 +12,7 @@
       </nb-step>
 
       <nb-step label="Resultado">
-        <app-show-result [resultado]="resultado" [errores]="errores"></app-show-result>
-        <button mat-raised-button color="primary" (click)="stepper.reset()" type="button" [ngStyle]="{'float':'right'}">
-          <nb-icon icon="arrow-circle-right-outline"></nb-icon>
-          Finalizar
-        </button>
+        <app-show-result [resultado]="resultado" [errores]="errores" ></app-show-result>
       </nb-step>
     </nb-stepper>
   </nb-card-body>

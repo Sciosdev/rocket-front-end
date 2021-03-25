@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { layout_map } from 'src/app/schemas/layout.schema';
 import * as Excel from 'exceljs/dist/exceljs.min.js';
-import { NbStepperComponent } from '@nebular/theme';
+import { NbStepperComponent, NbToastrService } from '@nebular/theme';
 import { RegistroService } from 'src/app/services/registro.service';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
@@ -32,7 +32,8 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   procesado: boolean;
   constructor(private stepper: NbStepperComponent,
     private registrorService: RegistroService,
-    private authService: NbAuthService) { }
+    private authService: NbAuthService,
+    private toastrService: NbToastrService) { }
 
   ngOnInit(): void {
     this.procesado = false;
@@ -168,6 +169,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
         this.load = false;
         this.stepper.next();
         this.resultado.emit(ret);
+        this.toastrService.success('Operación finalizada correctamente','Proceso');
       },
       (error) => {
         this.load = false;

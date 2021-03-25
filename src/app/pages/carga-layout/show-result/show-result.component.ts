@@ -11,9 +11,13 @@ export class ShowResultComponent implements OnInit, OnChanges {
   @Input() resultado: any;
   @Input() errores: any[];
 
-  constructor() { }
+  constructor(private stepper: NbStepperComponent) { }
 
   ngOnInit(): void {
+  }
+  
+  finaliza(){
+    this.stepper.reset();
   }
   
   ngOnChanges(): void {

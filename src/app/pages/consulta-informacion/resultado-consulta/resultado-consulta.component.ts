@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
 import { NbAccessChecker } from '@nebular/security';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { PrimeNGConfig } from 'primeng/api';
 
 import { Estatus } from 'src/app/models/estatus.model';
@@ -50,7 +50,8 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     private authService: NbAuthService,
     protected cd: ChangeDetectorRef,
     private _snackBar: MatSnackBar,
-    private primeNGConfig: PrimeNGConfig) {
+    private primeNGConfig: PrimeNGConfig,
+    private toastrService: NbToastrService) {
     this.selection = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);
   }
 
@@ -159,17 +160,14 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
       this.registros = null;
       this.regis.emit(this.registros);
       this.loading.emit(false);
-      this._snackBar.open("Registros actualizados correctamente", "Éxito", {
-        duration: 2000,
-      });
+      this.toastrService.success('Registros actualizados correctamente','Proceso');
+     
     }, error => {
       this.limpiarAgenda();
       this.registros = null;
       this.regis.emit(this.registros);
       this.loading.emit(false);
-      this._snackBar.open("Ocurrio un error", "Error", {
-        duration: 2000,
-      });
+      this.toastrService.danger('Ocurrió un error al actualizar los registros','Proceso');
     })
   }
 
