@@ -4,15 +4,15 @@
 <nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
     <p class="alert-title"><b>Error al iniciar sesión</b></p>
     <ul class="alert-message-list">
-        <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+        <li>Combinación usuario/contraseña incorrecta</li>
     </ul>
 </nb-alert>
 
 <nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="primary" role="alert">
     <p class="alert-title"><b>Éxito</b></p>
     <ul class="alert-message-list">
-        <li *ngFor="let message of messages" class="alert-message">
-            {{ message }}
+        <li>
+            Sesión iniciada correctamente.
         </li>
     </ul>
 </nb-alert>
@@ -35,16 +35,16 @@
                 La contraseña es <strong>REQUERIDA</strong>
             </mat-error>
         </mat-form-field>
-        
+
         <button type="submit" mat-raised-button color="accent" [disabled]="
         passwordFormControl.hasError('required') ||
         nameFormControl.hasError('required')
       ">
-      <mat-icon>exit_to_app</mat-icon>
-      <span>
-        Iniciar sesión
-      </span>
-    </button>
+            <mat-icon>exit_to_app</mat-icon>
+            <span>
+                Iniciar sesión
+            </span>
+        </button>
     </div>
 </form>
 
