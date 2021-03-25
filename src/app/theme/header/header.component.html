@@ -15,7 +15,7 @@
   <nb-actions>
 
     <nb-action class="user-action" matRipple [matRippleUnbounded]="true" [matRippleCentered]="true">
-      <nb-user [name]="user?.fullname" [title]="user?.authorities[0]" color="#cccccc" 
+      <nb-user [name]="user?.fullname" color="#cccccc" 
         [nbContextMenu]="userMenu" *ngIf="user"></nb-user>
       <button mat-raised-button color="warn" type="button" (click)="goToLogin()" *ngIf="!user">
         <nb-icon icon="log-in-outline"></nb-icon>

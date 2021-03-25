@@ -94,7 +94,7 @@ registerLocaleData(es);
           strategy: 'oauth'
         },
         logout: {
-          redirectDelay: 5000,
+          redirectDelay: 200,
           strategy: 'oauth',
         },
         register: {
