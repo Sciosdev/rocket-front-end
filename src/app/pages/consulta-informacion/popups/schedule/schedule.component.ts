@@ -7,23 +7,23 @@ import { NbDialogRef } from '@nebular/theme';
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
-  title: String;
-  data: Date;
+  comentario: String;
+  selectedDate: Date;
+  today : Date;
   constructor(protected ref: NbDialogRef<ScheduleComponent>) { }
 
   ngOnInit(): void {
-    this.data = new Date();
-    this.data.setSeconds(0);
-    this.data.setHours(0);
-    this.data.setMinutes(0);
+    this.selectedDate = new Date();
+    this.selectedDate.setSeconds(0);
 
+    this.today = new Date();
   }
 
   cancel() {
     this.ref.close();
   }
 
-  submit(value: Date) {
+  submit(value: any) {
     this.ref.close(value);
   }
 }
