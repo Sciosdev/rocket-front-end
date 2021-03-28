@@ -10,4 +10,5 @@ export interface RegistroTable {
     descStatus:      string;
     cargaDt:         Date;
     scheduledDt:     Date;
+    comment:         string;
 }
