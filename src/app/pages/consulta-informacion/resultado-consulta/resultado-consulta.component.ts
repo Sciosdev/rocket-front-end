@@ -9,12 +9,9 @@ import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { PrimeNGConfig } from 'primeng/api';
 
 import { Estatus } from 'src/app/models/estatus.model';
-import { Registro } from 'src/app/models/registro.model';
 import { RegistroTable } from 'src/app/models/registro.table.model';
 import { ScheduleServiceInDto } from 'src/app/models/ScheduleServiceInDto.model';
-import { EstatusService } from 'src/app/services/estatus.service';
 import { RegistroService } from 'src/app/services/registro.service';
-import Swal from 'sweetalert2';
 import { ScheduleComponent } from '../popups/schedule/schedule.component';
 
 @Component({
@@ -31,7 +28,8 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   @Output() regis: any = new EventEmitter<RegistroTable[]>();
   @Output() loading: any = new EventEmitter<boolean>();
 
-  columns;
+  columns:any[] = [];
+  defaultColumns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled', 'Comentario'];
 
   displayedColumns: string[];
   dataSource;
@@ -76,10 +74,12 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
     this.loadAccess();
     this.loadUser();
-    if (this.canRender())
-      this.columns = ['select', 'OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled'];
+    this.columns = [];
+    if (this.canRender()) {
+      this.columns.push('select',...this.defaultColumns);
+    }
     else
-      this.columns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled'];
+      this.columns = this.defaultColumns;
     this.displayedColumns = this.columns;
   }
 
@@ -88,10 +88,12 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.dataSource.paginator = this.paginator;
     this.selection.clear();
     this.ToBeScheduled = [];
-    if (this.canRender())
-      this.columns = ['select', 'OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled'];
+    this.columns = [];
+    if (this.canRender()) {
+      this.columns.push('select',...this.defaultColumns);
+    }
     else
-      this.columns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled'];
+      this.columns = this.defaultColumns;
     this.displayedColumns = this.columns;
   }
 
@@ -112,14 +114,12 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   solicitarAgenda() {
     this.dialogService.open(ScheduleComponent, {
       closeOnBackdropClick: false,
-      context: {
-        title: 'Enter template name'
-      },
     })
-      .onClose.subscribe(fecha => {
-        if (fecha != undefined) {
+      .onClose.subscribe((result: any) => {
+        if (result != undefined && result.fecha != null) {
           this.selection.selected.forEach(element => {
-            element.scheduledDt = fecha;
+            element.scheduledDt = result.fecha;
+            element.comment = result.comentario;
 
             if (!this.ToBeScheduled.includes(element)) {
               this.ToBeScheduled.push(element);
@@ -135,6 +135,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   limpiarAgenda() {
     this.ToBeScheduled.forEach(element => {
       element.scheduledDt = null;
+      element.comment = null;
     })
 
     this.ToBeScheduled = [];
@@ -149,6 +150,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
       let scheduleServiceInDto: ScheduleServiceInDto = {};
       scheduleServiceInDto.orderkey = registro.orderkey;
       scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
+      scheduleServiceInDto.comment = registro.comment;
       scheduleServiceInDto.vendor = this.vendor;
       scheduleServiceInDto.user = this.loggedUser;
       agenda.push(scheduleServiceInDto);
@@ -160,14 +162,14 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
       this.registros = null;
       this.regis.emit(this.registros);
       this.loading.emit(false);
-      this.toastrService.success('Registros actualizados correctamente','Proceso');
-     
+      this.toastrService.success('Registros actualizados correctamente', 'Proceso');
+
     }, error => {
       this.limpiarAgenda();
       this.registros = null;
       this.regis.emit(this.registros);
       this.loading.emit(false);
-      this.toastrService.danger('Ocurrió un error al actualizar los registros','Proceso');
+      this.toastrService.danger('Ocurrió un error al actualizar los registros', 'Proceso');
     })
   }
 
@@ -190,10 +192,10 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   }
 
-  loadAccess(){
+  loadAccess() {
     this.access = this.hasAccess('filtro', ['customer']);
   }
-  
+
   canRender() {
     if (this.access) {
       return this.sEstatus.tipo === "inicial";
