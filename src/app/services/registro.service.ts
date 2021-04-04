@@ -64,6 +64,17 @@ export class RegistroService {
     return this.http.put(url, data, options);
   }
 
+  aceptarAgenda(data: ScheduleServiceInDto[]){
+    const url = this.URL_SERVICIOS + '/registro/agenda/aceptar';
+    const options = { headers: this.getHeaders() };
+    return this.http.put(url, data, options);
+  }
+ 
+  rechazarAgenda(data: ScheduleServiceInDto[]){
+    const url = this.URL_SERVICIOS + '/registro/agenda/rechazar';
+    const options = { headers: this.getHeaders() };
+    return this.http.put(url, data, options);
+  }
 
   private getHeaders() {
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
+import { RegistroTable } from 'src/app/models/registro.table.model';
 
 @Component({
   selector: 'app-schedule',
@@ -9,12 +10,20 @@ import { NbDialogRef } from '@nebular/theme';
 export class ScheduleComponent implements OnInit {
   comentario: String;
   selectedDate: Date;
-  today : Date;
+  today: Date;
+  row: RegistroTable;
+  disabled: boolean = false;
   constructor(protected ref: NbDialogRef<ScheduleComponent>) { }
 
   ngOnInit(): void {
-    this.selectedDate = new Date();
-    this.selectedDate.setSeconds(0);
+
+    if (this.row) {
+      this.selectedDate = new Date(Date.parse(this.row.scheduledDt.toString()));
+      this.comentario = this.row.comment;
+    } else {
+      this.selectedDate = new Date();
+      this.selectedDate.setSeconds(0);
+    }
 
     this.today = new Date();
   }

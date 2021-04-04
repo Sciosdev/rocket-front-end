@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-end" *ngIf="canRender()" >
+<div class="d-flex justify-content-end" *ngIf="canRenderCustomer()" >
   <div class="p-2">
     <button mat-raised-button color="accent" matRipple [disabled]="selection.selected.length == 0" (click)="solicitarAgenda()">
       <nb-icon icon="calendar-outline"></nb-icon>
@@ -19,10 +19,25 @@
   </div>
 </div>
 
+<div class="d-flex justify-content-end" *ngIf="canRenderAdmin()" >
+  <div class="p-2">
+    <button mat-raised-button color="accent" matRipple [disabled]="selection.selected.length == 0" (click)="aceptarAgenda()">
+      <nb-icon icon="checkmark-square-2-outline"></nb-icon>
+      Aceptar agenda
+    </button>
+  </div>
+  <div class="p-2">
+    <button mat-raised-button color="primary" matRipple [disabled]="selection.selected.length == 0" (click)="rechazarAgenda()">
+      <nb-icon icon="checkmark-square-2-outline"></nb-icon>
+      Rechazar agenda
+    </button>
+  </div>
+</div>
+
 <div class="mat-elevation-z8">
   <mat-table [dataSource]="dataSource">
 
-    <ng-container matColumnDef="select" *ngIf="canRender()">
+    <ng-container matColumnDef="select" *ngIf="canRenderCustomer() || canRenderAdmin()">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
           [indeterminate]="selection.hasValue() && !isAllSelected()">

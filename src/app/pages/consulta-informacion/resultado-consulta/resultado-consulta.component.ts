@@ -12,6 +12,7 @@ import { Estatus } from 'src/app/models/estatus.model';
 import { RegistroTable } from 'src/app/models/registro.table.model';
 import { ScheduleServiceInDto } from 'src/app/models/ScheduleServiceInDto.model';
 import { RegistroService } from 'src/app/services/registro.service';
+import { AcceptanceComponent } from '../popups/acceptance/acceptance.component';
 import { ScheduleComponent } from '../popups/schedule/schedule.component';
 
 @Component({
@@ -28,20 +29,26 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   @Output() regis: any = new EventEmitter<RegistroTable[]>();
   @Output() loading: any = new EventEmitter<boolean>();
 
-  columns:any[] = [];
+  columns: any[] = [];
   defaultColumns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled', 'Comentario'];
 
   displayedColumns: string[];
-  dataSource;
+  dataSource: MatTableDataSource<RegistroTable>;
 
   initialSelection: RegistroTable[] = [];
   allowMultiSelect = true;
-  selection: SelectionModel<any>;
+  selection: SelectionModel<RegistroTable>;
   ToBeScheduled: RegistroTable[] = [];
 
   loggedUser;
-  isCustomer;
-  access: boolean;
+
+  isCustomer: boolean;
+  isAdmin: boolean;
+
+  scheduleAccepted: RegistroTable[] = [];
+  scheduleRejected: RegistroTable[] = [];
+  scheduleModified: RegistroTable[] = [];
+
   constructor(public accessChecker: NbAccessChecker,
     private dialogService: NbDialogService,
     private registroService: RegistroService,
@@ -75,10 +82,9 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.loadAccess();
     this.loadUser();
     this.columns = [];
-    if (this.canRender()) {
-      this.columns.push('select',...this.defaultColumns);
-    }
-    else
+    if (this.canRenderCustomer() || this.canRenderAdmin()) {
+      this.columns.push('select', ...this.defaultColumns);
+    } else
       this.columns = this.defaultColumns;
     this.displayedColumns = this.columns;
   }
@@ -89,8 +95,8 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.selection.clear();
     this.ToBeScheduled = [];
     this.columns = [];
-    if (this.canRender()) {
-      this.columns.push('select',...this.defaultColumns);
+    if (this.canRenderCustomer() || this.canRenderAdmin()) {
+      this.columns.push('select', ...this.defaultColumns);
     }
     else
       this.columns = this.defaultColumns;
@@ -120,11 +126,122 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
           this.selection.selected.forEach(element => {
             element.scheduledDt = result.fecha;
             element.comment = result.comentario;
-
             if (!this.ToBeScheduled.includes(element)) {
               this.ToBeScheduled.push(element);
             }
+          })
+        }
+        this.selection.clear();
+      });
+  }
 
+  arrayRemove(arr: RegistroTable[], value: RegistroTable) {
+
+    return arr.filter(function (ele) {
+      return ele.orderkey != value.orderkey;
+    });
+  }
+
+
+  aceptarAgenda() {
+
+    this.dialogService.open(AcceptanceComponent, {
+      closeOnBackdropClick: false,
+    })
+      .onClose.subscribe((result: any) => {
+
+        if (result) {
+
+          this.loading.emit(true);
+          this.scheduleAccepted.push(...this.selection.selected);
+
+          this.selection.selected.forEach(ele => {
+            this.registros = this.arrayRemove(this.registros, ele)
+          });
+
+          let data: ScheduleServiceInDto[] = [];
+
+          this.selection.selected.forEach(registro => {
+            let scheduleServiceInDto: ScheduleServiceInDto = {};
+            scheduleServiceInDto.orderkey = registro.orderkey;
+            try {
+              scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
+            } catch (error) {
+              console.error(error);
+              let scheduleDate = new Date(Date.parse(registro.scheduledDt.toString()));
+              scheduleServiceInDto.scheduledDate = scheduleDate.toLocaleDateString() + ' ' + scheduleDate.toLocaleTimeString();
+            }
+            scheduleServiceInDto.comment = registro.comment;
+            scheduleServiceInDto.vendor = this.vendor;
+            scheduleServiceInDto.user = this.loggedUser;
+            data.push(scheduleServiceInDto);
+          });
+
+          this.registroService.aceptarAgenda(data).subscribe(response => {
+            this.loading.emit(false);
+            this.toastrService.success('Se acepto la agenda correctamente', 'Proceso');
+
+          }, error => {
+            this.loading.emit(false);
+            this.toastrService.danger('Ocurrió un error al aceptar la agenda', 'Proceso');
+          })
+
+          this.dataSource = new MatTableDataSource(this.registros);
+          this.dataSource.paginator = this.paginator;
+        }
+
+        this.selection.clear();
+      });
+  }
+
+  rechazarAgenda() {
+
+    let data: ScheduleServiceInDto[] = [];
+
+    this.dialogService.open(ScheduleComponent, {
+      closeOnBackdropClick: false,
+      context: { 'disabled': true }
+    })
+      .onClose.subscribe((result: any) => {
+
+        if (result != null || result != undefined) {
+
+          this.loading.emit(true);
+
+          this.scheduleRejected.push(...this.selection.selected);
+
+          this.selection.selected.forEach(ele => {
+            this.registros = this.arrayRemove(this.registros, ele)
+          });
+
+          this.selection.selected.forEach(registro => {
+
+            let scheduleServiceInDto: ScheduleServiceInDto = {};
+
+            if (result != undefined && result.fecha != null) {
+
+              scheduleServiceInDto.orderkey = registro.orderkey;
+              try {
+                scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
+              } catch (error) {
+                let scheduleDate = new Date(Date.parse(registro.scheduledDt.toString()));
+                scheduleServiceInDto.scheduledDate = scheduleDate.toLocaleDateString() + ' ' + scheduleDate.toLocaleTimeString();
+              }
+              scheduleServiceInDto.comment = result.comentario;
+              scheduleServiceInDto.vendor = this.vendor;
+              scheduleServiceInDto.user = this.loggedUser;
+              data.push(scheduleServiceInDto);
+            }
+          });
+
+          this.registroService.rechazarAgenda(data).subscribe(response => {
+            this.loading.emit(false);
+            this.toastrService.success('Se rechazo la agenda correctamente', 'Proceso');
+            this.dataSource = new MatTableDataSource(this.registros);
+            this.dataSource.paginator = this.paginator;
+          }, error => {
+            this.loading.emit(false);
+            this.toastrService.danger('Ocurrió un error al rechazar la agenda', 'Proceso');
           })
         }
 
@@ -193,12 +310,21 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   }
 
   loadAccess() {
-    this.access = this.hasAccess('filtro', ['customer']);
+    this.isCustomer = this.hasAccess('filtro', ['customer']);
+    this.isAdmin = this.hasAccess('filtro', ['admin']);
   }
 
-  canRender() {
-    if (this.access) {
+  canRenderCustomer() {
+    if (this.isCustomer) {
       return this.sEstatus.tipo === "inicial";
+    } else {
+      return false;
+    }
+  }
+
+  canRenderAdmin() {
+    if (this.isAdmin) {
+      return this.sEstatus.id == 2;
     } else {
       return false;
     }

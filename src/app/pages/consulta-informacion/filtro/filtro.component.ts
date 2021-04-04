@@ -33,6 +33,8 @@ export class FiltroComponent implements OnInit, OnChanges {
   adminFormControl = new FormControl('', Validators.required);
   isAdmin: boolean;
   access: boolean;
+  selectedVendor;
+
   constructor(public accessChecker: NbAccessChecker,
     private authService: NbAuthService,
     private registroService: RegistroService,
@@ -142,7 +144,13 @@ export class FiltroComponent implements OnInit, OnChanges {
 
   obtenerRegistros() {
     this.loading.emit(true);
-    this.vendor.emit(this.loggedUser);
+    
+    if(!this.isAdmin){
+      this.selectedVendor = this.loggedUser;
+    }
+    
+    this.vendor.emit(this.selectedVendor);
+
     this.sEstatus.emit(this.selectedEstatus);
     if (this.checked) {
 
@@ -151,7 +159,7 @@ export class FiltroComponent implements OnInit, OnChanges {
         Swal.fire('Error', 'Por favor asegurese que el rango de fechas es correcto', 'error');
 
       } else {
-        this.registroService.obtenerRegistrosPorFecha(this.loggedUser, this.range.start, this.range.end, this.selectedEstatus.id).subscribe(
+        this.registroService.obtenerRegistrosPorFecha(this.selectedVendor, this.range.start, this.range.end, this.selectedEstatus.id).subscribe(
           (response: RegistroTable[] )=> {
             this.registros.emit(response);
             this.loading.emit(false);
@@ -162,11 +170,10 @@ export class FiltroComponent implements OnInit, OnChanges {
 
 
     } else {
-      this.registroService.obtenerRegistros(this.loggedUser, this.selectedEstatus.id).subscribe(
+      this.registroService.obtenerRegistros(this.selectedVendor, this.selectedEstatus.id).subscribe(
         (response: RegistroTable[] ) => {
           this.registros.emit(response);
           this.loading.emit(false);
-
         }
       )
     }
