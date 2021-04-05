@@ -1,7 +1,9 @@
-<nb-card>
+<nb-card  status="primary">
+  <nb-card-header *ngIf = "disabled">Rechazo de agenda</nb-card-header>
+  <nb-card-header *ngIf = "!disabled">Solicitud de agenda</nb-card-header>
   <nb-card-body>
-    <div class="d-flex align-content-start flex-wrap">
-      <div class="p-2">
+    <div class="d-flex align-content-start flex-wrap" >
+      <div class="p-2" *ngIf = "!disabled">
         <h5>Calendario</h5>
         <p-calendar [(ngModel)]="selectedDate" [inline]="true" [showTime]="true" [hourFormat]="'12'" [minDate]="today">
         </p-calendar>
