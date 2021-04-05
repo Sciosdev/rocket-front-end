@@ -10,10 +10,11 @@ import { NbDatepickerModule } from '@nebular/theme';
 import { NgxLoadingXModule } from 'ngx-loading-x';
 import { ScheduleComponent } from './popups/schedule/schedule.component';
 import { CalendarModule } from 'primeng/calendar';
+import { AcceptanceComponent } from './popups/acceptance/acceptance.component';
 
 
 @NgModule({
-  declarations: [ConsultaInformacionComponent, FiltroComponent, ResultadoConsultaComponent, ScheduleComponent],
+  declarations: [ConsultaInformacionComponent, FiltroComponent, ResultadoConsultaComponent, ScheduleComponent, AcceptanceComponent],
   imports: [
     CommonModule,
     MaterialModule,
