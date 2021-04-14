@@ -23,7 +23,9 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "allowedCommonJsDependencies": [
-              "xlsx"],
+              "xlsx",
+              "file-saver"
+            ],
             "aot": true,
             "assets": [
               "src/favicon.ico",
