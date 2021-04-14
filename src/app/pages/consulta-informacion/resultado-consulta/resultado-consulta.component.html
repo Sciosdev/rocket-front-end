@@ -91,6 +91,15 @@
       <td mat-cell *matCellDef="let element"> {{element.comment}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="actions" *ngIf="canRenderEtiqueta()">
+      <mat-header-cell  *matHeaderCellDef > Etiqueta </mat-header-cell>
+      <mat-cell *matCellDef="let row" >
+           <button mat-button (click)="imprimir(row)" nbTooltip="Descargar etiqueta" nbTooltipStatus="primary">
+            <nb-icon icon="file-text-outline" style="color: red;"></nb-icon>
+           </button>
+      </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>

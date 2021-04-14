@@ -151,7 +151,7 @@ export class FiltroComponent implements OnInit, OnChanges {
     
     this.vendor.emit(this.selectedVendor);
 
-    this.sEstatus.emit(this.selectedEstatus);
+    
     if (this.checked) {
 
       if (this.range.start == undefined || this.range.end == undefined) {
@@ -172,6 +172,7 @@ export class FiltroComponent implements OnInit, OnChanges {
     } else {
       this.registroService.obtenerRegistros(this.selectedVendor, this.selectedEstatus.id).subscribe(
         (response: RegistroTable[] ) => {
+          this.sEstatus.emit(this.selectedEstatus);
           this.registros.emit(response);
           this.loading.emit(false);
         }

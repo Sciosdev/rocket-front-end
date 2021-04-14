@@ -76,6 +76,19 @@ export class RegistroService {
     return this.http.put(url, data, options);
   }
 
+  obtenerEtiqueta(orderKey: String){
+    const url = this.URL_SERVICIOS + '/api/registro/' + orderKey + '/etiqueta';
+   
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/pdf',
+      'Accepts': 'application/pdf'
+    });
+
+    const options = {headers: headers, responseType: 'blob'  };
+
+    return this.http.get(url, {responseType: 'blob'});
+  }
+
   private getHeaders() {
 
     let headers = new HttpHeaders({
