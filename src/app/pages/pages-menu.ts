@@ -25,7 +25,7 @@ export const admin_menu: NbMenuItem[] = [
       link: '/intranet/carga-layout',
       data: {
         permission: 'menu',
-        resource: ['messenger','customer']
+        resource: ['customer']
       },
     },
     {
