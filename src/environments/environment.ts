@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  endpoint: "https://18.221.76.172/rocket-back-end",
+  clientId: "foo",
+  clientSecret: "foosecret" 
 };
 
 /*

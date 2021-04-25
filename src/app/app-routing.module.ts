@@ -4,12 +4,17 @@ import { Routes, RouterModule, ExtraOptions } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'pages',
+    path: 'intranet',
     loadChildren: () => import('./pages/pages.module')
       .then(m => m.PagesModule),
+      
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  { path: 'auth', 
+    loadChildren: () => import('./auth/auth.module')
+      .then(m => m.AuthModule) 
+  },
+  { path: '', redirectTo: 'intranet', pathMatch: 'full' },
+  { path: '**', redirectTo: 'intranet' },
 ];
 
 const config: ExtraOptions = {

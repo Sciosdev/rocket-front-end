@@ -12,9 +12,14 @@ import {
   NbButtonModule,
   NbMenuModule,
   NbIconModule,
+  NbCardModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ThemeModule } from '../theme/theme.module';
+import { CargaLayoutModule } from './carga-layout/carga-layout.module';
+import { NgxLoadingXModule } from 'ngx-loading-x';
+import { ConsultaInformacionModule } from './consulta-informacion/consulta-informacion.module';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [PagesComponent],
@@ -22,6 +27,7 @@ import { ThemeModule } from '../theme/theme.module';
     CommonModule,
     PagesRoutingModule,
     HomeModule,
+    CargaLayoutModule,
     NotFoundModule,
     NbLayoutModule,
     NbSidebarModule,
@@ -30,8 +36,11 @@ import { ThemeModule } from '../theme/theme.module';
     NbEvaIconsModule,
     NbIconModule,
     ThemeModule,
-    
-    ],
+    NbCardModule,
+    NgxLoadingXModule,
+    ConsultaInformacionModule,
+    NgxSpinnerModule
+],
   providers: []
 })
 export class PagesModule { }
