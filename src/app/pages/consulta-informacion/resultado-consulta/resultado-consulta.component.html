@@ -28,7 +28,7 @@
   </div>
   <div class="p-2">
     <button mat-raised-button color="primary" matRipple [disabled]="selection.selected.length == 0" (click)="rechazarAgenda()">
-      <nb-icon icon="checkmark-square-2-outline"></nb-icon>
+      <nb-icon icon="close-square-outline"></nb-icon>
       Rechazar agenda
     </button>
   </div>
@@ -89,6 +89,15 @@
     <ng-container matColumnDef="Comentario">
       <mat-header-cell *matHeaderCellDef> Comentario </mat-header-cell>
       <td mat-cell *matCellDef="let element"> {{element.comment}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions" *ngIf="canRenderEtiqueta()">
+      <mat-header-cell  *matHeaderCellDef > Etiqueta </mat-header-cell>
+      <mat-cell *matCellDef="let row" >
+           <button mat-button (click)="imprimir(row)" nbTooltip="Descargar etiqueta" nbTooltipStatus="primary">
+            <nb-icon icon="file-text-outline" style="color: red;"></nb-icon>
+           </button>
+      </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

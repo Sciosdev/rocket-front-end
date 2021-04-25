@@ -15,6 +15,8 @@ import { RegistroService } from 'src/app/services/registro.service';
 import { AcceptanceComponent } from '../popups/acceptance/acceptance.component';
 import { ScheduleComponent } from '../popups/schedule/schedule.component';
 
+import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-resultado-consulta',
   templateUrl: './resultado-consulta.component.html',
@@ -84,8 +86,11 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.columns = [];
     if (this.canRenderCustomer() || this.canRenderAdmin()) {
       this.columns.push('select', ...this.defaultColumns);
+    } else if (this.canRenderEtiqueta()) {
+      this.columns.push(...this.defaultColumns, 'actions');
     } else
       this.columns = this.defaultColumns;
+
     this.displayedColumns = this.columns;
   }
 
@@ -98,8 +103,11 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     if (this.canRenderCustomer() || this.canRenderAdmin()) {
       this.columns.push('select', ...this.defaultColumns);
     }
-    else
+    else if (this.canRenderEtiqueta()) {
+      this.columns.push(...this.defaultColumns, 'actions');
+    } else
       this.columns = this.defaultColumns;
+
     this.displayedColumns = this.columns;
   }
 
@@ -290,6 +298,19 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     })
   }
 
+  imprimir(registro: RegistroTable) {
+    this.loading.emit(true);
+    this.registroService.obtenerEtiqueta(registro.orderkey).subscribe((response: any) => {
+      this.loading.emit(false);
+      var blob = new Blob([response], { type: 'application/pdf' });
+      saveAs(blob, registro.orderkey + ".pdf");
+    }, (error) => {
+      this.loading.emit(false);
+      console.error(error);
+    });
+
+  }
+
   hasAccess(permission, resources: any[]) {
     let access = false;
     this.authService.isAuthenticatedOrRefresh().subscribe(
@@ -330,6 +351,10 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     }
   }
 
+  canRenderEtiqueta() {
+    return this.sEstatus.id == 3;
+  }
+
   loadUser() {
     this.authService.isAuthenticatedOrRefresh().subscribe(
       authenticated => {
@@ -347,3 +372,4 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     );
   }
 }
+

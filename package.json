@@ -38,6 +38,7 @@
     "bootstrap": "^4.5.0",
     "eva-icons": "^1.1.2",
     "exceljs": "^4.2.0",
+    "file-saver": "^2.0.5",
     "jquery": "^3.5.1",
     "ngx-json-viewer": "^3.0.2",
     "ngx-loading-x": "^1.0.3",
