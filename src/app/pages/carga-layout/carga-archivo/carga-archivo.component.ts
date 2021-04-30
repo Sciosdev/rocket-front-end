@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 export class CargaArchivoComponent implements OnInit, OnChanges {
 
   @Output() archivoCargado = new EventEmitter<any>();
+  @Output() procesado = new EventEmitter<boolean>();
 
   /**
    * Nombre del archivo cargado
@@ -104,6 +105,7 @@ export class CargaArchivoComponent implements OnInit, OnChanges {
     this.fileLoaded = true;
     this.nombreArchivo = target.files[0].name;
     this.archivoCargado.emit(target.files[0]);
+    this.procesado.emit(false);
 
   }
 
