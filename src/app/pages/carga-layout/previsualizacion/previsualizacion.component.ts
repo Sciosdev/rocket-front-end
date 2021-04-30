@@ -22,6 +22,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   public user;
 
   @Input() archivoCargado: any;
+  @Input() procesado: boolean;
   @Output() resultado: any = new EventEmitter<any>();;
   @Output() errores: any = new EventEmitter<any[]>();
 
@@ -29,7 +30,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   resultJson: any;
   prevRows: any[];
   headerExcel: any[];
-  procesado: boolean;
+  
   constructor(private stepper: NbStepperComponent,
     private registrorService: RegistroService,
     private authService: NbAuthService,
