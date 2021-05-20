@@ -24,7 +24,8 @@
             "tsConfig": "tsconfig.app.json",
             "allowedCommonJsDependencies": [
               "xlsx",
-              "file-saver"
+              "file-saver",
+              "papaparse"
             ],
             "aot": true,
             "assets": [

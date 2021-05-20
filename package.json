@@ -42,6 +42,7 @@
     "jquery": "^3.5.1",
     "ngx-json-viewer": "^3.0.2",
     "ngx-loading-x": "^1.0.3",
+    "ngx-papaparse": "^5.0.0",
     "ngx-spinner": "^10.0.1",
     "popper.js": "^1.16.1",
     "primeicons": "^4.1.0",
