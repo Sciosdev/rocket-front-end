@@ -115,8 +115,6 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
                     let splitted = str.split(" ");
                     let datestring = splitted[0] + 'T' + splitted[1]+splitted[2];
                     value = new Date(datestring).getTime();
-                    console.log("Parsing DATE String: " + datestring);
-                    console.log("Parsing DATE: " + value);
                   }
                   else
                     value = json[key];
@@ -198,15 +196,8 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
                 var id = map[key].column_id;
                 var value;
 
-                if (id === "created_at" || id === "paid_at" || id === "fulfilled_at" || id === "cancelled_at") {
-                  let str = json[key];
-                  let splitted = str.split(" ");
-                  let datestring = splitted[0] + 'T' + splitted[1]+splitted[2];
-                  value = new Date(datestring).getTime();
-                  console.log("Parsing DATE String: " + datestring);
-                  console.log("Parsing DATE: " + value);
-                 
-                }
+                if (id === "created_at" || id === "paid_at" || id === "fulfilled_at" || id === "cancelled_at")
+                  value = new Date(json[key]).getTime();
                 else
                   value = json[key];
                 registro[type][id] = value;
