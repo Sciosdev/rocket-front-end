@@ -5,7 +5,8 @@ import { NbStepperComponent, NbToastrService } from '@nebular/theme';
 import { RegistroService } from 'src/app/services/registro.service';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
-import { NbAuthJWTToken, NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
+import { NbAuthOAuth2JWTToken, NbAuthService } from '@nebular/auth';
+import { Papa } from 'ngx-papaparse';
 
 @Component({
   selector: 'app-previsualizacion',
@@ -30,11 +31,12 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   resultJson: any;
   prevRows: any[];
   headerExcel: any[];
-  
+
   constructor(private stepper: NbStepperComponent,
     private registrorService: RegistroService,
     private authService: NbAuthService,
-    private toastrService: NbToastrService) { }
+    private toastrService: NbToastrService,
+    private papa: Papa) { }
 
   ngOnInit(): void {
     this.procesado = false;
@@ -54,11 +56,91 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   }
 
   register() {
-    this.excelToJson();
+    if (this.archivoCargado.type == 'application/vnd.ms-excel')
+      this.csvToJson();
+    else
+      this.excelToJson();
   }
 
   reiniciar() {
     this.procesado = false;
+  }
+
+
+  public csvToJson() {
+    this.flag = false;
+    const map = layout_map;
+    let result = [];
+
+    this.papa.parse(this.archivoCargado, {
+      header: true,
+      complete: (response) => {
+        this.jsontext = response.data;
+
+
+        console.log(this.jsontext);
+
+        this.flag = true;
+        let errors: any[] = [];
+        let rowNumber = 1;
+
+        this.jsontext.forEach(json => {
+
+          let registro: any = {
+            "rowNumber": "",
+            "order": {},
+            "billing_address": {},
+            "shipping_address": {},
+            "payment": {},
+            "extra": {}
+          };
+
+          let response = this.validateRequiredAnNullable(json);
+
+          if (response.error) {
+            errors.push({ rowNumber: rowNumber, errors: response.columns });
+            rowNumber++;
+          } else {
+            for (var key in json) {
+              try {
+
+                if (Object.keys(layout_map).includes(key)) {
+
+                  var type = map[key].type;
+                  var id = map[key].column_id;
+                  var value;
+
+                  if (id === "created_at" || id === "paid_at" || id === "fulfilled_at" || id === "cancelled_at") {
+                    let str = json[key];
+                    let splitted = str.split(" ");
+                    let datestring = splitted[0] + 'T' + splitted[1]+splitted[2];
+                    value = new Date(datestring).getTime();
+                  }
+                  else
+                    value = json[key];
+                  registro[type][id] = value;
+                }
+
+              } catch (e) {
+                console.error(e);
+              }
+            }
+            registro["rowNumber"] = rowNumber;
+            rowNumber++;
+
+            result.push(registro);
+          }
+
+        });
+
+        this.errores.emit(errors);
+        console.log(errors);
+        let peticion = { registro: result, idVendor: this.user.user_name }
+        this.registerTest(JSON.stringify(peticion));
+      }
+    });
+
+
   }
 
   public excelToJson() {
@@ -134,6 +216,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
       });
 
       this.errores.emit(errors);
+      console.log(errors);
       let peticion = { registro: result, idVendor: this.user.user_name }
       this.registerTest(JSON.stringify(peticion));
     }
@@ -170,9 +253,10 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
         this.load = false;
         this.stepper.next();
         this.resultado.emit(ret);
-        this.toastrService.success('Operación finalizada correctamente','Proceso');
+        this.toastrService.success('Operación finalizada correctamente', 'Proceso');
       },
       (error) => {
+        console.log(error);
         this.load = false;
         Swal.fire('Error', 'El archivo no cumple con el formato, por favor revise que contenga toda la información e intente nuevamente', 'error')
       });
@@ -185,40 +269,65 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
 
     this.nombreArchivo = this.archivoCargado.name;
 
-    const arryBuffer = new Response(this.archivoCargado).arrayBuffer();
+    if (this.archivoCargado.type == 'application/vnd.ms-excel') {
 
-    arryBuffer.then(function (data) {
-      workbook.xlsx.load(data)
-        .then(function () {
-          const worksheet = workbook.worksheets[0];
+      this.headerExcel = [];
+      this.papa.parse(this.archivoCargado, {
+        header: true,
+        preview: 5,
+        complete: (result) => {
+          this.prevRows = result.data;
+          result.meta.fields.forEach(field => {
+            let aux: any = {}
+            aux.header = field;
+            aux.field = field;
+            this.headerExcel.push(aux);
+          })
+          console.log(this.prevRows);
+          console.log(this.headerExcel);
+        }
+      });
+    } else {
 
-          worksheet.eachRow(function (row, rowNumber) {
-            let registro: any = {};
-            if (rowNumber < 6) {
-              row.eachCell(function (cell, colNumber) {
+      const arryBuffer = new Response(this.archivoCargado).arrayBuffer();
 
-                let header = "Columna " + colNumber;
-                let field = "column" + colNumber;
+      arryBuffer.then(function (data) {
+
+        workbook.xlsx.load(data)
+          .then(function () {
+            const worksheet = workbook.worksheets[0];
+
+            worksheet.eachRow(function (row, rowNumber) {
+              let registro: any = {};
+              if (rowNumber < 6) {
+                row.eachCell(function (cell, colNumber) {
+
+                  let header = "Columna " + colNumber;
+                  let field = "column" + colNumber;
 
 
-                registro[field] = cell.value;
+                  registro[field] = cell.value;
 
-                if (rowNumber == 2) {
+                  if (rowNumber == 2) {
 
-                  let aux: any = {}
-                  aux.header = header;
-                  aux.field = field;
-                  headerEx.push(aux);
-                }
-              });
+                    let aux: any = {}
+                    aux.header = header;
+                    aux.field = field;
+                    headerEx.push(aux);
+                  }
+                });
 
-              resultado.push(registro);
+                resultado.push(registro);
 
-            }
+              }
+            });
           });
-        });
-    });
-    this.prevRows = resultado;
-    this.headerExcel = headerEx;
+      });
+      this.prevRows = resultado;
+      this.headerExcel = headerEx;
+
+      console.log(this.prevRows);
+      console.log(this.headerExcel);
+    }
   }
 }

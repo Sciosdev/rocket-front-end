@@ -1,9 +1,9 @@
 export const layout_map = {
-    "Id (Importante)": {
+    "Id": {
         "column_id": "id",
         "type": "order",
-        "required": true,
-        "nullable": false
+        "required": false,
+        "nullable": true
     },
     "Name": {
         "column_id": "name",
@@ -15,7 +15,7 @@ export const layout_map = {
         "column_id": "email",
         "type": "order",
         "required": true,
-        "nullable": false
+        "nullable": true
     },
     "Financial Status": {
         "column_id": "financial_status",
@@ -26,8 +26,8 @@ export const layout_map = {
     "Paid at": {
         "column_id": "paid_at",
         "type": "payment",
-        "required": true,
-        "nullable": false
+        "required": false,
+        "nullable": true
     },
     "Fulfillment Status": {
         "column_id": "fulfillment_status",
@@ -44,7 +44,7 @@ export const layout_map = {
     "Accepts Marketing": {
         "column_id": "accepts_marketing",
         "type": "order",
-        "required": true,
+        "required": false,
         "nullable": true
     },
     "Currency": {
@@ -56,13 +56,13 @@ export const layout_map = {
     "Subtotal": {
         "column_id": "subtotal",
         "type": "order",
-        "required": true,
-        "nullable": false
+        "required": false,
+        "nullable": true
     },
     "Shipping": {
         "column_id": "shipping",
         "type": "order",
-        "required": true,
+        "required": false,
         "nullable": true
     },
     "Taxes": {
@@ -74,8 +74,8 @@ export const layout_map = {
     "Total": {
         "column_id": "total",
         "type": "payment",
-        "required": true,
-        "nullable": false
+        "required": false,
+        "nullable": true
     },
     "Discount Code": {
         "column_id": "discount_code",
@@ -92,14 +92,14 @@ export const layout_map = {
     "Shipping Method": {
         "column_id": "shipping_method",
         "type": "order",
-        "required": true,
-        "nullable": false
+        "required": false,
+        "nullable": true
     },
     "Created at": {
         "column_id": "created_at",
         "type": "order",
-        "required": true,
-        "nullable": false
+        "required": false,
+        "nullable": true
     },
     "Lineitem quantity": {
         "column_id": "lineitem_quantity",
@@ -107,13 +107,13 @@ export const layout_map = {
         "required": false,
         "nullable": true
     },
-    "Lineitem name (Producto)": {
+    "Lineitem name": {
         "column_id": "lineitem_name",
         "type": "extra",
         "required": false,
         "nullable": true
     },
-    "Lineitem price (Producto)": {
+    "Lineitem price": {
         "column_id": "lineitem_price",
         "type": "extra",
         "required": false,
@@ -149,13 +149,13 @@ export const layout_map = {
         "required": false,
         "nullable": true
     },
-    "Billing Name (Destinatario)": {
+    "Billing Name": {
         "column_id": "name",
         "type": "billing_address",
         "required": true,
         "nullable": true
     },
-    "Billing Street (Destinatario)": {
+    "Billing Street": {
         "column_id": "street",
         "type": "billing_address",
         "required": true,
@@ -231,7 +231,7 @@ export const layout_map = {
         "column_id": "address2",
         "type": "shipping_address",
         "required": true,
-        "nullable": false
+        "nullable": true
     },
     "Shipping Company": {
         "column_id": "company",
@@ -255,7 +255,7 @@ export const layout_map = {
         "column_id": "province",
         "type": "shipping_address",
         "required": true,
-        "nullable": true
+        "nullable": false
     },
     "Shipping Country": {
         "column_id": "country",
@@ -267,7 +267,7 @@ export const layout_map = {
         "column_id": "phone",
         "type": "shipping_address",
         "required": true,
-        "nullable": false
+        "nullable": true
     },
     "Notes": {
         "column_id": "notes",
@@ -290,26 +290,26 @@ export const layout_map = {
     "Payment Method": {
         "column_id": "payment_method",
         "type": "payment",
-        "required": true,
+        "required": false,
         "nullable": true
     },
     "Payment Reference": {
         "column_id": "payment_reference",
         "type": "payment",
-        "required": true,
+        "required": false,
         "nullable": true
     },
     "Refunded Amount": {
         "column_id": "refunded_amount",
         "type": "extra",
-        "required": true,
+        "required": false,
         "nullable": true
     },
     "Vendor": {
         "column_id": "vendor",
         "type": "order",
-        "required": true,
-        "nullable": false
+        "required": false,
+        "nullable": true
     },
     "Tags": {
         "column_id": "tags",
@@ -320,14 +320,14 @@ export const layout_map = {
     "Risk Level": {
         "column_id": "risk_level",
         "type": "order",
-        "required": true,
-        "nullable": false
+        "required": false,
+        "nullable": true
     },
     "Source": {
         "column_id": "source",
         "type": "order",
-        "required": true,
-        "nullable": false
+        "required": false,
+        "nullable": true
     },
     "Lineitem discount": {
         "column_id": "lineitem_discount",

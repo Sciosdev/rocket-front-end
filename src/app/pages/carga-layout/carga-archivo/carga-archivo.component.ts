@@ -95,12 +95,6 @@ export class CargaArchivoComponent implements OnInit, OnChanges {
     }
 
     console.log(target.files[0].type);
-    if (target.files[0].type != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
-      this.resultJson = [];
-      this.nombreArchivo = 'Ningún archivo seleccionado';
-      Swal.fire('Error al cargar', 'Por favor seleccione el tipo de archivo correcto (.xlsx)', 'error');
-      return;
-    }
 
     this.fileLoaded = true;
     this.nombreArchivo = target.files[0].name;
