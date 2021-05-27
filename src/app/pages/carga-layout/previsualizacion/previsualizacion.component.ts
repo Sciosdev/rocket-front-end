@@ -56,7 +56,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   }
 
   register() {
-    if (this.archivoCargado.type == 'application/vnd.ms-excel')
+    if (this.archivoCargado.type == 'application/vnd.ms-excel' || this.archivoCargado.type == 'text/csv')
       this.csvToJson();
     else
       this.excelToJson();
@@ -269,7 +269,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
 
     this.nombreArchivo = this.archivoCargado.name;
 
-    if (this.archivoCargado.type == 'application/vnd.ms-excel') {
+    if (this.archivoCargado.type == 'application/vnd.ms-excel' || this.archivoCargado.type == 'text/csv') {
 
       this.headerExcel = [];
       this.papa.parse(this.archivoCargado, {
