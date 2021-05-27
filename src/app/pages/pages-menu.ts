@@ -34,7 +34,7 @@ export const admin_menu: NbMenuItem[] = [
       link: '/intranet/consulta-registros',
       data: {
         permission: 'menu',
-        resource: ['messenger','customer','admin']
+        resource: ['messenger','customer','admin', 'courier']
       },
     },
 ];
