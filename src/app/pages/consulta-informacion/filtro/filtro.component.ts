@@ -72,7 +72,7 @@ export class FiltroComponent implements OnInit, OnChanges {
   }
 
   get monthEnd(): Date {
-    return this.dateService.getMonthEnd(new Date());
+    return this.dateService.addDay(new Date(), 1);
   }
 
   ngOnInit(): void {
