@@ -1,14 +1,25 @@
 <nb-card  status="primary">
-    <nb-card-header>Aceptación de agenda</nb-card-header>
+    <nb-card-header>¿Desea aceptar las agendas seleccionadas?</nb-card-header>
     <nb-card-body>
       <div class="d-flex align-content-start flex-wrap" >
         <div class="p-2">
-          <span>¿Desea aceptar las agendas seleccionadas?</span>
+          <h6>Seleccione el courier:</h6>
+          <mat-form-field appearance="standard" >
+            <mat-label>Courier</mat-label>
+            <mat-select [(value)]="selectedCourier" [formControl]="courierFormControl" required style="width: 100%;">
+              <mat-option *ngFor="let courier of couriers" [value]="courier.user">
+                {{courier.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="courierFormControl.hasError('required')">
+              Este campo es requerido
+            </mat-error>
+          </mat-form-field>
         </div>
       </div>
       <div class="d-flex justify-content-end">
         <div class="p-2">
-          <button mat-raised-button color="accent" matRipple (click)="accept()">
+          <button mat-raised-button color="accent" matRipple (click)="accept()" [disabled]='courierFormControl.hasError("required")'>
             <nb-icon icon="checkmark-square-2-outline"></nb-icon>
             Aceptar
           </button>

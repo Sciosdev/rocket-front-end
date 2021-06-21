@@ -164,6 +164,10 @@ export class FiltroComponent implements OnInit, OnChanges {
             this.sEstatus.emit(this.selectedEstatus);
             this.registros.emit(response);
             this.loading.emit(false);
+          }, (error) => {
+            console.warn(error);
+            Swal.fire('Precaución', 'Ocurrió un error inesperado con la conexión, por favor intente nuevamente.', 'warning');
+            this.loading.emit(false);
           }
         );
       }
@@ -174,6 +178,10 @@ export class FiltroComponent implements OnInit, OnChanges {
         (response: RegistroTable[] ) => {
           this.sEstatus.emit(this.selectedEstatus);
           this.registros.emit(response);
+          this.loading.emit(false);
+        }, (error) => {
+          console.warn(error);
+          Swal.fire('Precaución', 'Ocurrió un error inesperado con la conexión, por favor intente nuevamente.', 'warning');
           this.loading.emit(false);
         }
       )

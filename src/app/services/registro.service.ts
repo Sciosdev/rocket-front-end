@@ -57,9 +57,9 @@ export class RegistroService {
     return this.http.get(url, options);
   }
 
-  actualizarRegistros(data: ScheduleServiceInDto[]) {
+  solicitarAgenda(data: ScheduleServiceInDto[]) {
 
-    const url = this.URL_SERVICIOS + '/registro';
+    const url = this.URL_SERVICIOS + '/registro/agenda/solicitar';
     const options = { headers: this.getHeaders() };
     return this.http.put(url, data, options);
   }

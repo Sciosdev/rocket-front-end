@@ -8,27 +8,14 @@
         <p-calendar [(ngModel)]="selectedDate" [inline]="true" [showTime]="true" [hourFormat]="'12'" [minDate]="today">
         </p-calendar>
       </div>
-   
       <div class="p-2">
-        <h5>Courier</h5>
-        <mat-form-field appearance="standard" >
-          <mat-label>Courier</mat-label>
-          <mat-select [(value)]="selectedCourier" [formControl]="courierFormControl" required>
-            <mat-option *ngFor="let courier of couriers" [value]="courier.user">
-              {{courier.name}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="courierFormControl.hasError('required')">
-            Este campo es requerido
-          </mat-error>
-        </mat-form-field>
         <h5>Comentarios</h5>
         <textarea rows="7" [(ngModel)] = "comentario" cols="30" pInputTextarea  placeholder="Escribe un comentario ... "></textarea>
       </div>
     </div>
     <div class="d-flex justify-content-end">
       <div class="p-2">
-        <button mat-raised-button color="accent" matRipple (click)="submit({fecha: selectedDate, comentario: comentario})" [disabled]='courierFormControl.hasError("required")'>
+        <button mat-raised-button color="accent" matRipple (click)="submit({fecha: selectedDate, comentario: comentario})">
           <nb-icon icon="checkmark-square-2-outline"></nb-icon>
           Aceptar
         </button>

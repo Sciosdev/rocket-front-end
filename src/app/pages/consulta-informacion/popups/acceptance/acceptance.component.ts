@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-acceptance',
@@ -8,17 +10,30 @@ import { NbDialogRef } from '@nebular/theme';
 })
 export class AcceptanceComponent implements OnInit {
 
-  constructor(protected ref: NbDialogRef<AcceptanceComponent>) { }
+  selectedCourier: any;
+  courierFormControl = new FormControl('', Validators.required);
+  couriers: any[] = [];
+  
+  constructor(protected ref: NbDialogRef<AcceptanceComponent>,
+    private usuarioService: UsuarioService) { }
 
   ngOnInit(): void {
+    this.usuarioService.obtenerCouriers().subscribe(
+      (resp: any[]) => {
+        resp.forEach(element => {
+          this.couriers.push(element);
+        })
+      }
+    );
+
   }
 
   accept() {
-    this.ref.close(true);
+    this.ref.close({accepted: true, courier: this.selectedCourier});
   }
 
   cancel() {
-    this.ref.close(false);
+    this.ref.close({accepted: false});
   }
 
 }
