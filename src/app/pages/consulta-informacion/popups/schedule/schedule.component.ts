@@ -13,6 +13,7 @@ export class ScheduleComponent implements OnInit {
   today: Date;
   row: RegistroTable;
   disabled: boolean = false;
+
   constructor(protected ref: NbDialogRef<ScheduleComponent>) { }
 
   ngOnInit(): void {

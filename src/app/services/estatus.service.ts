@@ -11,9 +11,9 @@ export class EstatusService {
 
   URL_SERVICIOS = environment.endpoint;
 
-  obtenerEstatus() {
+  obtenerEstatus(username: string) {
 
-    const url = this.URL_SERVICIOS + '/estatus/';
+    const url = this.URL_SERVICIOS + '/estatus/' + username;
     const options = { headers: this.getHeaders() };
     return this.http.get(url, options);
 

@@ -78,11 +78,6 @@ export class FiltroComponent implements OnInit, OnChanges {
   ngOnInit(): void {
 
     this.usuarioFormControl.disable();
-    this.estatusService.obtenerEstatus().subscribe(
-      (resp: Estatus[]) => {
-        this.estatus = resp;
-      }
-    );
 
     this.usuarioService.obtenerRepartidores().subscribe(
       (resp: any[]) => {
@@ -110,6 +105,12 @@ export class FiltroComponent implements OnInit, OnChanges {
                 this.loggedUser = user.user_name;
                 this.usuarioFormControl.setValue(user.fullname);
                 this.isAdmin = this.hasAccess('filtro',['admin']);
+
+                this.estatusService.obtenerEstatus(this.loggedUser).subscribe(
+                  (resp: Estatus[]) => {
+                    this.estatus = resp;
+                  }
+                );
               }
             }
           );
@@ -163,6 +164,10 @@ export class FiltroComponent implements OnInit, OnChanges {
             this.sEstatus.emit(this.selectedEstatus);
             this.registros.emit(response);
             this.loading.emit(false);
+          }, (error) => {
+            console.warn(error);
+            Swal.fire('Precaución', 'Ocurrió un error inesperado con la conexión, por favor intente nuevamente.', 'warning');
+            this.loading.emit(false);
           }
         );
       }
@@ -173,6 +178,10 @@ export class FiltroComponent implements OnInit, OnChanges {
         (response: RegistroTable[] ) => {
           this.sEstatus.emit(this.selectedEstatus);
           this.registros.emit(response);
+          this.loading.emit(false);
+        }, (error) => {
+          console.warn(error);
+          Swal.fire('Precaución', 'Ocurrió un error inesperado con la conexión, por favor intente nuevamente.', 'warning');
           this.loading.emit(false);
         }
       )

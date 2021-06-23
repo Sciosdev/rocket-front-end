@@ -11,4 +11,5 @@ export interface RegistroTable {
     cargaDt:         Date;
     scheduledDt:     Date;
     comment:         string;
+    courier:         string;
 }

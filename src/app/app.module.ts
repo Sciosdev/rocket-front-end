@@ -122,6 +122,12 @@ registerLocaleData(es);
           view: ['customer'],
           filtro: ['customer']
         },
+        courier: {
+          parent: 'guest',
+          menu: ['courier'],
+          view: ['courier'],
+          filtro: ['courier']
+        },
         admin: {
           parent: 'guest',
           menu: ['admin'],

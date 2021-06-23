@@ -27,6 +27,13 @@ export class UsuarioService {
 
   }
 
+  obtenerCouriers() {
+
+    const url = this.URL_SERVICIOS + '/courier';
+    return this.http.get(url, this.getOptions());
+
+  }
+
   private getOptions() {
 
     let headers = new HttpHeaders({
