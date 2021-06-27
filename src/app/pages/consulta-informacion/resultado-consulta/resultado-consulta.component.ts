@@ -32,7 +32,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   @Output() loading: any = new EventEmitter<boolean>();
 
   columns: any[] = [];
-  defaultColumns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled', 'Comentario', 'Courier'];
+  defaultColumns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled', 'Comentario', 'Courier', 'Vendedor'];
 
   displayedColumns: string[];
   dataSource: MatTableDataSource<RegistroTable>;
