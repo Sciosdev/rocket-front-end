@@ -3,5 +3,6 @@ export interface ScheduleServiceInDto {
     scheduledDate?: string;
     comment?: string;
     vendor?: string;
+    courier?: string;
     user?: string;
 }

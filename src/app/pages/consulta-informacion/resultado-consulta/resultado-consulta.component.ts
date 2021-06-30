@@ -32,7 +32,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   @Output() loading: any = new EventEmitter<boolean>();
 
   columns: any[] = [];
-  defaultColumns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled', 'Comentario'];
+  defaultColumns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled', 'Comentario', 'Courier', 'Vendedor'];
 
   displayedColumns: string[];
   dataSource: MatTableDataSource<RegistroTable>;
@@ -158,7 +158,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     })
       .onClose.subscribe((result: any) => {
 
-        if (result) {
+        if (result.accepted) {
 
           this.loading.emit(true);
           this.scheduleAccepted.push(...this.selection.selected);
@@ -175,13 +175,15 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
             try {
               scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
             } catch (error) {
-              console.error(error);
+             //console.error(error);
               let scheduleDate = new Date(Date.parse(registro.scheduledDt.toString()));
               scheduleServiceInDto.scheduledDate = scheduleDate.toLocaleDateString() + ' ' + scheduleDate.toLocaleTimeString();
             }
             scheduleServiceInDto.comment = registro.comment;
             scheduleServiceInDto.vendor = this.vendor;
             scheduleServiceInDto.user = this.loggedUser;
+            scheduleServiceInDto.courier = result.courier;
+            console.log(scheduleServiceInDto);
             data.push(scheduleServiceInDto);
           });
 
@@ -276,12 +278,13 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
       scheduleServiceInDto.orderkey = registro.orderkey;
       scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
       scheduleServiceInDto.comment = registro.comment;
+      scheduleServiceInDto.courier = registro.courier;
       scheduleServiceInDto.vendor = this.vendor;
       scheduleServiceInDto.user = this.loggedUser;
       agenda.push(scheduleServiceInDto);
     });
 
-    this.registroService.actualizarRegistros(agenda).subscribe(response => {
+    this.registroService.solicitarAgenda(agenda).subscribe(response => {
       console.log(response);
       this.limpiarAgenda();
       this.registros = null;

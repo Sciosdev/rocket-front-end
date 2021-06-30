@@ -29,7 +29,7 @@ const routes: Routes = [{
       component: ConsultaInformacionComponent,
       canActivate: [AuthGuard],
       data: {
-        resource: ['messenger', 'customer','admin'],
+        resource: ['messenger', 'customer','admin','courier'],
       },
     },
     {
