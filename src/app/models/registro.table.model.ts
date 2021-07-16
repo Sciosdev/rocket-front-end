@@ -12,4 +12,5 @@ export interface RegistroTable {
     scheduledDt:     Date;
     comment:         string;
     courier:         string;
+    vendedor:        string;
 }
