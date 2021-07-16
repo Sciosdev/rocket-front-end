@@ -20,9 +20,26 @@ export class EstatusService {
 
   }
 
+  obtenerEstatusChange(username: string) {
+
+    const url = this.URL_SERVICIOS + '/estatus-change/' + username;
+    const options = { headers: this.getHeaders() };
+    return this.http.get(url, options);
+
+  }
+
   obtenerEstatusSiguiente(idEstatus: number) {
 
     const url = this.URL_SERVICIOS + '/estatus/' + idEstatus + '/siguiente/';
+    const options = { headers: this.getHeaders() };
+    return this.http.get(url, options);
+
+  }
+
+  
+  obtenerEstatusSiguienteException(idEstatus: number) {
+
+    const url = this.URL_SERVICIOS + '/estatus/' + idEstatus + '/siguiente-exception/';
     const options = { headers: this.getHeaders() };
     return this.http.get(url, options);
 

@@ -18,15 +18,21 @@ export class CambioEstatusComponent implements OnInit {
   registro: RegistroTable;
   selectedEstatus: Estatus;
   estatusFormControl = new FormControl('', Validators.required);
-  estatusList: Estatus[];
+  estatusList: Estatus[] = [];
 
   constructor(protected ref: NbDialogRef<ScheduleComponent>, protected estatusService: EstatusService) { }
 
   ngOnInit(): void {
 
+    this.estatusList = [];
     this.estatusService.obtenerEstatusSiguiente(this.currentEstatus.id).subscribe(
       (result: Estatus) => {
-        this.estatusList = [result];
+        this.estatusList.push(result);
+      }
+    )
+    this.estatusService.obtenerEstatusSiguienteException(this.currentEstatus.id).subscribe(
+      (result: Estatus) => {
+        this.estatusList.push(result);
       }
     )
 
