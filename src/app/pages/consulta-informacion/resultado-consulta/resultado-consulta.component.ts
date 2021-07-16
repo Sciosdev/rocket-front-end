@@ -106,14 +106,11 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   canRenderCambioEstatus() {
 
     if (this.isCourier) {
-
       return [9, 10].includes(this.sEstatus.id);
     } else if (this.isCustomer) {
-
       return [6].includes(this.sEstatus.id);
     } else if (this.isAdmin) {
-
-      return [7, 8, 9].includes(this.sEstatus.id);
+      return [3, 7, 8, 9].includes(this.sEstatus.id);
     }
 
     return false;
