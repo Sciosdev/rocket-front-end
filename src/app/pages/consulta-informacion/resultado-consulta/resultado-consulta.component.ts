@@ -50,6 +50,8 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   isAdmin: boolean;
   isCourier: boolean;
 
+  authorizedStatus: any[] = [];
+
   scheduleAccepted: RegistroTable[] = [];
   scheduleRejected: RegistroTable[] = [];
   scheduleModified: RegistroTable[] = [];
@@ -73,6 +75,37 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   }
 
   ngOnInit(): void {
+
+    this.loadAccess();
+    this.loadUser();
+    this.authorizedStatus = [];
+    this.estatusService.obtenerEstatusChange(this.loggedUser).subscribe(
+      (response: Estatus[]) => {
+        response.forEach(r => {
+          this.authorizedStatus.push(r.id);
+        });
+
+        this.columns = [];
+        if (this.canRenderCustomer() || this.canRenderAdmin()) {
+          this.columns.push('select', ...this.defaultColumns);
+        } else if (this.canRenderEtiqueta()) {
+          this.columns.push(...this.defaultColumns, 'actions');
+        } else
+          this.columns.push(...this.defaultColumns);
+    
+    
+        if (this.canRenderCambioEstatus() && !this.columns.includes('CambioEstatus')) {
+          this.columns.push('CambioEstatus');
+        }
+    
+        this.displayedColumns = this.columns;
+
+      }, (error) => {
+        console.error(error);
+        this.toastrService.danger('Ocurrió un error al obtener el estatus', 'Estatus Change');
+      }
+    );
+
     this.primeNGConfig.setTranslation(
       {
         dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
@@ -84,36 +117,10 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
         clear: 'Limpiar',
       }
     );
-
-    this.loadAccess();
-    this.loadUser();
-    this.columns = [];
-    if (this.canRenderCustomer() || this.canRenderAdmin()) {
-      this.columns.push('select', ...this.defaultColumns);
-    } else if (this.canRenderEtiqueta()) {
-      this.columns.push(...this.defaultColumns, 'actions');
-    } else
-      this.columns.push(...this.defaultColumns);
-
-
-    if (this.canRenderCambioEstatus() && !this.columns.includes('CambioEstatus')) {
-      this.columns.push('CambioEstatus');
-    }
-
-    this.displayedColumns = this.columns;
   }
 
   canRenderCambioEstatus() {
-
-    if (this.isCourier) {
-      return [9, 10].includes(this.sEstatus.id);
-    } else if (this.isCustomer) {
-      return [6].includes(this.sEstatus.id);
-    } else if (this.isAdmin) {
-      return [3, 7, 8, 9].includes(this.sEstatus.id);
-    }
-
-    return false;
+    return this.authorizedStatus.includes(this.sEstatus.id);
   }
 
   ngOnChanges(): void {
