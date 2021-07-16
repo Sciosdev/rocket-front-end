@@ -11,10 +11,11 @@ import { NgxLoadingXModule } from 'ngx-loading-x';
 import { ScheduleComponent } from './popups/schedule/schedule.component';
 import { CalendarModule } from 'primeng/calendar';
 import { AcceptanceComponent } from './popups/acceptance/acceptance.component';
+import { CambioEstatusComponent } from './popups/cambio-estatus/cambio-estatus.component';
 
 
 @NgModule({
-  declarations: [ConsultaInformacionComponent, FiltroComponent, ResultadoConsultaComponent, ScheduleComponent, AcceptanceComponent],
+  declarations: [ConsultaInformacionComponent, FiltroComponent, ResultadoConsultaComponent, ScheduleComponent, AcceptanceComponent, CambioEstatusComponent],
   imports: [
     CommonModule,
     MaterialModule,

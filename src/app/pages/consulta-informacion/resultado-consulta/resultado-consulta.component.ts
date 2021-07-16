@@ -16,6 +16,8 @@ import { AcceptanceComponent } from '../popups/acceptance/acceptance.component';
 import { ScheduleComponent } from '../popups/schedule/schedule.component';
 
 import { saveAs } from 'file-saver';
+import { CambioEstatusComponent } from '../popups/cambio-estatus/cambio-estatus.component';
+import { EstatusService } from 'src/app/services/estatus.service';
 
 @Component({
   selector: 'app-resultado-consulta',
@@ -46,6 +48,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   isCustomer: boolean;
   isAdmin: boolean;
+  isCourier: boolean;
 
   scheduleAccepted: RegistroTable[] = [];
   scheduleRejected: RegistroTable[] = [];
@@ -55,6 +58,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     private dialogService: NbDialogService,
     private registroService: RegistroService,
     private authService: NbAuthService,
+    private estatusService: EstatusService,
     protected cd: ChangeDetectorRef,
     private _snackBar: MatSnackBar,
     private primeNGConfig: PrimeNGConfig,
@@ -89,9 +93,30 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     } else if (this.canRenderEtiqueta()) {
       this.columns.push(...this.defaultColumns, 'actions');
     } else
-      this.columns = this.defaultColumns;
+      this.columns.push(...this.defaultColumns);
+
+
+    if (this.canRenderCambioEstatus() && !this.columns.includes('CambioEstatus')) {
+      this.columns.push('CambioEstatus');
+    }
 
     this.displayedColumns = this.columns;
+  }
+
+  canRenderCambioEstatus() {
+
+    if (this.isCourier) {
+
+      return [9, 10].includes(this.sEstatus.id);
+    } else if (this.isCustomer) {
+
+      return [6].includes(this.sEstatus.id);
+    } else if (this.isAdmin) {
+
+      return [7, 8, 9].includes(this.sEstatus.id);
+    }
+
+    return false;
   }
 
   ngOnChanges(): void {
@@ -105,10 +130,16 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     }
     else if (this.canRenderEtiqueta()) {
       this.columns.push(...this.defaultColumns, 'actions');
-    } else
-      this.columns = this.defaultColumns;
+    }
+    else
+      this.columns.push(...this.defaultColumns);
+
+    if (this.canRenderCambioEstatus() && !this.columns.includes('CambioEstatus')) {
+      this.columns.push('CambioEstatus');
+    }
 
     this.displayedColumns = this.columns;
+
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -150,6 +181,26 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     });
   }
 
+  cambiarEstatus(registroTable: RegistroTable) {
+    this.dialogService.open(CambioEstatusComponent, {
+      closeOnBackdropClick: false, context: { currentEstatus: this.sEstatus, registro: registroTable }
+    }).onClose.subscribe((result: Estatus) => {
+      if (result) {
+        this.loading.emit(true);
+        this.estatusService.actualizarEstatus(result, registroTable.orderkey, this.loggedUser).subscribe((success) => {
+          this.registros = this.arrayRemove(this.registros, registroTable);
+          this.dataSource = new MatTableDataSource(this.registros);
+          this.dataSource.paginator = this.paginator;
+          this.loading.emit(false);
+          this.toastrService.success('Se actualizó correctamente el estatus', 'Cambio de estatus');
+        }, (error) => {
+          console.error(error);
+          this.loading.emit(false);
+          this.toastrService.danger('Ocurrió un error al cambiar el estatus', 'Cambio de estatus');
+        });
+      }
+    });
+  }
 
   aceptarAgenda() {
 
@@ -175,7 +226,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
             try {
               scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
             } catch (error) {
-             //console.error(error);
+              //console.error(error);
               let scheduleDate = new Date(Date.parse(registro.scheduledDt.toString()));
               scheduleServiceInDto.scheduledDate = scheduleDate.toLocaleDateString() + ' ' + scheduleDate.toLocaleTimeString();
             }
@@ -336,6 +387,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   loadAccess() {
     this.isCustomer = this.hasAccess('filtro', ['customer']);
     this.isAdmin = this.hasAccess('filtro', ['admin']);
+    this.isCourier = this.hasAccess('filtro', ['courier']);
   }
 
   canRenderCustomer() {

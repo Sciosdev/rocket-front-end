@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  endpoint: "http://192.168.3.2:8080/rocket-1.1.0-SNAPSHOT",
+  endpoint: "http://127.0.0.1:8080",
   clientId: "foo",
   clientSecret: "foosecret" 
 

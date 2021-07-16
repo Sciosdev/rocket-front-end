@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { Estatus } from '../models/estatus.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,13 @@ export class EstatusService {
     const options = { headers: this.getHeaders() };
     return this.http.get(url, options);
 
+  }
+
+  actualizarEstatus(estatusDto: Estatus, orderkey: string, user: string) {
+    const data = { estatusDto, orderKey: orderkey, user: user}; 
+    const url = this.URL_SERVICIOS + '/estatus/';
+    const options = { headers: this.getHeaders() };
+    return this.http.put(url, data, options);
   }
 
 
