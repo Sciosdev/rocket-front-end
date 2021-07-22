@@ -23,6 +23,7 @@ export class FiltroComponent implements OnInit, OnChanges {
   @Output() sEstatus: any = new EventEmitter<Estatus>();
 
   users_combo: any[] = [];
+  courier_combo: any[] = [];
   range: NbCalendarRange<Date>;
   checked: boolean = false;
   estatus: any[] = [];
@@ -34,6 +35,7 @@ export class FiltroComponent implements OnInit, OnChanges {
   isAdmin: boolean;
   access: boolean;
   selectedVendor;
+  selectedCourier;
 
   constructor(public accessChecker: NbAccessChecker,
     private authService: NbAuthService,
@@ -93,7 +95,13 @@ export class FiltroComponent implements OnInit, OnChanges {
         })
       }
     );
-
+    this.usuarioService.obtenerCouriers().subscribe(
+      (resp: any[]) => {
+        resp.forEach(element => {
+          this.courier_combo.push(element);
+        })
+      }
+    );
 
     this.authService.isAuthenticatedOrRefresh().subscribe(
       authenticated => {

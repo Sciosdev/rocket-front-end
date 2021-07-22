@@ -46,6 +46,16 @@
     <nb-rangepicker #rangepicker [(range)]="range"></nb-rangepicker>
 
   </div>
+  <div class="mr-auto p-2">
+    <mat-form-field appearance="standard" *ngIf="isAdmin">
+      <mat-label>Courier</mat-label>
+      <mat-select [(value)]="selectedCourier">
+        <mat-option *ngFor="let courier of courier_combo" [value]="courier.user">
+          {{courier.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
   <div class="ml-auto p-2">
     <button mat-raised-button color="accent" matRipple (click)="obtenerRegistros()" class="button-purple"
       [disabled]="validateInput()">
