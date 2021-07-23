@@ -215,10 +215,10 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   cambiarEstatus(registroTable: RegistroTable) {
     this.dialogService.open(CambioEstatusComponent, {
       closeOnBackdropClick: false, context: { currentEstatus: this.sEstatus, registro: registroTable }
-    }).onClose.subscribe((result: Estatus) => {
+    }).onClose.subscribe((result: any) => {
       if (result) {
         this.loading.emit(true);
-        this.estatusService.actualizarEstatus(result, registroTable.orderkey, this.loggedUser).subscribe((success) => {
+        this.estatusService.actualizarEstatus(result.estatus, registroTable.orderkey, this.loggedUser, result.courier).subscribe((success) => {
           this.registros = this.arrayRemove(this.registros, registroTable);
           this.dataSource = new MatTableDataSource(this.registros);
           this.dataSource.paginator = this.paginator;
