@@ -94,7 +94,6 @@ export class FiltroComponent implements OnInit, OnChanges {
       }
     );
 
-
     this.authService.isAuthenticatedOrRefresh().subscribe(
       authenticated => {
         if (authenticated) {

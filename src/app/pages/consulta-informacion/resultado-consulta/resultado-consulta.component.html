@@ -38,7 +38,18 @@
   </div>
 </div>
 
+<mat-form-field appearance="standard">
+  <mat-label>Comuna</mat-label>
+  <mat-select (selectionChange)="applyFilter($event.value)">
+    <mat-option *ngFor="let comuna of comunas" [value]="comuna">
+      {{comuna}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
 <div class="mat-elevation-z8">
+  
   <mat-table [dataSource]="dataSource">
 
     <ng-container matColumnDef="select" *ngIf="canRenderCustomer() || canRenderAdmin()">
