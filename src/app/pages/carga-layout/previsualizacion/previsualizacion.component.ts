@@ -56,6 +56,7 @@ export class PrevisualizacionComponent implements OnInit, OnChanges {
   }
 
   register() {
+    console.log(this.archivoCargado.type);
     if (this.archivoCargado.type == 'application/vnd.ms-excel' || this.archivoCargado.type == 'text/csv')
       this.csvToJson();
     else
