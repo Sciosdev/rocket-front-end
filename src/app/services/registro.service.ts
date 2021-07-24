@@ -24,6 +24,14 @@ export class RegistroService {
     return this.http.post(url, data, options);
   }
 
+  obtenerComunas() {
+
+    const url = this.URL_SERVICIOS + '/comuna/list/';
+    const options = {headers: this.getHeaders() };
+    return this.http.get(url, options);
+
+  }
+
   obtenerRegistros(user: any, estatus: number) {
 
     const url = this.URL_SERVICIOS + '/registro/list/' + user;
@@ -83,8 +91,6 @@ export class RegistroService {
       'Content-Type': 'application/pdf',
       'Accepts': 'application/pdf'
     });
-
-    const options = {headers: headers, responseType: 'blob'  };
 
     return this.http.get(url, {responseType: 'blob'});
   }

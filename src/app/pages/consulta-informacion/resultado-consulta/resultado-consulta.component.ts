@@ -56,6 +56,8 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   scheduleRejected: RegistroTable[] = [];
   scheduleModified: RegistroTable[] = [];
 
+  comunas: any[] = [];
+
   constructor(public accessChecker: NbAccessChecker,
     private dialogService: NbDialogService,
     private registroService: RegistroService,
@@ -74,6 +76,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.dataSource.paginator = this.paginator;
   }
 
+  
   ngOnInit(): void {
 
     this.loadAccess();
@@ -104,6 +107,17 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
         console.error(error);
         this.toastrService.danger('Ocurrió un error al obtener el estatus', 'Estatus Change');
       }
+
+      
+    );
+
+    this.registroService.obtenerComunas().subscribe(
+      (response : any[]) => {
+        this.comunas = response;
+        console.log(this.comunas);
+      }, (error) => {
+        console.error(error);
+      }
     );
 
     this.primeNGConfig.setTranslation(
@@ -117,6 +131,19 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
         clear: 'Limpiar',
       }
     );
+
+    this.dataSource.filterPredicate = (data: RegistroTable, filter: string) => {
+      return data.shippingCity.trim().toLowerCase() == filter;
+     };
+  }
+
+  applyFilter(filterValue) {
+    console.log(filterValue);
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   canRenderCambioEstatus() {
@@ -188,10 +215,10 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   cambiarEstatus(registroTable: RegistroTable) {
     this.dialogService.open(CambioEstatusComponent, {
       closeOnBackdropClick: false, context: { currentEstatus: this.sEstatus, registro: registroTable }
-    }).onClose.subscribe((result: Estatus) => {
+    }).onClose.subscribe((result: any) => {
       if (result) {
         this.loading.emit(true);
-        this.estatusService.actualizarEstatus(result, registroTable.orderkey, this.loggedUser).subscribe((success) => {
+        this.estatusService.actualizarEstatus(result.estatus, registroTable.orderkey, this.loggedUser, result.courier).subscribe((success) => {
           this.registros = this.arrayRemove(this.registros, registroTable);
           this.dataSource = new MatTableDataSource(this.registros);
           this.dataSource.paginator = this.paginator;

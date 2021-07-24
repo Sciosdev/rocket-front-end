@@ -45,8 +45,8 @@ export class EstatusService {
 
   }
 
-  actualizarEstatus(estatusDto: Estatus, orderkey: string, user: string) {
-    const data = { estatusDto, orderKey: orderkey, user: user}; 
+  actualizarEstatus(estatusDto: Estatus, orderkey: string, user: string, courier: string) {
+    const data = { estatusDto, orderKey: orderkey, user: user, courier: courier}; 
     const url = this.URL_SERVICIOS + '/estatus/';
     const options = { headers: this.getHeaders() };
     return this.http.put(url, data, options);
