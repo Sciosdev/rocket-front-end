@@ -32,20 +32,20 @@ export class RegistroService {
 
   }
 
-  obtenerRegistros(user: any, estatus: number) {
+  obtenerRegistros(user: any, estatus: number, courier: any) {
 
     const url = this.URL_SERVICIOS + '/registro/list/' + user;
-    const httpParams: HttpParamsOptions = { fromObject: {estatus: estatus.toString()} } as HttpParamsOptions;
+    const httpParams: HttpParamsOptions = { fromObject: {estatus: estatus.toString(), courier: courier.toString()} } as HttpParamsOptions;
     const options = { params: new HttpParams(httpParams), headers: this.getHeaders() };
     return this.http.get(url, options);
 
   }
 
-  obtenerRegistrosPorFecha(user: any, fDate: Date, tDate: Date, estatus: number) {
+  obtenerRegistrosPorFecha(user: any, fDate: Date, tDate: Date, estatus: number, courier: any) {
 
     const url = this.URL_SERVICIOS + '/registro/list/' + user;
 
-    const httpParams: HttpParamsOptions = { fromObject: {from: fDate.toDateString(), to: tDate.toDateString(), estatus: estatus.toString()} } as HttpParamsOptions;
+    const httpParams: HttpParamsOptions = { fromObject: {from: fDate.toDateString(), to: tDate.toDateString(), estatus: estatus.toString(), courier: courier.toString()} } as HttpParamsOptions;
     const options = { params: new HttpParams(httpParams), headers: this.getHeaders() };
     return this.http.get(url, options);
 

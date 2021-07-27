@@ -21,6 +21,7 @@ export class FiltroComponent implements OnInit, OnChanges {
   @Output() loading: any = new EventEmitter<boolean>();
   @Output() vendor: any = new EventEmitter<String>();
   @Output() sEstatus: any = new EventEmitter<Estatus>();
+  @Output() courier: any = new EventEmitter<String>();
 
   users_combo: any[] = [];
   courier_combo: any[] = [];
@@ -159,6 +160,7 @@ export class FiltroComponent implements OnInit, OnChanges {
     }
     
     this.vendor.emit(this.selectedVendor);
+    this.courier.emit(this.selectedCourier);
 
     if (this.checked) {
 
@@ -167,7 +169,7 @@ export class FiltroComponent implements OnInit, OnChanges {
         Swal.fire('Error', 'Por favor asegurese que el rango de fechas es correcto', 'error');
 
       } else {
-        this.registroService.obtenerRegistrosPorFecha(this.selectedVendor, this.range.start, this.range.end, this.selectedEstatus.id).subscribe(
+        this.registroService.obtenerRegistrosPorFecha(this.selectedVendor, this.range.start, this.range.end, this.selectedEstatus.id, this.selectedCourier).subscribe(
           (response: RegistroTable[] )=> {
             this.sEstatus.emit(this.selectedEstatus);
             this.registros.emit(response);
@@ -182,7 +184,7 @@ export class FiltroComponent implements OnInit, OnChanges {
 
 
     } else {
-      this.registroService.obtenerRegistros(this.selectedVendor, this.selectedEstatus.id).subscribe(
+      this.registroService.obtenerRegistros(this.selectedVendor, this.selectedEstatus.id, this.selectedCourier).subscribe(
         (response: RegistroTable[] ) => {
           this.sEstatus.emit(this.selectedEstatus);
           this.registros.emit(response);
