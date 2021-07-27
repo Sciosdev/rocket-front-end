@@ -58,6 +58,8 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   comunas: any[] = [];
 
+  selectedComuna: string = '';
+
   constructor(public accessChecker: NbAccessChecker,
     private dialogService: NbDialogService,
     private registroService: RegistroService,
@@ -76,7 +78,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.dataSource.paginator = this.paginator;
   }
 
-  
+
   ngOnInit(): void {
 
     this.loadAccess();
@@ -95,12 +97,12 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
           this.columns.push(...this.defaultColumns, 'actions');
         } else
           this.columns.push(...this.defaultColumns);
-    
-    
+
+
         if (this.canRenderCambioEstatus() && !this.columns.includes('CambioEstatus')) {
           this.columns.push('CambioEstatus');
         }
-    
+
         this.displayedColumns = this.columns;
 
       }, (error) => {
@@ -108,11 +110,11 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
         this.toastrService.danger('Ocurrió un error al obtener el estatus', 'Estatus Change');
       }
 
-      
+
     );
 
     this.registroService.obtenerComunas().subscribe(
-      (response : any[]) => {
+      (response: any[]) => {
         this.comunas = response;
         console.log(this.comunas);
       }, (error) => {
@@ -134,16 +136,25 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
     this.dataSource.filterPredicate = (data: RegistroTable, filter: string) => {
       return data.shippingCity.trim().toLowerCase() == filter;
-     };
+    };
   }
 
-  applyFilter(filterValue) {
-    console.log(filterValue);
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter(filtro) {
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    console.log(filtro);
+
+    if (filtro) {
+      this.dataSource.filter = filtro.trim().toLowerCase();
+
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
+    } else {
+      this.dataSource = new MatTableDataSource(this.registros);
+      this.dataSource.paginator = this.paginator;
+      this.selection.clear();
     }
+
   }
 
   canRenderCambioEstatus() {
@@ -168,6 +179,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     if (this.canRenderCambioEstatus() && !this.columns.includes('CambioEstatus')) {
       this.columns.push('CambioEstatus');
     }
+    this.selectedComuna = '';
 
     this.displayedColumns = this.columns;
 
@@ -189,7 +201,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   solicitarAgenda() {
     this.dialogService.open(ScheduleComponent, {
-      closeOnBackdropClick: false,
+      closeOnBackdropClick: false,closeOnEsc: true
     })
       .onClose.subscribe((result: any) => {
         if (result != undefined && result.fecha != null) {
