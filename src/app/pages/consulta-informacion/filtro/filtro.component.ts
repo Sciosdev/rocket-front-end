@@ -216,6 +216,7 @@ export class FiltroComponent implements OnInit, OnChanges {
 
     this.selectCourierFormControl.reset();
     this.selectCourierFormControl.disable();
+    this.selectCourierFormControl.setValue(this.selectedCourier);
     this.checked_courier = false;
 
   }
