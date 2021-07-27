@@ -35,7 +35,7 @@
     </mat-form-field>
   </div>
 
-  <div class="p-2">
+  <div class="mr-auto p-2">
 
     <mat-form-field appearance="standard">
       <mat-label>Fecha de carga</mat-label>
@@ -45,6 +45,20 @@
     <mat-checkbox class="example-margin" [(ngModel)]="checked" class="ml-2"></mat-checkbox>
     <nb-rangepicker #rangepicker [(range)]="range"></nb-rangepicker>
 
+  </div>
+  <div class="mr-auto p-2" *ngIf="isAdmin">
+    <mat-form-field appearance="standard">
+      <mat-label>Courier</mat-label>
+      <mat-select [(value)]="selectedCourier" [required]="checked_courier" [formControl]="selectCourierFormControl">
+        <mat-option *ngFor="let courier of courier_combo" [value]="courier.user" >
+          {{courier.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="selectCourierFormControl.hasError('required')">
+        Este campo es requerido
+      </mat-error>
+    </mat-form-field>
+    <mat-checkbox class="example-margin" [(ngModel)]="checked_courier" class="ml-2" (click)="enable()"></mat-checkbox>
   </div>
   <div class="ml-auto p-2">
     <button mat-raised-button color="accent" matRipple (click)="obtenerRegistros()" class="button-purple"

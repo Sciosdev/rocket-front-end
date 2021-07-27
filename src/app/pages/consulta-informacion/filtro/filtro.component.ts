@@ -21,19 +21,24 @@ export class FiltroComponent implements OnInit, OnChanges {
   @Output() loading: any = new EventEmitter<boolean>();
   @Output() vendor: any = new EventEmitter<String>();
   @Output() sEstatus: any = new EventEmitter<Estatus>();
+  @Output() courier: any = new EventEmitter<String>();
 
   users_combo: any[] = [];
+  courier_combo: any[] = [];
   range: NbCalendarRange<Date>;
   checked: boolean = false;
+  checked_courier: boolean = false;
   estatus: any[] = [];
   selectedEstatus: Estatus;
 
   selectFormControl = new FormControl('', Validators.required);
+  selectCourierFormControl = new FormControl({value:  '', disabled: true}, Validators.required);
   usuarioFormControl = new FormControl('', Validators.required);
   adminFormControl = new FormControl('', Validators.required);
   isAdmin: boolean;
   access: boolean;
   selectedVendor;
+  selectedCourier;
 
   constructor(public accessChecker: NbAccessChecker,
     private authService: NbAuthService,
@@ -56,7 +61,7 @@ export class FiltroComponent implements OnInit, OnChanges {
                 let user = token.getAccessTokenPayload();
                 this.loggedUser = user.user_name;
                 this.usuarioFormControl.setValue(user.fullname);
-                this.isAdmin = this.hasAccess('filtro',['admin']);
+                this.isAdmin = this.hasAccess('filtro', ['admin']);
               }
             }
           );
@@ -64,7 +69,14 @@ export class FiltroComponent implements OnInit, OnChanges {
       }
     );
 
+  }
 
+  enable(){
+    if(this.checked_courier){
+      this.selectCourierFormControl.disable();
+    } else {
+      this.selectCourierFormControl.enable();
+    }
   }
 
   get monthStart(): Date {
@@ -93,7 +105,13 @@ export class FiltroComponent implements OnInit, OnChanges {
         })
       }
     );
-
+    this.usuarioService.obtenerCouriers().subscribe(
+      (resp: any[]) => {
+        resp.forEach(element => {
+          this.courier_combo.push(element);
+        })
+      }
+    );
 
     this.authService.isAuthenticatedOrRefresh().subscribe(
       authenticated => {
@@ -104,7 +122,7 @@ export class FiltroComponent implements OnInit, OnChanges {
                 let user = token.getAccessTokenPayload();
                 this.loggedUser = user.user_name;
                 this.usuarioFormControl.setValue(user.fullname);
-                this.isAdmin = this.hasAccess('filtro',['admin']);
+                this.isAdmin = this.hasAccess('filtro', ['admin']);
 
                 this.estatusService.obtenerEstatus(this.loggedUser).subscribe(
                   (resp: Estatus[]) => {
@@ -118,7 +136,7 @@ export class FiltroComponent implements OnInit, OnChanges {
       }
     );
 
-   
+
   }
 
   loggedUser: any;
@@ -139,18 +157,27 @@ export class FiltroComponent implements OnInit, OnChanges {
     if (!this.isAdmin) {
       return this.usuarioFormControl.hasError("required") || this.selectFormControl.hasError("required");
     } else {
-      return this.adminFormControl.hasError("required") || this.selectFormControl.hasError("required");
+      if (this.checked_courier)
+        return this.adminFormControl.hasError("required") || this.selectFormControl.hasError("required") || this.selectCourierFormControl.hasError("required");
+      else
+        return this.adminFormControl.hasError("required") || this.selectFormControl.hasError("required");
     }
   }
 
   obtenerRegistros() {
-    this.loading.emit(true);
     
-    if(!this.isAdmin){
+    this.loading.emit(true);
+
+    if (!this.isAdmin) {
       this.selectedVendor = this.loggedUser;
     }
-    
+
     this.vendor.emit(this.selectedVendor);
+
+    if (!this.checked_courier)
+      this.selectedCourier = null;
+
+    this.courier.emit(this.selectedCourier);
 
     if (this.checked) {
 
@@ -159,8 +186,8 @@ export class FiltroComponent implements OnInit, OnChanges {
         Swal.fire('Error', 'Por favor asegurese que el rango de fechas es correcto', 'error');
 
       } else {
-        this.registroService.obtenerRegistrosPorFecha(this.selectedVendor, this.range.start, this.range.end, this.selectedEstatus.id).subscribe(
-          (response: RegistroTable[] )=> {
+        this.registroService.obtenerRegistrosPorFecha(this.selectedVendor, this.range.start, this.range.end, this.selectedEstatus.id, this.selectedCourier).subscribe(
+          (response: RegistroTable[]) => {
             this.sEstatus.emit(this.selectedEstatus);
             this.registros.emit(response);
             this.loading.emit(false);
@@ -174,8 +201,8 @@ export class FiltroComponent implements OnInit, OnChanges {
 
 
     } else {
-      this.registroService.obtenerRegistros(this.selectedVendor, this.selectedEstatus.id).subscribe(
-        (response: RegistroTable[] ) => {
+      this.registroService.obtenerRegistros(this.selectedVendor, this.selectedEstatus.id, this.selectedCourier).subscribe(
+        (response: RegistroTable[]) => {
           this.sEstatus.emit(this.selectedEstatus);
           this.registros.emit(response);
           this.loading.emit(false);
@@ -186,6 +213,11 @@ export class FiltroComponent implements OnInit, OnChanges {
         }
       )
     }
+
+    this.selectCourierFormControl.reset();
+    this.selectCourierFormControl.disable();
+    this.selectCourierFormControl.setValue(this.selectedCourier);
+    this.checked_courier = false;
 
   }
 }

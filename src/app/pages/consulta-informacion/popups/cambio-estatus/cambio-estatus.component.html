@@ -9,32 +9,36 @@
     <hr>
     <div class="row">
       <div class="col-md-6">
-        <dl>
-          <dt>
-            Nombre
-          </dt>
-          <dd>
-            {{registro.name}}
-          </dd>
-          <dt>
-            Email
-          </dt>
-          <dd>
-            {{registro.email}}
-          </dd>
-          <dt>
-            Tienda
-          </dt>
-          <dt>
-          <dd>
-            {{registro.vendedor}}
-          </dd>
+        <div class="d-flex align-items-center" style="height: 100%;">
+          <div class="p-2">
+            <dl>
+              <dt>
+                Nombre
+              </dt>
+              <dd>
+                {{registro.name}}
+              </dd>
+              <dt>
+                Email
+              </dt>
+              <dd>
+                {{registro.email}}
+              </dd>
+              <dt>
+                Tienda
+              </dt>
+              <dt>
+              <dd>
+                {{registro.vendedor}}
+              </dd>
+            
 
-        </dl>
-
+            </dl>
+          </div>
+        </div>
       </div>
       <div class="col-md-6">
-        <div class="d-flex align-items-center">
+        <div class="d-flex flex-column align-items-center" style="height: 100%;">
           <div class="p-2 text-info">
             <b>
               Selecciona el nuevo estatus
@@ -51,8 +55,23 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <div class="p-2 text-success" *ngIf="activateReassignCourier()">
+            <b>
+              Reasignar Courier
+            </b>
+            <mat-form-field >
+              <mat-label>Courier</mat-label>
+              <mat-select [(value)]="selectedCourier" style="width: 100%;">
+                <mat-option *ngFor="let courier of courierList" [value]="courier.user">
+                  {{courier.name}}
+                </mat-option>
+              </mat-select>
+             
+            </mat-form-field>
+          </div>
         </div>
       </div>
+
     </div>
     <div class="d-flex justify-content-end">
       <div class="p-2">
