@@ -201,7 +201,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   solicitarAgenda() {
     this.dialogService.open(ScheduleComponent, {
-      closeOnBackdropClick: false
+      closeOnBackdropClick: false,closeOnEsc: true
     })
       .onClose.subscribe((result: any) => {
         if (result != undefined && result.fecha != null) {
