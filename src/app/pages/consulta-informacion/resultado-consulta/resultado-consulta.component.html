@@ -1,55 +1,61 @@
-<div class="d-flex justify-content-end" *ngIf="canRenderCustomer()">
-  <div class="p-2">
-    <button mat-raised-button color="accent" matRipple [disabled]="selection.selected.length == 0"
-      (click)="solicitarAgenda()">
-      <nb-icon icon="calendar-outline"></nb-icon>
-      Solicitar agenda
-    </button>
+<div class="d-flex justify-content-between flex-wrap">
+  <div class="p-2"> 
+    <mat-form-field>
+
+      <mat-label>Filtro Comuna</mat-label>
+      <mat-select ([value])="selectedComuna" (selectionChange)="applyFilter($event.value)">
+        <mat-option>Ninguno</mat-option>
+        <mat-option *ngFor="let comuna of comunas" [value]="comuna">
+          {{comuna | titlecase}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
-  <div class="p-2">
-    <button mat-raised-button color="primary" matRipple [disabled]="ToBeScheduled.length == 0"
-      (click)="procesarAgenda()">
-      <nb-icon icon="checkmark-square-2-outline"></nb-icon>
-      Confirmar agenda
-    </button>
+
+  <div class="d-flex justify-content-lg-end flex-wrap" *ngIf="canRenderCustomer()">
+    <div class="p-2">
+      <button mat-raised-button color="accent" matRipple [disabled]="selection.selected.length == 0"
+        (click)="solicitarAgenda()">
+        <nb-icon icon="calendar-outline"></nb-icon>
+        Solicitar agenda
+      </button>
+    </div>
+    <div class="p-2">
+      <button mat-raised-button color="primary" matRipple [disabled]="ToBeScheduled.length == 0"
+        (click)="procesarAgenda()">
+        <nb-icon icon="checkmark-square-2-outline"></nb-icon>
+        Confirmar agenda
+      </button>
+    </div>
+    <div class="p-2">
+      <button mat-raised-button color="warn" matRipple [disabled]="ToBeScheduled.length == 0" (click)="limpiarAgenda()">
+        <nb-icon icon="close-square-outline"></nb-icon>
+        Limpiar agenda
+      </button>
+    </div>
   </div>
-  <div class="p-2">
-    <button mat-raised-button color="warn" matRipple [disabled]="ToBeScheduled.length == 0" (click)="limpiarAgenda()">
-      <nb-icon icon="close-square-outline"></nb-icon>
-      Limpiar agenda
-    </button>
+
+  <div class="d-flex justify-content-lg-end flex-wrap" *ngIf="canRenderAdmin()">
+    <div class="p-2">
+      <button mat-raised-button color="accent" matRipple [disabled]="selection.selected.length == 0"
+        (click)="aceptarAgenda()">
+        <nb-icon icon="checkmark-square-2-outline"></nb-icon>
+        Aceptar agenda
+      </button>
+    </div>
+    <div class="p-2">
+      <button mat-raised-button color="primary" matRipple [disabled]="selection.selected.length == 0"
+        (click)="rechazarAgenda()">
+        <nb-icon icon="close-square-outline"></nb-icon>
+        Rechazar agenda
+      </button>
+    </div>
   </div>
+  
 </div>
-
-<div class="d-flex justify-content-end" *ngIf="canRenderAdmin()">
-  <div class="p-2">
-    <button mat-raised-button color="accent" matRipple [disabled]="selection.selected.length == 0"
-      (click)="aceptarAgenda()">
-      <nb-icon icon="checkmark-square-2-outline"></nb-icon>
-      Aceptar agenda
-    </button>
-  </div>
-  <div class="p-2">
-    <button mat-raised-button color="primary" matRipple [disabled]="selection.selected.length == 0"
-      (click)="rechazarAgenda()">
-      <nb-icon icon="close-square-outline"></nb-icon>
-      Rechazar agenda
-    </button>
-  </div>
-</div>
-
-<mat-form-field appearance="standard">
-  <mat-label>Comuna</mat-label>
-  <mat-select (selectionChange)="applyFilter($event.value)">
-    <mat-option *ngFor="let comuna of comunas" [value]="comuna">
-      {{comuna}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-
 
 <div class="mat-elevation-z8">
-  
+
   <mat-table [dataSource]="dataSource">
 
     <ng-container matColumnDef="select" *ngIf="canRenderCustomer() || canRenderAdmin()">
@@ -123,7 +129,7 @@
       </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="CambioEstatus"  *ngIf="canRenderCambioEstatus()">
+    <ng-container matColumnDef="CambioEstatus" *ngIf="canRenderCambioEstatus()">
       <mat-header-cell *matHeaderCellDef> Cambiar estatus </mat-header-cell>
 
       <mat-cell *matCellDef="let row" style="text-align: center;">
@@ -137,7 +143,8 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
-  <div class="d-flex align-content-center justify-content-center" *ngIf="registros.length === 0">No se encontraron
+  <div class="d-flex align-content-center justify-content-center"
+    *ngIf="registros.length === 0 ||  dataSource.filteredData.length  === 0">No se encontraron
     registros</div>
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
