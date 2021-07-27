@@ -116,7 +116,6 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.registroService.obtenerComunas().subscribe(
       (response: any[]) => {
         this.comunas = response;
-        console.log(this.comunas);
       }, (error) => {
         console.error(error);
       }
@@ -140,8 +139,6 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   }
 
   applyFilter(filtro) {
-
-    console.log(filtro);
 
     if (filtro) {
       this.dataSource.filter = filtro.trim().toLowerCase();
@@ -269,7 +266,6 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
             try {
               scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
             } catch (error) {
-              //console.error(error);
               let scheduleDate = new Date(Date.parse(registro.scheduledDt.toString()));
               scheduleServiceInDto.scheduledDate = scheduleDate.toLocaleDateString() + ' ' + scheduleDate.toLocaleTimeString();
             }
@@ -277,7 +273,6 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
             scheduleServiceInDto.vendor = this.vendor;
             scheduleServiceInDto.user = this.loggedUser;
             scheduleServiceInDto.courier = result.courier;
-            console.log(scheduleServiceInDto);
             data.push(scheduleServiceInDto);
           });
 
@@ -379,7 +374,6 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     });
 
     this.registroService.solicitarAgenda(agenda).subscribe(response => {
-      console.log(response);
       this.limpiarAgenda();
       this.registros = null;
       this.regis.emit(this.registros);
