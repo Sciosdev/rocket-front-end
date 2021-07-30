@@ -6,6 +6,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { CargaLayoutComponent } from './carga-layout/carga-layout.component';
 import { AuthGuard } from '../auth.guard';
 import { ConsultaInformacionComponent } from './consulta-informacion/consulta-informacion.component';
+import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.component';
 
 
 const routes: Routes = [{
@@ -30,6 +31,14 @@ const routes: Routes = [{
       canActivate: [AuthGuard],
       data: {
         resource: ['messenger', 'customer','admin','courier'],
+      },
+    },
+    {
+      path: 'gestion-usuarios',
+      component: GestionUsuariosComponent,
+      canActivate: [AuthGuard],
+      data: {
+        resource: ['admin'],
       },
     },
     {

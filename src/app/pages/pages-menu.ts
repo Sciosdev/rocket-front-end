@@ -37,4 +37,13 @@ export const admin_menu: NbMenuItem[] = [
         resource: ['messenger','customer','admin', 'courier']
       },
     },
+    {
+      title: 'Administración',
+      icon: 'settings-2-outline',
+      link: '/intranet/gestion-usuarios',
+      data: {
+        permission: 'menu',
+        resource: ['admin']
+      },
+    },
 ];
