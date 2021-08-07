@@ -1,0 +1,22 @@
+<div class="d-flex flex-row align-items-center flex-wrap">
+    <div class="mr-auto p-2">
+      <mat-form-field appearance="standard" *ngIf="isAdmin">
+        <mat-label>Rol de usuario</mat-label>
+        <mat-select [(value)]="selectedRolUsuario" [formControl]="adminFormControl">
+          <mat-option *ngFor="let rol of roles_combo" [value]="rol.rol">
+            {{rol.rol}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="adminFormControl.hasError('required')">
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+    </div>
+  <div class="ml-auto p-2">
+    <button mat-raised-button color="accent" matRipple (click)="obtenerUsuarios()" class="button-purple">
+      <nb-icon icon="search-outline"></nb-icon>
+      Traer Usuarios
+    </button>
+  </div>
+</div>
+

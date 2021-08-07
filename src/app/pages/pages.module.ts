@@ -20,10 +20,10 @@ import { CargaLayoutModule } from './carga-layout/carga-layout.module';
 import { NgxLoadingXModule } from 'ngx-loading-x';
 import { ConsultaInformacionModule } from './consulta-informacion/consulta-informacion.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.component';
+import { GestionUsuariosModule } from './gestion-usuarios/gestion-usuarios.module';
 
 @NgModule({
-  declarations: [PagesComponent, GestionUsuariosComponent],
+  declarations: [PagesComponent],
   imports: [
     CommonModule,
     PagesRoutingModule,
@@ -40,7 +40,8 @@ import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.co
     NbCardModule,
     NgxLoadingXModule,
     ConsultaInformacionModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    GestionUsuariosModule
 ],
   providers: []
 })
