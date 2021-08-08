@@ -6,6 +6,7 @@ import { EstatusService } from 'src/app/services/estatus.service';
 import { RolesService } from 'src/app/services/roles.service';
 import { EventEmitter, Output } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { Usuario } from 'src/app/models/usuario.model';
 
 @Component({
   selector: 'app-filtro-consulta',
@@ -26,6 +27,8 @@ export class FiltroConsultaComponent implements OnInit {
   usuarios_combo: any[] = [];
 
   @Output() rol: any = new EventEmitter<String>();
+  @Output() registros: any = new EventEmitter<Usuario[]>();
+  @Output() loading: any = new EventEmitter<boolean>();
   
 
   constructor(
@@ -103,6 +106,7 @@ export class FiltroConsultaComponent implements OnInit {
 
   obtenerUsuarios() {
 
+    this.loading.emit(true);
     if(!this.selectedRolUsuario)
       this.selectedRolUsuario = null;
     
@@ -112,18 +116,23 @@ export class FiltroConsultaComponent implements OnInit {
 
     if(this.selectedRolUsuario === null) {
       this.usuarioService.obtenerUsuarios().subscribe(
-        (resp: any[]) => {
-          resp.forEach(element => {
-            this.usuarios_combo.push(element);
-          })
+        (resp: Usuario[]) => {
+          this.registros.emit(resp);
+          console.log("obtenerUsuarios" + resp);
+          this.loading.emit(false);
+        }, (error) => {
+          this.loading.emit(false);
+          console.error(error);
         }
       );
     } else {
       this.usuarioService.obtenerUsuariosPorRol(this.selectedRolUsuario).subscribe(
-        (resp: any[]) => {
-          resp.forEach(element => {
-            this.usuarios_combo.push(element);
-          })
+        (resp: Usuario[]) => {
+          this.registros.emit(resp);
+          this.loading.emit(false);
+        }, (error) => {
+          this.loading.emit(false);
+          console.error(error);
         }
       );
     }

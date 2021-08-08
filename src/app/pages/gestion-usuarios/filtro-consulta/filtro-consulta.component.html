@@ -2,14 +2,12 @@
     <div class="mr-auto p-2">
       <mat-form-field appearance="standard" *ngIf="isAdmin">
         <mat-label>Rol de usuario</mat-label>
-        <mat-select [(value)]="selectedRolUsuario" [formControl]="adminFormControl">
+        <mat-select [(value)]="selectedRolUsuario">
+          <mat-option>Sin Selección</mat-option>
           <mat-option *ngFor="let rol of roles_combo" [value]="rol.rol">
             {{rol.rol}}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="adminFormControl.hasError('required')">
-          Este campo es requerido
-        </mat-error>
       </mat-form-field>
     </div>
   <div class="ml-auto p-2">
