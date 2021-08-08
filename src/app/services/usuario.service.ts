@@ -37,7 +37,17 @@ export class UsuarioService {
   obtenerUsuarios() {
 
     const url = this.URL_SERVICIOS + '/user/';
-    return this.http.get(url, this.getOptions()); 
+    return this.http.get(url, this.getOptions());
+  }
+
+  obtenerUsuario(username: string) {
+    const url = this.URL_SERVICIOS + '/user/' + username;
+    return this.http.get(url, this.getOptions());
+  }
+
+  obtenerUsuarioCompleto(username: string) {
+    const url = this.URL_SERVICIOS + '/user-full/' + username;
+    return this.http.get(url, this.getOptions());
   }
 
   obtenerUsuariosPorRol(rol: any) {
@@ -46,8 +56,8 @@ export class UsuarioService {
 
     let httpParams: HttpParamsOptions;
 
-    httpParams = { fromObject: { rol: rol.toString()} } as HttpParamsOptions;
-    
+    httpParams = { fromObject: { rol: rol.toString() } } as HttpParamsOptions;
+
 
     const options = { params: new HttpParams(httpParams), headers: this.getHeaders() };
     return this.http.get(url, options);

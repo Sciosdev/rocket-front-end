@@ -112,13 +112,10 @@ export class FiltroConsultaComponent implements OnInit {
     
     this.rol.emit(this.selectedRolUsuario);
 
-    console.log(this.selectedRolUsuario);
-
     if(this.selectedRolUsuario === null) {
       this.usuarioService.obtenerUsuarios().subscribe(
         (resp: Usuario[]) => {
           this.registros.emit(resp);
-          console.log("obtenerUsuarios" + resp);
           this.loading.emit(false);
         }, (error) => {
           this.loading.emit(false);
