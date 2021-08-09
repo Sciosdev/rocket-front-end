@@ -7,6 +7,7 @@ import { CargaLayoutComponent } from './carga-layout/carga-layout.component';
 import { AuthGuard } from '../auth.guard';
 import { ConsultaInformacionComponent } from './consulta-informacion/consulta-informacion.component';
 import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.component';
+import { GestionTiendasComponent } from './gestion-tiendas/gestion-tiendas.component';
 
 
 const routes: Routes = [{
@@ -36,6 +37,13 @@ const routes: Routes = [{
     {
       path: 'gestion-usuarios',
       component: GestionUsuariosComponent,
+      canActivate: [AuthGuard],
+      data: {
+        resource: ['admin'],
+      },
+    },{
+      path: 'gestion-tiendas',
+      component: GestionTiendasComponent,
       canActivate: [AuthGuard],
       data: {
         resource: ['admin'],
