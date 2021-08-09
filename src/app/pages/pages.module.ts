@@ -21,6 +21,7 @@ import { NgxLoadingXModule } from 'ngx-loading-x';
 import { ConsultaInformacionModule } from './consulta-informacion/consulta-informacion.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { GestionUsuariosModule } from './gestion-usuarios/gestion-usuarios.module';
+import { GestionTiendasModule } from './gestion-tiendas/gestion-tiendas.module';
 
 @NgModule({
   declarations: [PagesComponent],
@@ -41,7 +42,8 @@ import { GestionUsuariosModule } from './gestion-usuarios/gestion-usuarios.modul
     NgxLoadingXModule,
     ConsultaInformacionModule,
     NgxSpinnerModule,
-    GestionUsuariosModule
+    GestionUsuariosModule,
+    GestionTiendasModule
 ],
   providers: []
 })

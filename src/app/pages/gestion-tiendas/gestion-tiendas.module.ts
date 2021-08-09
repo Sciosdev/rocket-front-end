@@ -13,9 +13,9 @@ import { MaterialModule } from 'src/app/material/material.module';
   declarations: [GestionTiendasComponent, FiltroConsultaTiendasComponent, ResultadoConsultaTiendasComponent],
   imports: [
     CommonModule,
-    NgxLoadingXModule,
-    ThemeModule,
     MaterialModule,
+    ThemeModule,
+    NgxLoadingXModule
   ]
 })
 export class GestionTiendasModule { }
