@@ -8,18 +8,19 @@ import { ResultadoConsultaUsuariosComponent } from './resultado-consulta-usuario
 import { NgxLoadingXModule } from 'ngx-loading-x';
 import { ModificarUsuarioComponent } from './popups/modificar-usuario/modificar-usuario.component';
 import { EliminarUsuarioComponent } from './popups/eliminar-usuario/eliminar-usuario.component';
-import { UndefinedPipe } from '../pipes/undefined.pipe';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 
 
 
 @NgModule({
-  declarations: [FiltroConsultaComponent, GestionUsuariosComponent, ResultadoConsultaUsuariosComponent, ModificarUsuarioComponent, EliminarUsuarioComponent, UndefinedPipe],
+  declarations: [FiltroConsultaComponent, GestionUsuariosComponent, ResultadoConsultaUsuariosComponent, ModificarUsuarioComponent, EliminarUsuarioComponent],
   imports: [
     CommonModule,
     MaterialModule,
     ThemeModule,
-    NgxLoadingXModule
+    NgxLoadingXModule,
+    PipesModule
   ]
 })
 export class GestionUsuariosModule { }

@@ -7,6 +7,7 @@ import { TiendaService } from 'src/app/services/tienda.service';
   templateUrl: './filtro-consulta-tiendas.component.html',
   styleUrls: ['./filtro-consulta-tiendas.component.scss']
 })
+
 export class FiltroConsultaTiendasComponent implements OnInit {
   isAdmin: boolean;
 
@@ -17,7 +18,6 @@ export class FiltroConsultaTiendasComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 
   obtenerTiendas() {
 

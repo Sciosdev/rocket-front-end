@@ -6,16 +6,25 @@ import { ResultadoConsultaTiendasComponent } from './resultado-consulta-tiendas/
 import { NgxLoadingXModule } from 'ngx-loading-x';
 import { ThemeModule } from 'src/app/theme/theme.module';
 import { MaterialModule } from 'src/app/material/material.module';
-
-
+import { AltaTiendaComponent } from './popups/alta-tienda/alta-tienda.component';
+import { ModificacionTiendaComponent } from './popups/modificacion-tienda/modificacion-tienda.component';
+import { PipesModule } from 'src/app/pipes/pipes.module';
+import {FileUploadModule} from 'primeng/fileupload';
+import {HttpClientModule} from '@angular/common/http';
+import {BlockUIModule} from 'primeng/blockui';
 
 @NgModule({
-  declarations: [GestionTiendasComponent, FiltroConsultaTiendasComponent, ResultadoConsultaTiendasComponent],
+  declarations: [GestionTiendasComponent, FiltroConsultaTiendasComponent, ResultadoConsultaTiendasComponent, AltaTiendaComponent, ModificacionTiendaComponent],
   imports: [
     CommonModule,
     MaterialModule,
     ThemeModule,
-    NgxLoadingXModule
+    NgxLoadingXModule,
+    PipesModule,
+    FileUploadModule,
+    HttpClientModule,
+    BlockUIModule
   ]
 })
+
 export class GestionTiendasModule { }

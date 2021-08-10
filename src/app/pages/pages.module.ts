@@ -22,9 +22,10 @@ import { ConsultaInformacionModule } from './consulta-informacion/consulta-infor
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { GestionUsuariosModule } from './gestion-usuarios/gestion-usuarios.module';
 import { GestionTiendasModule } from './gestion-tiendas/gestion-tiendas.module';
+import { GlobalAcceptanceComponent } from './common-popups/global-acceptance/global-acceptance.component';
 
 @NgModule({
-  declarations: [PagesComponent],
+  declarations: [PagesComponent, GlobalAcceptanceComponent],
   imports: [
     CommonModule,
     PagesRoutingModule,
@@ -43,8 +44,10 @@ import { GestionTiendasModule } from './gestion-tiendas/gestion-tiendas.module';
     ConsultaInformacionModule,
     NgxSpinnerModule,
     GestionUsuariosModule,
-    GestionTiendasModule
+    GestionTiendasModule,
+    
 ],
-  providers: []
+  providers: [],
+  exports: []
 })
 export class PagesModule { }
