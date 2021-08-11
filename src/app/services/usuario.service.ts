@@ -35,12 +35,6 @@ export class UsuarioService {
 
   }
 
-  obtenerUsuarios() {
-
-    const url = this.URL_SERVICIOS + '/user/';
-    return this.http.get(url, this.getOptions());
-  }
-
   obtenerUsuario(username: string) {
     const url = this.URL_SERVICIOS + '/user/' + username;
     return this.http.get(url, this.getOptions());
@@ -51,17 +45,29 @@ export class UsuarioService {
     return this.http.get(url, this.getOptions());
   }
 
-  obtenerUsuariosPorRol(rol: any) {
+  obtenerUsuarios(rol: string, tienda: number) {
 
     const url = this.URL_SERVICIOS + '/user/';
 
     let httpParams: HttpParamsOptions;
 
-    httpParams = { fromObject: { rol: rol.toString() } } as HttpParamsOptions;
-
+    if(rol != undefined && tienda != undefined){
+      httpParams = { fromObject: { rol: rol.toString(), tienda: tienda.toString()  } } as HttpParamsOptions;
+    } else if (rol != undefined) {
+      httpParams = { fromObject: { rol: rol.toString() } } as HttpParamsOptions;
+    } else if (tienda != undefined) {
+      httpParams = { fromObject: { tienda: tienda.toString() } } as HttpParamsOptions;
+    } else {
+      httpParams = { fromObject: {  } } as HttpParamsOptions;
+    }
 
     const options = { params: new HttpParams(httpParams), headers: this.getHeaders() };
     return this.http.get(url, options);
+  }
+
+  eliminarUsuario(usuario:string) {
+    const url = this.URL_SERVICIOS + '/user/' + usuario;
+    return this.http.delete(url, this.getOptions());
   }
 
   actualizarUsuarios(usuario: UsuarioCompleto) {

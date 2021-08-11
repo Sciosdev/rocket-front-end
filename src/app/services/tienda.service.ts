@@ -18,6 +18,12 @@ export class TiendaService {
     return this.http.get(url, this.getOptions());
   }
 
+  obtenerCatalogoTiendas() {
+
+    const url = this.URL_SERVICIOS + '/vendor-catalog/';
+    return this.http.get(url, this.getOptions());
+  }
+
   eliminarTienda(idTienda: number) {
     const url = this.URL_SERVICIOS + '/vendor/' + idTienda;
     return this.http.delete(url, this.getOptions());

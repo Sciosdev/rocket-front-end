@@ -8,6 +8,14 @@
             <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
             <td mat-cell *matCellDef="let usuario"> {{usuario.nombre}} </td>
         </ng-container>
+        <ng-container matColumnDef="Rol">
+            <mat-header-cell *matHeaderCellDef> Rol </mat-header-cell>
+            <td mat-cell *matCellDef="let usuario"> {{usuario.rol}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Tienda">
+            <mat-header-cell *matHeaderCellDef> Tienda </mat-header-cell>
+            <td mat-cell *matCellDef="let usuario"> {{usuario.tienda}} </td>
+        </ng-container>
         <ng-container matColumnDef="Correo">
             <mat-header-cell *matHeaderCellDef> Correo </mat-header-cell>
             <td mat-cell *matCellDef="let usuario"> {{usuario.correo}} </td>
@@ -23,6 +31,10 @@
                 <button mat-button (click)="modificarUsuario(usuario)" nbTooltip="Modificar Usuario"
                     nbTooltipStatus="primary">
                     <nb-icon icon="edit-outline" style="color: rgb(111, 0, 255);"></nb-icon>
+                </button>
+                <button mat-button (click)="eliminarUsuario(usuario)" nbTooltip="Eliminar usuario"
+                    nbTooltipStatus="primary">
+                    <nb-icon icon="trash-2-outline" style="color: rgb(255, 0, 0);"></nb-icon>
                 </button>
             </mat-cell>
         </ng-container>

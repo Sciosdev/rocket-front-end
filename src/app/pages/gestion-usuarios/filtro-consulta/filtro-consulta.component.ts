@@ -7,6 +7,7 @@ import { RolesService } from 'src/app/services/roles.service';
 import { EventEmitter, Output } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { Usuario } from 'src/app/models/usuario.model';
+import { TiendaService } from '../../../services/tienda.service';
 
 @Component({
   selector: 'app-filtro-consulta',
@@ -18,6 +19,7 @@ export class FiltroConsultaComponent implements OnInit {
   isAdmin: boolean;
   selectedRolUsuario;
   selectedUsuario;
+  selectedTienda;
 
   adminFormControl = new FormControl('', Validators.required);
   usuarioFormControl = new FormControl('', Validators.required);
@@ -25,6 +27,7 @@ export class FiltroConsultaComponent implements OnInit {
   estatus: any[] = [];
   roles_combo: any[] = [];
   usuarios_combo: any[] = [];
+  tiendas_combo: any[] = [];
 
   @Output() rol: any = new EventEmitter<String>();
   @Output() registros: any = new EventEmitter<Usuario[]>();
@@ -35,7 +38,8 @@ export class FiltroConsultaComponent implements OnInit {
     public accessChecker: NbAccessChecker, 
     private authService: NbAuthService,
     private rolesService: RolesService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private tiendaService: TiendaService
     ) { }
 
   ngOnInit(): void {
@@ -61,6 +65,12 @@ export class FiltroConsultaComponent implements OnInit {
         resp.forEach(element => {
           this.roles_combo.push(element);
         })
+      }
+    );
+
+    this.tiendaService.obtenerCatalogoTiendas().subscribe(
+      (response: any[]) => {
+        this.tiendas_combo = response;
       }
     );
   }
@@ -112,8 +122,7 @@ export class FiltroConsultaComponent implements OnInit {
     
     this.rol.emit(this.selectedRolUsuario);
 
-    if(this.selectedRolUsuario === null) {
-      this.usuarioService.obtenerUsuarios().subscribe(
+      this.usuarioService.obtenerUsuarios(this.selectedRolUsuario, this.selectedTienda).subscribe(
         (resp: Usuario[]) => {
           this.registros.emit(resp);
           this.loading.emit(false);
@@ -122,17 +131,6 @@ export class FiltroConsultaComponent implements OnInit {
           console.error(error);
         }
       );
-    } else {
-      this.usuarioService.obtenerUsuariosPorRol(this.selectedRolUsuario).subscribe(
-        (resp: Usuario[]) => {
-          this.registros.emit(resp);
-          this.loading.emit(false);
-        }, (error) => {
-          this.loading.emit(false);
-          console.error(error);
-        }
-      );
-    }
     
   }
 
