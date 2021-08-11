@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpParamsOptions } from '@angular/common/http';
 import { NbAuthService, NbAuthJWTToken, NbTokenService } from '@nebular/auth';
 import { environment } from 'src/environments/environment';
+import { UsuarioCompleto } from '../models/usuario-completo.model';
 
 @Injectable({
   providedIn: 'root',
@@ -61,6 +62,12 @@ export class UsuarioService {
 
     const options = { params: new HttpParams(httpParams), headers: this.getHeaders() };
     return this.http.get(url, options);
+  }
+
+  actualizarUsuarios(usuario: UsuarioCompleto) {
+    const url = this.URL_SERVICIOS + '/user/';
+    const options = { headers: this.getHeaders() };
+    return this.http.put(url, usuario, options);
   }
 
   private getOptions() {
