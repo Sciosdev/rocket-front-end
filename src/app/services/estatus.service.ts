@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { Estatus } from '../models/estatus.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,12 +20,36 @@ export class EstatusService {
 
   }
 
+  obtenerEstatusChange(username: string) {
+
+    const url = this.URL_SERVICIOS + '/estatus-change/' + username;
+    const options = { headers: this.getHeaders() };
+    return this.http.get(url, options);
+
+  }
+
   obtenerEstatusSiguiente(idEstatus: number) {
 
     const url = this.URL_SERVICIOS + '/estatus/' + idEstatus + '/siguiente/';
     const options = { headers: this.getHeaders() };
     return this.http.get(url, options);
 
+  }
+
+  
+  obtenerEstatusSiguienteException(idEstatus: number) {
+
+    const url = this.URL_SERVICIOS + '/estatus/' + idEstatus + '/siguiente-exception/';
+    const options = { headers: this.getHeaders() };
+    return this.http.get(url, options);
+
+  }
+
+  actualizarEstatus(estatusDto: Estatus, orderkey: string, user: string, courier: string) {
+    const data = { estatusDto, orderKey: orderkey, user: user, courier: courier}; 
+    const url = this.URL_SERVICIOS + '/estatus/';
+    const options = { headers: this.getHeaders() };
+    return this.http.put(url, data, options);
   }
 
 

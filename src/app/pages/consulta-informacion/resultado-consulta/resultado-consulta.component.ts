@@ -16,6 +16,8 @@ import { AcceptanceComponent } from '../popups/acceptance/acceptance.component';
 import { ScheduleComponent } from '../popups/schedule/schedule.component';
 
 import { saveAs } from 'file-saver';
+import { CambioEstatusComponent } from '../popups/cambio-estatus/cambio-estatus.component';
+import { EstatusService } from 'src/app/services/estatus.service';
 
 @Component({
   selector: 'app-resultado-consulta',
@@ -46,15 +48,23 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   isCustomer: boolean;
   isAdmin: boolean;
+  isCourier: boolean;
+
+  authorizedStatus: any[] = [];
 
   scheduleAccepted: RegistroTable[] = [];
   scheduleRejected: RegistroTable[] = [];
   scheduleModified: RegistroTable[] = [];
 
+  comunas: any[] = [];
+
+  selectedComuna: string = '';
+
   constructor(public accessChecker: NbAccessChecker,
     private dialogService: NbDialogService,
     private registroService: RegistroService,
     private authService: NbAuthService,
+    private estatusService: EstatusService,
     protected cd: ChangeDetectorRef,
     private _snackBar: MatSnackBar,
     private primeNGConfig: PrimeNGConfig,
@@ -68,7 +78,49 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.dataSource.paginator = this.paginator;
   }
 
+
   ngOnInit(): void {
+
+    this.loadAccess();
+    this.loadUser();
+    this.authorizedStatus = [];
+    this.estatusService.obtenerEstatusChange(this.loggedUser).subscribe(
+      (response: Estatus[]) => {
+        response.forEach(r => {
+          this.authorizedStatus.push(r.id);
+        });
+
+        this.columns = [];
+        if (this.canRenderCustomer() || this.canRenderAdmin()) {
+          this.columns.push('select', ...this.defaultColumns);
+        } else if (this.canRenderEtiqueta()) {
+          this.columns.push(...this.defaultColumns, 'actions');
+        } else
+          this.columns.push(...this.defaultColumns);
+
+
+        if (this.canRenderCambioEstatus() && !this.columns.includes('CambioEstatus')) {
+          this.columns.push('CambioEstatus');
+        }
+
+        this.displayedColumns = this.columns;
+
+      }, (error) => {
+        console.error(error);
+        this.toastrService.danger('Ocurrió un error al obtener el estatus', 'Estatus Change');
+      }
+
+
+    );
+
+    this.registroService.obtenerComunas().subscribe(
+      (response: any[]) => {
+        this.comunas = response;
+      }, (error) => {
+        console.error(error);
+      }
+    );
+
     this.primeNGConfig.setTranslation(
       {
         dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
@@ -81,17 +133,29 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
       }
     );
 
-    this.loadAccess();
-    this.loadUser();
-    this.columns = [];
-    if (this.canRenderCustomer() || this.canRenderAdmin()) {
-      this.columns.push('select', ...this.defaultColumns);
-    } else if (this.canRenderEtiqueta()) {
-      this.columns.push(...this.defaultColumns, 'actions');
-    } else
-      this.columns = this.defaultColumns;
+    this.dataSource.filterPredicate = (data: RegistroTable, filter: string) => {
+      return data.shippingCity.trim().toLowerCase() == filter;
+    };
+  }
 
-    this.displayedColumns = this.columns;
+  applyFilter(filtro) {
+
+    if (filtro) {
+      this.dataSource.filter = filtro.trim().toLowerCase();
+
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
+    } else {
+      this.dataSource = new MatTableDataSource(this.registros);
+      this.dataSource.paginator = this.paginator;
+      this.selection.clear();
+    }
+
+  }
+
+  canRenderCambioEstatus() {
+    return this.authorizedStatus.includes(this.sEstatus.id);
   }
 
   ngOnChanges(): void {
@@ -105,10 +169,17 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     }
     else if (this.canRenderEtiqueta()) {
       this.columns.push(...this.defaultColumns, 'actions');
-    } else
-      this.columns = this.defaultColumns;
+    }
+    else
+      this.columns.push(...this.defaultColumns);
+
+    if (this.canRenderCambioEstatus() && !this.columns.includes('CambioEstatus')) {
+      this.columns.push('CambioEstatus');
+    }
+    this.selectedComuna = '';
 
     this.displayedColumns = this.columns;
+
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -127,7 +198,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   solicitarAgenda() {
     this.dialogService.open(ScheduleComponent, {
-      closeOnBackdropClick: false,
+      closeOnBackdropClick: false,closeOnEsc: true
     })
       .onClose.subscribe((result: any) => {
         if (result != undefined && result.fecha != null) {
@@ -150,6 +221,26 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     });
   }
 
+  cambiarEstatus(registroTable: RegistroTable) {
+    this.dialogService.open(CambioEstatusComponent, {
+      closeOnBackdropClick: false, context: { currentEstatus: this.sEstatus, registro: registroTable }
+    }).onClose.subscribe((result: any) => {
+      if (result) {
+        this.loading.emit(true);
+        this.estatusService.actualizarEstatus(result.estatus, registroTable.orderkey, this.loggedUser, result.courier).subscribe((success) => {
+          this.registros = this.arrayRemove(this.registros, registroTable);
+          this.dataSource = new MatTableDataSource(this.registros);
+          this.dataSource.paginator = this.paginator;
+          this.loading.emit(false);
+          this.toastrService.success('Se actualizó correctamente el estatus', 'Cambio de estatus');
+        }, (error) => {
+          console.error(error);
+          this.loading.emit(false);
+          this.toastrService.danger('Ocurrió un error al cambiar el estatus', 'Cambio de estatus');
+        });
+      }
+    });
+  }
 
   aceptarAgenda() {
 
@@ -175,7 +266,6 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
             try {
               scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
             } catch (error) {
-             //console.error(error);
               let scheduleDate = new Date(Date.parse(registro.scheduledDt.toString()));
               scheduleServiceInDto.scheduledDate = scheduleDate.toLocaleDateString() + ' ' + scheduleDate.toLocaleTimeString();
             }
@@ -183,7 +273,6 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
             scheduleServiceInDto.vendor = this.vendor;
             scheduleServiceInDto.user = this.loggedUser;
             scheduleServiceInDto.courier = result.courier;
-            console.log(scheduleServiceInDto);
             data.push(scheduleServiceInDto);
           });
 
@@ -285,7 +374,6 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     });
 
     this.registroService.solicitarAgenda(agenda).subscribe(response => {
-      console.log(response);
       this.limpiarAgenda();
       this.registros = null;
       this.regis.emit(this.registros);
@@ -336,6 +424,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   loadAccess() {
     this.isCustomer = this.hasAccess('filtro', ['customer']);
     this.isAdmin = this.hasAccess('filtro', ['admin']);
+    this.isCourier = this.hasAccess('filtro', ['courier']);
   }
 
   canRenderCustomer() {
