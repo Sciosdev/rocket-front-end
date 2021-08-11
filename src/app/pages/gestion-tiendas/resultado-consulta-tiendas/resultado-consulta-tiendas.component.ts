@@ -9,11 +9,10 @@ import {
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { Tienda } from 'src/app/models/tienda.model';
 import { TiendaService } from 'src/app/services/tienda.service';
 import { ModificacionTiendaComponent } from '../popups/modificacion-tienda/modificacion-tienda.component';
-import Swal from 'sweetalert2';
 import { AltaTiendaComponent } from '../popups/alta-tienda/alta-tienda.component';
 import { GlobalAcceptanceComponent } from '../../common-popups/global-acceptance/global-acceptance.component';
 
@@ -44,7 +43,8 @@ export class ResultadoConsultaTiendasComponent
 
   constructor(
     private dialogService: NbDialogService,
-    private tiendaService: TiendaService
+    private tiendaService: TiendaService,
+    private toastrService: NbToastrService
   ) {}
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -93,11 +93,7 @@ export class ResultadoConsultaTiendasComponent
           this.loading.emit(true);
           this.tiendaService.actualizarTienda(response.tienda).subscribe(
             (success) => {
-              Swal.fire(
-                'Actualización',
-                'La tienda fue actualizada correctamente',
-                'success'
-              );
+              this.toastrService.success('La tienda fue actualizada correctamente', 'Actualización');
               this.loading.emit(false);
 
               if (response.tienda.id) tienda.id = response.tienda.id;
@@ -128,11 +124,7 @@ export class ResultadoConsultaTiendasComponent
               }
             },
             (error) => {
-              Swal.fire(
-                'Actualización',
-                'La tienda no fue actualizada correctamente',
-                'error'
-              );
+              this.toastrService.danger('La tienda no fue actualizada correctamente', 'Actualización');
               this.loading.emit(false);
             }
           );
@@ -160,8 +152,7 @@ export class ResultadoConsultaTiendasComponent
           this.tiendaService.eliminarTienda(tienda.id).subscribe(
             (response: any) => {
               if (response.response) {
-                Swal.fire('Eliminación', response.responseMessage, 'success');
-
+                this.toastrService.success(response.responseMessage, 'Eliminación');
                 this.registros = this.arrayRemove(this.registros, tienda);
 
                 this.dataSource = new MatTableDataSource(this.registros);
@@ -170,18 +161,15 @@ export class ResultadoConsultaTiendasComponent
                   this.dataSource.paginator.firstPage();
                 }
               } else {
-                Swal.fire('Eliminación', response.responseMessage, 'error');
+
+                this.toastrService.danger(response.responseMessage, 'Eliminación');
+                
               }
 
               this.loading.emit(false);
             },
             (error) => {
-              Swal.fire(
-                'Eliminación',
-                'La tienda no se pudo eliminar',
-                'error'
-              );
-
+              this.toastrService.danger('La tienda no se pudo eliminar', 'Eliminación');
               this.loading.emit(false);
             }
           );
@@ -207,11 +195,7 @@ export class ResultadoConsultaTiendasComponent
           this.tiendaService.crearTienda(response.tienda).subscribe(
             (success) => {
               let tienda = new Tienda();
-              Swal.fire(
-                'Crear',
-                'La tienda fue creada correctamente',
-                'success'
-              );
+              this.toastrService.success('La tienda fue creada correctamente', 'Crear');
               this.loading.emit(false);
 
               tienda.setTienda(response.tienda);
@@ -224,7 +208,7 @@ export class ResultadoConsultaTiendasComponent
               }
             },
             (error) => {
-              Swal.fire('Crear', 'La tienda no fue creada', 'error');
+              this.toastrService.success('La tienda no fue creada', 'Crear');
               this.loading.emit(false);
             }
           );
