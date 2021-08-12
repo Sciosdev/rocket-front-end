@@ -7,6 +7,7 @@ import { Usuario } from 'src/app/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { GlobalAcceptanceComponent } from '../../common-popups/global-acceptance/global-acceptance.component';
 import { ModificarUsuarioComponent } from '../popups/modificar-usuario/modificar-usuario.component';
+import { AltaUsuarioComponent } from '../popups/alta-usuario/alta-usuario.component';
 
 @Component({
   selector: 'app-resultado-consulta-usuarios',
@@ -63,6 +64,41 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
     this.columns.push(...this.defaultColumns);
 
     this.displayedColumns = this.columns;
+  }
+
+  crearUsuario() {
+    this.dialogService
+      .open(AltaUsuarioComponent, {
+        closeOnBackdropClick: false,
+        closeOnEsc: true,
+        hasScroll: true
+      })
+      .onClose.subscribe((response) => {
+        console.log(response);
+       /*  if (response && response.accept) {
+          this.loading.emit(true);
+          this.usuarioService.(response.tienda).subscribe(
+            (success) => {
+              let tienda = new Tienda();
+              this.toastrService.success('La tienda fue creada correctamente', 'Crear');
+              this.loading.emit(false);
+
+              tienda.setTienda(response.tienda);
+
+              this.registros.push(tienda);
+              this.dataSource = new MatTableDataSource(this.registros);
+              this.dataSource.paginator = this.paginator;
+              if (this.dataSource.paginator) {
+                this.dataSource.paginator.lastPage();
+              }
+            },
+            (error) => {
+              this.toastrService.success('La tienda no fue creada', 'Crear');
+              this.loading.emit(false);
+            }
+          );
+        } */
+      });
   }
 
   modificarUsuario(usuario: Usuario) {

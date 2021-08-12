@@ -9,18 +9,24 @@ import { NgxLoadingXModule } from 'ngx-loading-x';
 import { ModificarUsuarioComponent } from './popups/modificar-usuario/modificar-usuario.component';
 import { EliminarUsuarioComponent } from './popups/eliminar-usuario/eliminar-usuario.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { AltaUsuarioComponent } from './popups/alta-usuario/alta-usuario.component';
+import { FileUploadModule } from 'primeng/fileupload';
+import { NbFormFieldModule, NbSelectModule } from '@nebular/theme';
 
 
 
 
 @NgModule({
-  declarations: [FiltroConsultaComponent, GestionUsuariosComponent, ResultadoConsultaUsuariosComponent, ModificarUsuarioComponent, EliminarUsuarioComponent],
+  declarations: [FiltroConsultaComponent, GestionUsuariosComponent, ResultadoConsultaUsuariosComponent, ModificarUsuarioComponent, EliminarUsuarioComponent, AltaUsuarioComponent],
   imports: [
     CommonModule,
-    MaterialModule,
+   // MaterialModule,
     ThemeModule,
     NgxLoadingXModule,
-    PipesModule
+    PipesModule,
+    FileUploadModule,
+    NbSelectModule,
+    NbFormFieldModule
   ]
 })
 export class GestionUsuariosModule { }
