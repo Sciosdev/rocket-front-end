@@ -91,7 +91,7 @@ export class FiltroConsultaComponent implements OnInit {
         }
       }
     );
-      
+
   }
 
   loggedUser: any;

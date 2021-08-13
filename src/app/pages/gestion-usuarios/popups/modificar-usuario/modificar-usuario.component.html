@@ -4,7 +4,7 @@
         <div class="p-2">
                 <form>
 
-
+                    
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -54,6 +54,67 @@
                         </div>
                     </div>
 
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="inputCommune" class="label">Comuna</label>
+                            <input type="text" nbInput fullWidth id="inputCommune" placeholder="Comuna"
+                                [value]="usuario.commune | undefined" [(ngModel)]="usuario.commune" name="commune">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="inputBirthday" class="label">Cumpleaños</label>
+                            <input type="text" nbInput fullWidth id="inputBirthday" placeholder="Último acceso"
+                                [value]="usuario.birthday | undefined" [(ngModel)]="usuario.birthday" name="birthday">
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="inputDocumentCountry" class="label">País del documento</label>
+                            <input type="text" nbInput fullWidth id="inputDocumentCountry" placeholder="País del documento"
+                                [value]="usuario.documentCountry | undefined" [(ngModel)]="usuario.documentCountry" name="documentCountry">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="inputDocumentNumber" class="label">Número del documento</label>
+                            <input type="text" nbInput fullWidth id="inputDocumentNumber" placeholder="Número del documento"
+                                [value]="usuario.documentNumber | undefined" [(ngModel)]="usuario.documentNumber" name="documentNumber">
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="inputDocumentType" class="label">Tipo de documento</label>
+                            <input type="text" nbInput fullWidth id="inputDocumentType" placeholder="Tipo de documento"
+                                [value]="usuario.documentType | undefined" [(ngModel)]="usuario.documentType" name="documentType">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="inputRol" class="label">Rol</label>
+                            <input type="text" nbInput fullWidth id="inputRol" placeholder="Rol"
+                                [value]="usuario.rol | undefined" [(ngModel)]="usuario.rol" name="rol">
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="inputTienda" class="label">Tienda</label>
+                            <input type="text" nbInput fullWidth id="inputTienda" placeholder="Tienda"
+                                [value]="usuario.tienda | undefined" [(ngModel)]="usuario.tienda" name="tienda">
+                        </div>
+                    </div>
+                
                 </div>
             </form>
             </div>

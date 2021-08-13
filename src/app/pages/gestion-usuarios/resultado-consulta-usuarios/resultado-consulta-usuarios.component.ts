@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChil
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NbDialogService, NbToastrService } from '@nebular/theme';
+import { element } from 'protractor';
 import { UsuarioCompleto } from 'src/app/models/usuario-completo.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -17,7 +18,7 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
 
   @Input() registros: Usuario[];
   @Output() loading: any = new EventEmitter<boolean>();
-  
+
   columns: any[] = [];
   defaultColumns = ['Nombre', 'Rol', 'Tienda', 'Correo', 'Telefono', 'Acciones'];
 
@@ -66,12 +67,25 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
   }
 
   modificarUsuario(usuario: Usuario) {
-    this.usuarioService.obtenerUsuarioCompleto(usuario.username).subscribe((response: UsuarioCompleto) => {
-      this.dialogService.open(ModificarUsuarioComponent, {
-        closeOnBackdropClick: false, closeOnEsc: true, context: { usuario: response }
-      }).onClose.subscribe((response) => {
-        console.log(response);
-      })
+    this.usuarioService.obtenerUsuarioCompleto(usuario.username).subscribe((usuarioCompleto: UsuarioCompleto) => {
+      this.dialogService
+        .open(ModificarUsuarioComponent, {
+          closeOnBackdropClick: false,
+          closeOnEsc: true,
+          context: { usuario: usuarioCompleto }
+        }).onClose.subscribe((response) => {
+
+          if (response.usuario && response.accepted) {
+            if (response.firstName) usuario.nombre = response.firstName;
+          }
+
+          this.dataSource = new MatTableDataSource(this.registros);
+          this.dataSource.paginator = this.paginator;
+          if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+          }
+          console.log(response);
+        })
     }, (error) => {
       console.error(error);
     })
@@ -110,7 +124,7 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
               } else {
 
                 this.toastrService.danger(response.responseMessage, 'Eliminación');
-                
+
               }
 
               this.loading.emit(false);

@@ -30,10 +30,13 @@ export class ModificarUsuarioComponent implements OnInit {
   accept() {
     this.loading.emit(true);
     this.usuario.name = this.usuario.firstName + ' ' + this.usuario.lastName + ' ' + this.usuario.secondLastName;
-
+    
+    if(!this.usuario.firstName) {
+      this.usuario.firstName = "";
+    }
     /* BLOQUE DE LLAMADO AL SERVICIO PARA ACTUALIZAR */
     this.usuarioService.actualizarUsuarios(this.usuario).subscribe(
-      (resp: Usuario[]) => {
+      (resp: UsuarioCompleto[]) => {
         this.loading.emit(false);
         this.toastrService.success('Se actualizó correctamente el usuario: ' + this.usuario.firstName, 'Actualización de usuario');
       }, (error) => {
