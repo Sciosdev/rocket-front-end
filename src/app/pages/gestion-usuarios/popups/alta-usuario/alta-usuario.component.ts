@@ -70,15 +70,26 @@ export class AltaUsuarioComponent implements OnInit {
         this.usuario.secondLastName
       );
 
-      
     this.usuario.rol = this.selectedRolFormControl.value;
-    this.usuario.tienda = this.selectedTienda;
+   
+    if(this.selectedTienda)
+      this.usuario.tienda = this.selectedTienda;
 
-    this.ref.close({ accepted: true, usuario: this.usuario });
+    let nombreTienda: string = null;
+
+    this.tiendas_combo.forEach(
+      tienda => {
+        if(tienda.id ==  this.selectedTienda){
+          nombreTienda = tienda.nombreTienda;
+        }
+      }
+    )
+
+    this.ref.close({ accept: true, usuario: this.usuario, tienda:nombreTienda });
   }
 
   cancel() {
-    this.ref.close({ accepted: false });
+    this.ref.close({ accept: false });
   }
 
   myUploader(event, form) {

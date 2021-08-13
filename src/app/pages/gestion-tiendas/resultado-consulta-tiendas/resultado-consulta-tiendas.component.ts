@@ -80,7 +80,6 @@ export class ResultadoConsultaTiendasComponent
   }
 
   modificarTienda(tienda: Tienda) {
-
     this.dialogService
       .open(ModificacionTiendaComponent, {
         closeOnBackdropClick: false,
@@ -94,7 +93,6 @@ export class ResultadoConsultaTiendasComponent
           this.loading.emit(true);
           this.tiendaService.actualizarTienda(response.tienda).subscribe(
             (success) => {
-
               this.setTienda(response.tienda, tienda);
 
               if (response.tienda.logo) {
@@ -104,18 +102,23 @@ export class ResultadoConsultaTiendasComponent
                 tienda.logo = null;
               }
 
-              this.toastrService.success('La tienda fue actualizada correctamente', 'Actualización');
+              this.toastrService.success(
+                'La tienda fue actualizada correctamente',
+                'Actualización'
+              );
               this.loading.emit(false);
             },
             (error) => {
-              this.toastrService.danger('La tienda no fue actualizada correctamente', 'Actualización');
+              this.toastrService.danger(
+                'La tienda no fue actualizada correctamente',
+                'Actualización'
+              );
               this.loading.emit(false);
             }
           );
         }
       });
   }
-
 
   eliminarTienda(tienda: Tienda) {
     this.dialogService
@@ -137,7 +140,10 @@ export class ResultadoConsultaTiendasComponent
           this.tiendaService.eliminarTienda(tienda.id).subscribe(
             (response: any) => {
               if (response.response) {
-                this.toastrService.success(response.responseMessage, 'Eliminación');
+                this.toastrService.success(
+                  response.responseMessage,
+                  'Eliminación'
+                );
                 this.registros = this.arrayRemove(this.registros, tienda);
 
                 this.dataSource = new MatTableDataSource(this.registros);
@@ -146,15 +152,19 @@ export class ResultadoConsultaTiendasComponent
                   this.dataSource.paginator.firstPage();
                 }
               } else {
-
-                this.toastrService.danger(response.responseMessage, 'Eliminación');
-                
+                this.toastrService.danger(
+                  response.responseMessage,
+                  'Eliminación'
+                );
               }
 
               this.loading.emit(false);
             },
             (error) => {
-              this.toastrService.danger('La tienda no se pudo eliminar', 'Eliminación');
+              this.toastrService.danger(
+                'La tienda no se pudo eliminar',
+                'Eliminación'
+              );
               this.loading.emit(false);
             }
           );
@@ -163,19 +173,42 @@ export class ResultadoConsultaTiendasComponent
   }
 
   setTienda(tiendaOrigen: Tienda, tiendaDestino: Tienda) {
-    if (tiendaOrigen.id) tiendaDestino.id = tiendaOrigen.id;
-    if (tiendaOrigen.nombreTienda) tiendaDestino.nombreTienda = tiendaOrigen.nombreTienda;
-    if (tiendaOrigen.sitio) tiendaDestino.sitio = tiendaOrigen.sitio;
-    if (tiendaOrigen.rutRazonSocial) tiendaDestino.rutRazonSocial = tiendaOrigen.rutRazonSocial;
-    if (tiendaOrigen.giroComercial) tiendaDestino.giroComercial = tiendaOrigen.giroComercial;
-    if (tiendaOrigen.direccion) tiendaDestino.direccion = tiendaOrigen.direccion;
-    if (tiendaOrigen.tipoProducto) tiendaDestino.tipoProducto = tiendaOrigen.tipoProducto;
-    if (tiendaOrigen.canalVenta) tiendaDestino.canalVenta = tiendaOrigen.canalVenta;
-    if (tiendaOrigen.preferenciaPagoFactura) tiendaDestino.preferenciaPagoFactura = tiendaOrigen.preferenciaPagoFactura;
-    if (tiendaOrigen.email) tiendaDestino.email = tiendaOrigen.email;
-    if (tiendaOrigen.telefono) tiendaDestino.telefono = tiendaOrigen.telefono;
-    if (tiendaOrigen.activo) tiendaDestino.activo = tiendaOrigen.activo;
-    if (tiendaOrigen.logo) tiendaDestino.logo = tiendaOrigen.logo;
+
+    if (tiendaOrigen.nombreTienda)
+      tiendaDestino.nombreTienda = tiendaOrigen.nombreTienda;
+
+    if (tiendaOrigen.sitio) 
+      tiendaDestino.sitio = tiendaOrigen.sitio;
+
+    if (tiendaOrigen.rutRazonSocial)
+      tiendaDestino.rutRazonSocial = tiendaOrigen.rutRazonSocial;
+
+    if (tiendaOrigen.giroComercial)
+      tiendaDestino.giroComercial = tiendaOrigen.giroComercial;
+
+    if (tiendaOrigen.direccion)
+      tiendaDestino.direccion = tiendaOrigen.direccion;
+
+    if (tiendaOrigen.tipoProducto)
+      tiendaDestino.tipoProducto = tiendaOrigen.tipoProducto;
+
+    if (tiendaOrigen.canalVenta)
+      tiendaDestino.canalVenta = tiendaOrigen.canalVenta;
+
+    if (tiendaOrigen.preferenciaPagoFactura)
+      tiendaDestino.preferenciaPagoFactura = tiendaOrigen.preferenciaPagoFactura;
+      
+    if (tiendaOrigen.email) 
+      tiendaDestino.email = tiendaOrigen.email;
+
+    if (tiendaOrigen.telefono) 
+      tiendaDestino.telefono = tiendaOrigen.telefono;
+
+    if (tiendaOrigen.activo) 
+      tiendaDestino.activo = tiendaOrigen.activo;
+      
+    if (tiendaOrigen.logo)
+       tiendaDestino.logo = tiendaOrigen.logo;
   }
 
   arrayRemove(arr: Tienda[], value: Tienda) {
@@ -196,7 +229,10 @@ export class ResultadoConsultaTiendasComponent
           this.tiendaService.crearTienda(response.tienda).subscribe(
             (success) => {
               let tienda = new Tienda();
-              this.toastrService.success('La tienda fue creada correctamente', 'Crear');
+              this.toastrService.success(
+                'La tienda fue creada correctamente',
+                'Crear'
+              );
               this.loading.emit(false);
 
               tienda.setTienda(response.tienda);

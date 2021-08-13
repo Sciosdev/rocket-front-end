@@ -75,17 +75,19 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
       })
       .onClose.subscribe((response) => {
         console.log(response);
-       /*  if (response && response.accept) {
+         if (response && response.accept) {
           this.loading.emit(true);
-          this.usuarioService.(response.tienda).subscribe(
+          this.usuarioService.agregarUsuario(response.usuario).subscribe(
             (success) => {
-              let tienda = new Tienda();
-              this.toastrService.success('La tienda fue creada correctamente', 'Crear');
+              let usuario = new UsuarioCompleto();
+              this.toastrService.success('El usuario fue creado correctamente', 'Crear');
               this.loading.emit(false);
 
-              tienda.setTienda(response.tienda);
+              usuario.setUsuario(response.usuario);
 
-              this.registros.push(tienda);
+              let usuarioSimple:Usuario = this.mapUsuarioCompletoToUsuario(usuario, response.tienda);
+              
+              this.registros.push(usuarioSimple);
               this.dataSource = new MatTableDataSource(this.registros);
               this.dataSource.paginator = this.paginator;
               if (this.dataSource.paginator) {
@@ -93,12 +95,30 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
               }
             },
             (error) => {
-              this.toastrService.success('La tienda no fue creada', 'Crear');
+              this.toastrService.success('El usuario no fue creado', 'Crear');
               this.loading.emit(false);
             }
           );
-        } */
+        } 
       });
+  }
+
+  mapUsuarioCompletoToUsuario(usuario: UsuarioCompleto, tienda: string){
+
+    let usuarioSimple:Usuario = {
+      id: usuario.id,
+      nombre: usuario.name,
+      rol: usuario.rol,
+      username: usuario.user,
+      correo: usuario.email,
+      telefono: usuario.phoneNumber
+    };
+
+    if(tienda) {
+      usuarioSimple.tienda = tienda;
+    }
+
+    return usuarioSimple;
   }
 
   modificarUsuario(usuario: Usuario) {
