@@ -8,6 +8,7 @@ import { Usuario } from 'src/app/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { GlobalAcceptanceComponent } from '../../common-popups/global-acceptance/global-acceptance.component';
 import { ModificarUsuarioComponent } from '../popups/modificar-usuario/modificar-usuario.component';
+import { AltaUsuarioComponent } from '../popups/alta-usuario/alta-usuario.component';
 
 @Component({
   selector: 'app-resultado-consulta-usuarios',
@@ -66,6 +67,61 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
     this.displayedColumns = this.columns;
   }
 
+  crearUsuario() {
+    this.dialogService
+      .open(AltaUsuarioComponent, {
+        closeOnBackdropClick: false,
+        closeOnEsc: true,
+        hasScroll: true
+      })
+      .onClose.subscribe((response) => {
+        console.log(response);
+         if (response && response.accept) {
+          this.loading.emit(true);
+          this.usuarioService.agregarUsuario(response.usuario).subscribe(
+            (success) => {
+              let usuario = new UsuarioCompleto();
+              this.toastrService.success('El usuario fue creado correctamente', 'Crear');
+              this.loading.emit(false);
+
+              usuario.setUsuario(response.usuario);
+
+              let usuarioSimple:Usuario = this.mapUsuarioCompletoToUsuario(usuario, response.tienda);
+              
+              this.registros.push(usuarioSimple);
+              this.dataSource = new MatTableDataSource(this.registros);
+              this.dataSource.paginator = this.paginator;
+              if (this.dataSource.paginator) {
+                this.dataSource.paginator.lastPage();
+              }
+            },
+            (error) => {
+              this.toastrService.success('El usuario no fue creado', 'Crear');
+              this.loading.emit(false);
+            }
+          );
+        } 
+      });
+  }
+
+  mapUsuarioCompletoToUsuario(usuario: UsuarioCompleto, tienda: string){
+
+    let usuarioSimple:Usuario = {
+      id: usuario.id,
+      nombre: usuario.name,
+      rol: usuario.rol,
+      username: usuario.user,
+      correo: usuario.email,
+      telefono: usuario.phoneNumber
+    };
+
+    if(tienda) {
+      usuarioSimple.tienda = tienda;
+    }
+
+    return usuarioSimple;
+  }
+
   modificarUsuario(usuario: Usuario) {
     this.usuarioService.obtenerUsuarioCompleto(usuario.username).subscribe((usuarioCompleto: UsuarioCompleto) => {
       this.dialogService
@@ -114,7 +170,7 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
             (response: any) => {
               if (response.response) {
                 this.toastrService.success(response.responseMessage, 'Eliminación');
-                this.registros = this.arrayRemove(this.registros, usuario);
+                this.registros = [...this.arrayRemove(this.registros, usuario)];
 
                 this.dataSource = new MatTableDataSource(this.registros);
                 this.dataSource.paginator = this.paginator;
