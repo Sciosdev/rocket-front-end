@@ -80,6 +80,7 @@ export class ResultadoConsultaTiendasComponent
   }
 
   modificarTienda(tienda: Tienda) {
+
     this.dialogService
       .open(ModificacionTiendaComponent, {
         closeOnBackdropClick: false,
@@ -93,35 +94,18 @@ export class ResultadoConsultaTiendasComponent
           this.loading.emit(true);
           this.tiendaService.actualizarTienda(response.tienda).subscribe(
             (success) => {
-              this.toastrService.success('La tienda fue actualizada correctamente', 'Actualización');
-              this.loading.emit(false);
 
-              if (response.tienda.id) tienda.id = response.tienda.id;
-              if (response.tienda.nombreTienda)
-                tienda.nombreTienda = response.tienda.nombreTienda;
-              if (response.tienda.sitio) tienda.sitio = response.tienda.sitio;
-              if (response.tienda.rutRazonSocial)
-                tienda.rutRazonSocial = response.tienda.rutRazonSocial;
-              if (response.tienda.giroComercial)
-                tienda.giroComercial = response.tienda.giroComercial;
-              if (response.tienda.direccion)
-                tienda.direccion = response.tienda.direccion;
-              if (response.tienda.tipoProducto)
-                tienda.tipoProducto = response.tienda.tipoProducto;
-              if (response.tienda.canalVenta)
-                tienda.canalVenta = response.tienda.canalVenta;
-              if (response.tienda.preferenciaPagoFactura)
-                tienda.preferenciaPagoFactura =
-                  response.tienda.preferenciaPagoFactura;
-              if (response.tienda.email) tienda.email = response.tienda.email;
-              if (response.tienda.telefono)
-                tienda.telefono = response.tienda.telefono;
+              this.setTienda(response.tienda, tienda);
+
               if (response.tienda.logo) {
                 if (response.tienda.logo == 'nologo') tienda.logo = null;
                 else tienda.logo = response.tienda.logo;
               } else {
                 tienda.logo = null;
               }
+
+              this.toastrService.success('La tienda fue actualizada correctamente', 'Actualización');
+              this.loading.emit(false);
             },
             (error) => {
               this.toastrService.danger('La tienda no fue actualizada correctamente', 'Actualización');
@@ -131,6 +115,7 @@ export class ResultadoConsultaTiendasComponent
         }
       });
   }
+
 
   eliminarTienda(tienda: Tienda) {
     this.dialogService
@@ -175,6 +160,22 @@ export class ResultadoConsultaTiendasComponent
           );
         }
       });
+  }
+
+  setTienda(tiendaOrigen: Tienda, tiendaDestino: Tienda) {
+    if (tiendaOrigen.id) tiendaDestino.id = tiendaOrigen.id;
+    if (tiendaOrigen.nombreTienda) tiendaDestino.nombreTienda = tiendaOrigen.nombreTienda;
+    if (tiendaOrigen.sitio) tiendaDestino.sitio = tiendaOrigen.sitio;
+    if (tiendaOrigen.rutRazonSocial) tiendaDestino.rutRazonSocial = tiendaOrigen.rutRazonSocial;
+    if (tiendaOrigen.giroComercial) tiendaDestino.giroComercial = tiendaOrigen.giroComercial;
+    if (tiendaOrigen.direccion) tiendaDestino.direccion = tiendaOrigen.direccion;
+    if (tiendaOrigen.tipoProducto) tiendaDestino.tipoProducto = tiendaOrigen.tipoProducto;
+    if (tiendaOrigen.canalVenta) tiendaDestino.canalVenta = tiendaOrigen.canalVenta;
+    if (tiendaOrigen.preferenciaPagoFactura) tiendaDestino.preferenciaPagoFactura = tiendaOrigen.preferenciaPagoFactura;
+    if (tiendaOrigen.email) tiendaDestino.email = tiendaOrigen.email;
+    if (tiendaOrigen.telefono) tiendaDestino.telefono = tiendaOrigen.telefono;
+    if (tiendaOrigen.activo) tiendaDestino.activo = tiendaOrigen.activo;
+    if (tiendaOrigen.logo) tiendaDestino.logo = tiendaOrigen.logo;
   }
 
   arrayRemove(arr: Tienda[], value: Tienda) {

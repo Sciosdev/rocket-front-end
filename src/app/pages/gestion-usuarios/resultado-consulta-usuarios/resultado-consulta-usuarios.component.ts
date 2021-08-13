@@ -136,7 +136,7 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
             (response: any) => {
               if (response.response) {
                 this.toastrService.success(response.responseMessage, 'Eliminación');
-                this.registros = this.arrayRemove(this.registros, usuario);
+                this.registros = [...this.arrayRemove(this.registros, usuario)];
 
                 this.dataSource = new MatTableDataSource(this.registros);
                 this.dataSource.paginator = this.paginator;
