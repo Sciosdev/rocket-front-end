@@ -132,15 +132,10 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
         }).onClose.subscribe((response) => {
 
           if (response.usuario && response.accepted) {
-            if (response.firstName) usuario.nombre = response.firstName;
+            if (response.usuario.name) usuario.nombre = response.usuario.name;
+            usuario = this.mapUsuarioCompletoToUsuario(response.usuario, response.tienda);
           }
 
-          this.dataSource = new MatTableDataSource(this.registros);
-          this.dataSource.paginator = this.paginator;
-          if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
-          }
-          console.log(response);
         })
     }, (error) => {
       console.error(error);

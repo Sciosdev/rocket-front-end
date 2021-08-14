@@ -29,14 +29,23 @@ export class ModificarUsuarioComponent implements OnInit {
 
   accept() {
     this.loading.emit(true);
-    this.usuario.name = this.usuario.firstName + ' ' + this.usuario.lastName + ' ' + this.usuario.secondLastName;
+    this.usuario.name = '';
+
+    if (this.usuario.firstName)
+      this.usuario.name = this.usuario.name.concat(this.usuario.firstName);
+
+    if (this.usuario.lastName)
+      this.usuario.name = this.usuario.name.concat(' ', this.usuario.lastName);
+
+    if (this.usuario.secondLastName)
+      this.usuario.name = this.usuario.name.concat(
+        ' ',
+        this.usuario.secondLastName
+      );
     
-    if(!this.usuario.firstName) {
-      this.usuario.firstName = "";
-    }
     /* BLOQUE DE LLAMADO AL SERVICIO PARA ACTUALIZAR */
     this.usuarioService.actualizarUsuarios(this.usuario).subscribe(
-      (resp: UsuarioCompleto[]) => {
+      (resp: UsuarioCompleto) => {
         this.loading.emit(false);
         this.toastrService.success('Se actualizó correctamente el usuario: ' + this.usuario.firstName, 'Actualización de usuario');
       }, (error) => {
@@ -44,8 +53,8 @@ export class ModificarUsuarioComponent implements OnInit {
         this.toastrService.danger('Ocurrió un error al actualizar el usuario: ' + this.usuario.firstName, 'Actualización de usuario');
       }
     );
-
-    this.ref.close({ accepted: true, usuario: this.usuario });
+    
+    this.ref.close({ accepted: true, usuario: this.usuario, tienda: null });
   }
 
   cancel() {
