@@ -12,13 +12,12 @@ import { TiendaService } from 'src/app/services/tienda.service';
   styleUrls: ['./alta-usuario.component.scss'],
 })
 export class AltaUsuarioComponent implements OnInit {
-
   usuario: UsuarioCompleto;
   blocked: boolean = false;
   contents: any = null;
   filename: string;
   imagePath;
-  
+
   roles_combo: any[] = [];
   tiendas_combo: any[] = [];
 
@@ -28,31 +27,27 @@ export class AltaUsuarioComponent implements OnInit {
 
   selectedRolFormControl = new FormControl('', Validators.required);
   selectedTiendaFormControl = new FormControl('', Validators.required);
-  
+
   showPassword = false;
   showCPassword = false;
 
-  
-  constructor(protected ref: NbDialogRef<AltaUsuarioComponent>,
+  constructor(
+    protected ref: NbDialogRef<AltaUsuarioComponent>,
     private _sanitizer: DomSanitizer,
     private rolesService: RolesService,
-    private tiendaService: TiendaService) {}
+    private tiendaService: TiendaService
+  ) {}
 
   ngOnInit(): void {
     this.usuario = new UsuarioCompleto();
 
-    this.rolesService.obtenerRoles().subscribe(
-      (roles: any[]) => {
-        this.roles_combo = roles;
-      }
-    );
+    this.rolesService.obtenerRoles().subscribe((roles: any[]) => {
+      this.roles_combo = roles;
+    });
 
-    this.tiendaService.obtenerCatalogoTiendas().subscribe(
-      (tiendas: any[]) => {
-        this.tiendas_combo = tiendas;
-      }
-    );
-
+    this.tiendaService.obtenerCatalogoTiendas().subscribe((tiendas: any[]) => {
+      this.tiendas_combo = tiendas;
+    });
   }
 
   accept() {
@@ -70,22 +65,26 @@ export class AltaUsuarioComponent implements OnInit {
         this.usuario.secondLastName
       );
 
-    this.usuario.rol = this.selectedRolFormControl.value;
-   
-    if(this.selectedTienda)
-      this.usuario.tienda = this.selectedTienda;
+    this.usuario.rol = this.selectedRolFormControl.value.rol;
 
     let nombreTienda: string = null;
 
-    this.tiendas_combo.forEach(
-      tienda => {
-        if(tienda.id ==  this.selectedTienda){
-          nombreTienda = tienda.nombreTienda;
-        }
+    if (this.selectedRolFormControl.value.vendorAssignment) {
+      if (this.selectedTienda) {
+        this.usuario.tienda = this.selectedTienda;
+        this.tiendas_combo.forEach((tienda) => {
+          if (tienda.id == this.selectedTienda) {
+            nombreTienda = tienda.nombreTienda;
+          }
+        });
       }
-    )
+    }
 
-    this.ref.close({ accept: true, usuario: this.usuario, tienda:nombreTienda });
+    this.ref.close({
+      accept: true,
+      usuario: this.usuario,
+      tienda: nombreTienda,
+    });
   }
 
   cancel() {
@@ -94,7 +93,7 @@ export class AltaUsuarioComponent implements OnInit {
 
   myUploader(event, form) {
     for (const file of event.files) {
-   this.readFile(file);
+      this.readFile(file);
     }
     form.clear();
   }
@@ -108,7 +107,6 @@ export class AltaUsuarioComponent implements OnInit {
   }
 
   private readFile(file: File) {
-
     const reader: FileReader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -116,7 +114,7 @@ export class AltaUsuarioComponent implements OnInit {
       this.usuario.foto = data.split(',')[1];
 
       this.imagePath = this._sanitizer.bypassSecurityTrustResourceUrl(
-       'data:image/jpg;base64,' + this.usuario.foto
+        'data:image/jpg;base64,' + this.usuario.foto
       );
     };
   }
@@ -142,5 +140,4 @@ export class AltaUsuarioComponent implements OnInit {
   toggleShowCPassword() {
     this.showCPassword = !this.showCPassword;
   }
-
 }

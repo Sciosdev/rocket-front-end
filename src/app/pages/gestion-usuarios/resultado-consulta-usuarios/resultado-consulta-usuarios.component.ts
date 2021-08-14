@@ -104,9 +104,9 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
       });
   }
 
-  mapUsuarioCompletoToUsuario(usuario: UsuarioCompleto, tienda: string){
+  mapUsuarioCompletoToUsuario(usuario: UsuarioCompleto, tienda: string): Usuario {
 
-    let usuarioSimple:Usuario = {
+    let usuarioSimple: Usuario = {
       id: usuario.id,
       nombre: usuario.name,
       rol: usuario.rol,

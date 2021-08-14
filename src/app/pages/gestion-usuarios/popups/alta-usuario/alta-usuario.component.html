@@ -35,9 +35,9 @@
                         <label for="rol" class="label">Rol *</label>
                         <nb-form-field class="full-width">
                             <nb-select placeholder="Selecciona un rol" [formControl]="selectedRolFormControl"
-                                [required]="true">
+                                [required]="true" >
                                 <nb-option>Sin Selección</nb-option>
-                                <nb-option *ngFor="let rol of roles_combo" [value]="rol.rol">
+                                <nb-option *ngFor="let rol of roles_combo" [value]="rol">
                                     {{ rol.rol }}
                                 </nb-option>
                             </nb-select>
@@ -51,15 +51,23 @@
                     </div>
 
                     <div class="col-sm-12">
-                        <label for="rol" class="label">Tienda</label>
+                        <label for="rol" class="label" *ngIf="selectedRolFormControl.value && selectedRolFormControl.value.vendorAssignment" >Tienda *</label>
+                        <label for="rol" class="label" *ngIf="!(selectedRolFormControl.value && selectedRolFormControl.value.vendorAssignment)">Tienda</label>
                         <nb-form-field class="full-width">
-                            <nb-select placeholder="Selecciona una tienda" [(ngModel)]="selectedTienda" name="tienda">
+                            <nb-select placeholder="Selecciona una tienda" [(ngModel)]="selectedTienda" name="tienda" #tiendaF="ngModel" [disabled]="!selectedRolFormControl.value || !selectedRolFormControl.value.vendorAssignment"
+                            [required] = 'selectedRolFormControl.value && selectedRolFormControl.value.vendorAssignment'>
                                 <nb-option>Sin Selección</nb-option>
                                 <nb-option *ngFor="let tienda of tiendas_combo" [value]="tienda.id">
                                     {{ tienda.nombreTienda }}
                                 </nb-option>
                             </nb-select>
                         </nb-form-field>
+                        <ng-container
+                            *ngIf="selectedRolFormControl.value && selectedRolFormControl.value.vendorAssignment && tiendaF.dirty && tiendaF.hasError('required')">
+                            <p class="caption status-danger">
+                                La tienda es requerida
+                            </p>
+                        </ng-container>
                     </div>
                 </div>
             </div>
@@ -198,7 +206,8 @@
                     username.errors?.required || 
                     contrasena.errors?.required || 
                     confcontrasena.errors?.required || 
-                    confirmapassword !== usuario.password">
+                    confirmapassword !== usuario.password ||
+                    (selectedRolFormControl.value.vendorAssignment && tiendaF.errors?.required)">
                     <nb-icon icon="checkmark-square-2-outline"></nb-icon>
                     Aceptar
                 </button>
