@@ -96,7 +96,7 @@ export class ResultadoConsultaUsuariosComponent implements OnInit, AfterViewInit
               }
             },
             (error) => {
-              this.toastrService.success('El usuario no fue creado', 'Crear');
+              this.toastrService.warning(error.error, 'Error al crear');
               this.loading.emit(false);
             }
           );

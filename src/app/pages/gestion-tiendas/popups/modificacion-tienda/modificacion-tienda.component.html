@@ -1,24 +1,15 @@
 <p-blockUI [blocked]="blocked" [target]="form"></p-blockUI>
 
-<nb-card status="primary" >
-  <nb-card-header
-    >Modificación de tienda: [{{ mtienda.nombreTienda }}]
+<nb-card status="primary">
+  <nb-card-header>Modificación de tienda: [{{ mtienda.nombreTienda }}]
   </nb-card-header>
   <nb-card-body>
     <div class="d-flex justify-content-left">
       <div class="p-2">
-        <img
-          class="border border-secondary"
-          [src]="imagePath"
-          width="150px"
-          height="150px"
-          *ngIf="mtienda.logo && mtienda.logo != 'nologo'"
-        />
-        <div
-          class="border border-secondary"
-          style="width: 150px; height: 150px"
-          *ngIf="!mtienda.logo || mtienda.logo == 'nologo'"
-        >
+        <img class="border border-secondary" [src]="imagePath" width="150px" height="150px"
+          *ngIf="mtienda.logo && mtienda.logo != 'nologo'" />
+        <div class="border border-secondary" style="width: 150px; height: 150px"
+          *ngIf="!mtienda.logo || mtienda.logo == 'nologo'">
           <div class="d-flex align-items-center justify-content-center h-100">
             <div>
               <div class="d-flex justify-content-center big-icon">
@@ -32,24 +23,13 @@
         </div>
       </div>
       <div class="p-2">
-        <p-fileUpload
-          #form
-          name="myfile[]"
-          accept="image/*"
-          mode="basic"
-          chooseLabel="Seleccionar imagen"
-          chooseIcon="pi-search"
-          uploadLabel="Cargar"
-          cancelLabel="Cancelar"
-          [customUpload]="true"
-          (uploadHandler)="myUploader($event, form)"
-          (onBeforeUpload) = "onBeforeUpload()"
-          (onUpload) = "onUpload()"
-          [auto]="true"
-        ></p-fileUpload>
-        <hr/>
+        <p-fileUpload #form name="myfile[]" accept="image/*" mode="basic" chooseLabel="Seleccionar imagen"
+          chooseIcon="pi-search" uploadLabel="Cargar" cancelLabel="Cancelar" [customUpload]="true"
+          (uploadHandler)="myUploader($event, form)" (onBeforeUpload)="onBeforeUpload()" (onUpload)="onUpload()"
+          [auto]="true"></p-fileUpload>
+        <hr />
         <button mat-raised-button color="accent" matRipple (click)="deleteLogo()" size="large">
-          <nb-icon icon="trash-2-outline" ></nb-icon>
+          <nb-icon icon="trash-2-outline"></nb-icon>
           Quitar Imágen
         </button>
       </div>
@@ -61,16 +41,8 @@
           <div class="col-sm-12">
             <div class="form-group">
               <label for="nombreTienda" class="label">Nombre</label>
-              <input
-                type="text"
-                nbInput
-                fullWidth
-                id="nombreTienda"
-                placeholder="Nombre"
-                [value]="mtienda.nombreTienda | undefined"
-                [(ngModel)]="mtienda.nombreTienda"
-                name="nombreTienda"
-              />
+              <input type="text" nbInput fullWidth id="nombreTienda" placeholder="Nombre"
+                [value]="mtienda.nombreTienda | undefined" [(ngModel)]="mtienda.nombreTienda" name="nombreTienda" />
             </div>
           </div>
         </div>
@@ -78,16 +50,8 @@
           <div class="col-sm-12">
             <div class="form-group">
               <label for="direccion" class="label">Dirección</label>
-              <input
-                type="text"
-                nbInput
-                fullWidth
-                id="direccion"
-                placeholder="Dirección"
-                [value]="mtienda.direccion | undefined"
-                [(ngModel)]="mtienda.direccion"
-                name="direccion"
-              />
+              <input type="text" nbInput fullWidth id="direccion" placeholder="Dirección"
+                [value]="mtienda.direccion | undefined" [(ngModel)]="mtienda.direccion" name="direccion" />
             </div>
           </div>
         </div>
@@ -95,16 +59,8 @@
           <div class="col-sm-12">
             <div class="form-group">
               <label for="sitio" class="label">Sitio</label>
-              <input
-                type="text"
-                nbInput
-                fullWidth
-                id="sitio"
-                placeholder="Sitio"
-                [value]="mtienda.sitio | undefined"
-                [(ngModel)]="mtienda.sitio"
-                name="sitio"
-              />
+              <input type="text" nbInput fullWidth id="sitio" placeholder="Sitio" [value]="mtienda.sitio | undefined"
+                [(ngModel)]="mtienda.sitio" name="sitio" />
             </div>
           </div>
         </div>
@@ -112,31 +68,15 @@
           <div class="col-sm-6">
             <div class="form-group">
               <label for="email" class="label">Correo</label>
-              <input
-                type="email"
-                nbInput
-                fullWidth
-                id="email"
-                placeholder="Correo"
-                [value]="mtienda.email | undefined"
-                [(ngModel)]="mtienda.email"
-                name="email"
-              />
+              <input type="email" nbInput fullWidth id="email" placeholder="Correo" [value]="mtienda.email | undefined"
+                [(ngModel)]="mtienda.email" name="email" />
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label for="telefono" class="label">Telefono</label>
-              <input
-              type="tel"
-                nbInput
-                fullWidth
-                id="telefono"
-                placeholder="Telefono"
-                [value]="mtienda.telefono | undefined"
-                [(ngModel)]="mtienda.telefono"
-                name="telefono"
-              />
+              <input type="tel" nbInput fullWidth id="telefono" placeholder="Telefono"
+                [value]="mtienda.telefono | undefined" [(ngModel)]="mtienda.telefono" name="telefono" />
             </div>
           </div>
         </div>
