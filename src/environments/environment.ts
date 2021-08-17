@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  endpoint: "https://18.221.76.172/rocket-back-end",
+  endpoint: "https://rocket-back-end.herokuapp.com",
   clientId: "foo",
   clientSecret: "foosecret" 
 };
