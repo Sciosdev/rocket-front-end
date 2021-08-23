@@ -1,10 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NbDialogRef, NbToastrService } from '@nebular/theme';
+import { NbDialogRef } from '@nebular/theme';
 import { UsuarioCompleto } from 'src/app/models/usuario-completo.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { TiendaService } from 'src/app/services/tienda.service';
-import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-modificar-usuario',
@@ -24,13 +23,16 @@ export class ModificarUsuarioComponent implements OnInit {
 
   constructor(
     protected ref: NbDialogRef<ModificarUsuarioComponent>,
-    private usuarioService: UsuarioService,
     private _sanitizer: DomSanitizer,
-    private toastrService: NbToastrService,
     private tiendaService: TiendaService
   ) {}
 
   ngOnInit(): void {
+
+    if(this.usuario.fullAddress == undefined){
+      this.usuario.fullAddress = {};
+    }
+
     this.nombreTienda = 'Sin tienda asignada';
 
     this.imagePath = this._sanitizer.bypassSecurityTrustResourceUrl(
@@ -64,29 +66,9 @@ export class ModificarUsuarioComponent implements OnInit {
         this.usuario.secondLastName
       );
 
-    /* BLOQUE DE LLAMADO AL SERVICIO PARA ACTUALIZAR */
-
     if (this.usuario.foto) {
       if (this.usuario.foto == 'nofoto') this.usuario.foto = null;
     } 
-
-    this.usuarioService.actualizarUsuarios(this.usuario).subscribe(
-      (resp: UsuarioCompleto) => {
-        this.loading.emit(false);
-        this.toastrService.success(
-          'Se actualizó correctamente el usuario: ' + this.usuario.firstName,
-          'Actualización de usuario'
-        );
-      },
-      (error) => {
-        this.loading.emit(false);
-        this.toastrService.danger(
-          'Ocurrió un error al actualizar el usuario: ' +
-            this.usuario.firstName,
-          'Actualización de usuario'
-        );
-      }
-    );
 
     this.ref.close({ accepted: true, usuario: this.usuario, tienda: null });
   }

@@ -1,6 +1,4 @@
-<p-blockUI [blocked]="blocked" [target]="form"></p-blockUI>
-
-<nb-card status="primary">
+<nb-card status="primary" class="overflow-auto" style="height: 100%; position: sticky;">
   <nb-card-header>Modificación de tienda: [{{ mtienda.nombreTienda }}]
   </nb-card-header>
   <nb-card-body>
@@ -23,68 +21,182 @@
         </div>
       </div>
       <div class="p-2">
-        <p-fileUpload #form name="myfile[]" accept="image/*" mode="basic" chooseLabel="Seleccionar imagen"
+        <p-fileUpload #form name="myfile[]" accept="image/*" mode="basic" chooseLabel="Reemplazar imagen"
           chooseIcon="pi-search" uploadLabel="Cargar" cancelLabel="Cancelar" [customUpload]="true"
           (uploadHandler)="myUploader($event, form)" (onBeforeUpload)="onBeforeUpload()" (onUpload)="onUpload()"
           [auto]="true"></p-fileUpload>
-        <hr />
-        <button mat-raised-button color="accent" matRipple (click)="deleteLogo()" size="large">
-          <nb-icon icon="trash-2-outline"></nb-icon>
-          Quitar Imágen
-        </button>
       </div>
     </div>
 
     <div class="p-2">
       <form>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="form-group">
-              <label for="nombreTienda" class="label">Nombre</label>
-              <input type="text" nbInput fullWidth id="nombreTienda" placeholder="Nombre"
-                [value]="mtienda.nombreTienda | undefined" [(ngModel)]="mtienda.nombreTienda" name="nombreTienda" />
+        <fieldset>
+          <legend>Datos de la tienda:</legend>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="nombreTienda" class="label">Nombre *</label>
+                <input type="text" nbInput fullWidth id="nombreTienda" placeholder="Nombre"
+                  [value]="mtienda.nombreTienda | undefined" [(ngModel)]="mtienda.nombreTienda" name="nombre"
+                  #nombre="ngModel" required />
+                <ng-container *ngIf="nombre.invalid && nombre.touched">
+                  <p class="caption status-danger" *ngIf="nombre.errors?.required">
+                    Nombre es requerido
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="sitio" class="label">Sitio *</label>
+                <input type="text" nbInput fullWidth id="sitio" placeholder="Sitio" [value]="mtienda.sitio | undefined"
+                  [(ngModel)]="mtienda.sitio" name="sitio" #sitio="ngModel" required />
+                <ng-container *ngIf="sitio.invalid && sitio.touched">
+                  <p class="caption status-danger" *ngIf="sitio.errors?.required">
+                    Sitio es requerido
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="email" class="label">Correo *</label>
+                <input type="email" nbInput fullWidth id="email" placeholder="Correo"
+                  [value]="mtienda.email | undefined" [(ngModel)]="mtienda.email" name="email" #email="ngModel"
+                  required />
+                <ng-container *ngIf="email.invalid && email.touched">
+                  <p class="caption status-danger" *ngIf="email.errors?.required">
+                    Correo es requerido
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="telefono" class="label">Teléfono *</label>
+                <input type="tel" nbInput fullWidth id="telefono" placeholder="Teléfono"
+                  [value]="mtienda.telefono | undefined" [(ngModel)]="mtienda.telefono" name="telefono"
+                  #telefono="ngModel" required />
+                <ng-container *ngIf="telefono.invalid && telefono.touched">
+                  <p class="caption status-danger" *ngIf="telefono.errors?.required">
+                    Teléfono es requerido
+                  </p>
+                </ng-container>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="form-group">
-              <label for="direccion" class="label">Dirección</label>
-              <input type="text" nbInput fullWidth id="direccion" placeholder="Dirección"
-                [value]="mtienda.direccion | undefined" [(ngModel)]="mtienda.direccion" name="direccion" />
+        </fieldset>
+        <fieldset>
+          <legend>Dirección:</legend>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputCalle" class="label">Calle *</label>
+                <input type="text" nbInput fullWidth id="inputCalle" placeholder="Calle"
+                  [value]="mtienda.direccionCompleta.street | undefined" [(ngModel)]="mtienda.direccionCompleta.street"
+                  name="street" #street="ngModel" required />
+                <ng-container *ngIf="street.invalid && street.touched">
+                  <p class="caption status-danger" *ngIf="street.errors?.required">
+                    Calle es requerido
+                  </p>
+                </ng-container>
+
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="form-group">
+                <label for="inputExternal" class="label">N° Exterior *</label>
+                <input type="text" nbInput fullWidth id="inputExternal" placeholder="N° Exterior"
+                  [value]="mtienda.direccionCompleta.external | undefined"
+                  [(ngModel)]="mtienda.direccionCompleta.external" name="external" #external="ngModel" required />
+                <ng-container *ngIf="external.invalid && external.touched">
+                  <p class="caption status-danger" *ngIf="external.errors?.required">
+                    N° Exterior es requerido
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="form-group">
+                <label for="inputInternal" class="label">N° Interior</label>
+                <input type="text" nbInput fullWidth id="inputInternal" placeholder="N° Interior"
+                  [value]="mtienda.direccionCompleta.internal | undefined"
+                  [(ngModel)]="mtienda.direccionCompleta.internal" name="internal" />
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="form-group">
+                <label for="inputZip" class="label">Código Postal *</label>
+                <input type="text" nbInput fullWidth id="inputZip" placeholder="Código Postal"
+                  [value]="mtienda.direccionCompleta.zipCode | undefined"
+                  [(ngModel)]="mtienda.direccionCompleta.zipCode" name="zipCode" #zipCode="ngModel" required />
+                <ng-container *ngIf="zipCode.invalid && zipCode.touched">
+                  <p class="caption status-danger" *ngIf="zipCode.errors?.required">
+                    Código Postal es requerido
+                  </p>
+                </ng-container>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="form-group">
-              <label for="sitio" class="label">Sitio</label>
-              <input type="text" nbInput fullWidth id="sitio" placeholder="Sitio" [value]="mtienda.sitio | undefined"
-                [(ngModel)]="mtienda.sitio" name="sitio" />
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="inputCommune" class="label">Comuna / Ciudad *</label>
+                <input type="text" nbInput fullWidth id="inputCommune" placeholder="Comuna / Ciudad"
+                  [value]="mtienda.direccionCompleta.commune | undefined"
+                  [(ngModel)]="mtienda.direccionCompleta.commune" name="commune" #commune="ngModel" required />
+                <ng-container *ngIf="commune.invalid && commune.touched">
+                  <p class="caption status-danger" *ngIf="commune.errors?.required">
+                    Comuna / Ciudad es requerido
+                  </p>
+                </ng-container>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label for="email" class="label">Correo</label>
-              <input type="email" nbInput fullWidth id="email" placeholder="Correo" [value]="mtienda.email | undefined"
-                [(ngModel)]="mtienda.email" name="email" />
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="inputProvince" class="label">Provincia / Estado *</label>
+                <input type="text" nbInput fullWidth id="inputProvince" placeholder="Provincia / Estado"
+                  [value]="mtienda.direccionCompleta.province | undefined"
+                  [(ngModel)]="mtienda.direccionCompleta.province" name="province" #province="ngModel" required />
+                <ng-container *ngIf="province.invalid && province.touched">
+                  <p class="caption status-danger" *ngIf="province.errors?.required">
+                    Provincia / Estado es requerido
+                  </p>
+                </ng-container>
+              </div>
             </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label for="telefono" class="label">Telefono</label>
-              <input type="tel" nbInput fullWidth id="telefono" placeholder="Telefono"
-                [value]="mtienda.telefono | undefined" [(ngModel)]="mtienda.telefono" name="telefono" />
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="inputCountry" class="label">País *</label>
+                <input type="text" nbInput fullWidth id="inputCountry" placeholder="País"
+                  [value]="mtienda.direccionCompleta.country | undefined"
+                  [(ngModel)]="mtienda.direccionCompleta.country" name="country" #country="ngModel" required />
+                <ng-container *ngIf="country.invalid && country.touched">
+                  <p class="caption status-danger" *ngIf="country.errors?.required">
+                    País es requerido
+                  </p>
+                </ng-container>
+              </div>
             </div>
+
           </div>
-        </div>
+        </fieldset>
       </form>
     </div>
     <div class="d-flex justify-content-end">
       <div class="p-2">
-        <button mat-raised-button color="accent" matRipple (click)="accept()">
+        <button mat-raised-button color="accent" matRipple (click)="accept()" [disabled]="
+        street.errors?.required ||
+        external.errors?.required ||
+        commune.errors?.required ||
+        zipCode.errors?.required ||
+        province.errors?.required ||
+        country.errors?.required ||
+        nombre.errors?.required || 
+        sitio.errors?.required || 
+        email.errors?.required || 
+        telefono.errors?.required || 
+        (!mtienda.logo || mtienda.logo == 'nologo')">
           <nb-icon icon="checkmark-square-2-outline"></nb-icon>
           Aceptar
         </button>

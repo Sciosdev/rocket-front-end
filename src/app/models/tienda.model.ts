@@ -1,3 +1,4 @@
+import { FullAddress } from './address.model';
 export class Tienda {
   id: number;
   nombreTienda: string;
@@ -5,6 +6,7 @@ export class Tienda {
   rutRazonSocial?: string;
   giroComercial?: string;
   direccion?: string;
+  direccionCompleta: FullAddress;
   tipoProducto?: string;
   canalVenta?: string;
   preferenciaPagoFactura?: string;
@@ -14,7 +16,7 @@ export class Tienda {
   logo?: any;
 
   constructor() {
-   
+   this.direccionCompleta = {};
   }
 
   setTienda(tienda: Tienda) {
@@ -24,6 +26,7 @@ export class Tienda {
     if (tienda.rutRazonSocial) this.rutRazonSocial = tienda.rutRazonSocial;
     if (tienda.giroComercial) this.giroComercial = tienda.giroComercial;
     if (tienda.direccion) this.direccion = tienda.direccion;
+    if (tienda.direccionCompleta) this.direccionCompleta = tienda.direccionCompleta;
     if (tienda.tipoProducto) this.tipoProducto = tienda.tipoProducto;
     if (tienda.canalVenta) this.canalVenta = tienda.canalVenta;
     if (tienda.preferenciaPagoFactura) this.preferenciaPagoFactura = tienda.preferenciaPagoFactura;

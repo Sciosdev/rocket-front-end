@@ -1,3 +1,4 @@
+import { FullAddress } from './address.model';
 export class UsuarioCompleto {
     address?: string;
     birthday?: string;
@@ -21,12 +22,16 @@ export class UsuarioCompleto {
     foto?: string;
     tienda?: number;
     password?: string;
+    fullAddress?: FullAddress;
 
     constructor(){
+        this.fullAddress = {
+        };
     }
 
     setUsuario(usuario: UsuarioCompleto) {
         if(usuario.address) this.address = usuario.address;
+        if(usuario.fullAddress) this.fullAddress = usuario.fullAddress;
         if(usuario.birthday) this.birthday = usuario.birthday;
         if(usuario.commune) this.commune = usuario.commune;
         if(usuario.documentCountry) this.documentCountry = usuario.documentCountry;

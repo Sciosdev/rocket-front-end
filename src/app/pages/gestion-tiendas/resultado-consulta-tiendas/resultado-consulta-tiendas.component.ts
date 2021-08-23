@@ -173,12 +173,12 @@ export class ResultadoConsultaTiendasComponent
   }
 
   setTienda(tiendaOrigen: Tienda, tiendaDestino: Tienda) {
+    if (tiendaOrigen.id) tiendaDestino.id = tiendaOrigen.id;
 
     if (tiendaOrigen.nombreTienda)
       tiendaDestino.nombreTienda = tiendaOrigen.nombreTienda;
 
-    if (tiendaOrigen.sitio) 
-      tiendaDestino.sitio = tiendaOrigen.sitio;
+    if (tiendaOrigen.sitio) tiendaDestino.sitio = tiendaOrigen.sitio;
 
     if (tiendaOrigen.rutRazonSocial)
       tiendaDestino.rutRazonSocial = tiendaOrigen.rutRazonSocial;
@@ -196,19 +196,16 @@ export class ResultadoConsultaTiendasComponent
       tiendaDestino.canalVenta = tiendaOrigen.canalVenta;
 
     if (tiendaOrigen.preferenciaPagoFactura)
-      tiendaDestino.preferenciaPagoFactura = tiendaOrigen.preferenciaPagoFactura;
-      
-    if (tiendaOrigen.email) 
-      tiendaDestino.email = tiendaOrigen.email;
+      tiendaDestino.preferenciaPagoFactura =
+        tiendaOrigen.preferenciaPagoFactura;
 
-    if (tiendaOrigen.telefono) 
-      tiendaDestino.telefono = tiendaOrigen.telefono;
+    if (tiendaOrigen.email) tiendaDestino.email = tiendaOrigen.email;
 
-    if (tiendaOrigen.activo) 
-      tiendaDestino.activo = tiendaOrigen.activo;
-      
-    if (tiendaOrigen.logo)
-       tiendaDestino.logo = tiendaOrigen.logo;
+    if (tiendaOrigen.telefono) tiendaDestino.telefono = tiendaOrigen.telefono;
+
+    if (tiendaOrigen.activo) tiendaDestino.activo = tiendaOrigen.activo;
+
+    if (tiendaOrigen.logo) tiendaDestino.logo = tiendaOrigen.logo;
   }
 
   arrayRemove(arr: Tienda[], value: Tienda) {
@@ -227,7 +224,8 @@ export class ResultadoConsultaTiendasComponent
         if (response && response.accept) {
           this.loading.emit(true);
           this.tiendaService.crearTienda(response.tienda).subscribe(
-            (success) => {
+            (ntienda:Tienda) => {
+
               let tienda = new Tienda();
               this.toastrService.success(
                 'La tienda fue creada correctamente',
@@ -235,7 +233,7 @@ export class ResultadoConsultaTiendasComponent
               );
               this.loading.emit(false);
 
-              tienda.setTienda(response.tienda);
+              tienda.setTienda(ntienda);
 
               this.registros.push(tienda);
               this.dataSource = new MatTableDataSource(this.registros);

@@ -2,7 +2,7 @@
     <nb-card-header>Alta de usuario </nb-card-header>
     <nb-card-body>
         <div class="row mb-2">
-            <div class="col-sm-6">
+            <div class="col-lg-4 col-sm-12">
                 <div class="d-flex justify-content-left">
                     <div class="p-2">
                         <img class="border border-secondary" [src]="imagePath" width="150px" height="150px"
@@ -29,13 +29,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-lg-8 col-sm-12">
                 <div class="row ">
-                    <div class="col-sm-12 mb-3">
+                    <div class="col-sm-6 mb-3">
                         <label for="rol" class="label">Rol *</label>
                         <nb-form-field class="full-width">
                             <nb-select placeholder="Selecciona un rol" [formControl]="selectedRolFormControl"
-                                [required]="true" >
+                                [required]="true">
                                 <nb-option>Sin Selección</nb-option>
                                 <nb-option *ngFor="let rol of roles_combo" [value]="rol">
                                     {{ rol.rol }}
@@ -50,12 +50,17 @@
                         </ng-container>
                     </div>
 
-                    <div class="col-sm-12">
-                        <label for="rol" class="label" *ngIf="selectedRolFormControl.value && selectedRolFormControl.value.vendorAssignment" >Tienda *</label>
-                        <label for="rol" class="label" *ngIf="!(selectedRolFormControl.value && selectedRolFormControl.value.vendorAssignment)">Tienda</label>
+                    <div class="col-sm-6">
+                        <label for="rol" class="label"
+                            *ngIf="selectedRolFormControl.value && selectedRolFormControl.value.vendorAssignment">Tienda
+                            *</label>
+                        <label for="rol" class="label"
+                            *ngIf="!(selectedRolFormControl.value && selectedRolFormControl.value.vendorAssignment)">Tienda</label>
                         <nb-form-field class="full-width">
-                            <nb-select placeholder="Selecciona una tienda" [(ngModel)]="selectedTienda" name="tienda" #tiendaF="ngModel" [disabled]="!selectedRolFormControl.value || !selectedRolFormControl.value.vendorAssignment"
-                            [required] = 'selectedRolFormControl.value && selectedRolFormControl.value.vendorAssignment'>
+                            <nb-select placeholder="Selecciona una tienda" [(ngModel)]="selectedTienda" name="tienda"
+                                #tiendaF="ngModel"
+                                [disabled]="!selectedRolFormControl.value || !selectedRolFormControl.value.vendorAssignment"
+                                [required]='selectedRolFormControl.value && selectedRolFormControl.value.vendorAssignment'>
                                 <nb-option>Sin Selección</nb-option>
                                 <nb-option *ngFor="let tienda of tiendas_combo" [value]="tienda.id">
                                     {{ tienda.nombreTienda }}
@@ -69,48 +74,8 @@
                             </p>
                         </ng-container>
                     </div>
-                </div>
-            </div>
-        </div>
-        <hr />
-        <span class="text-info font-weight-bold">Los campos marcados con * son requeridos</span>
 
-        <div class="p-2">
-            <form>
-                <div class="row">
                     <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="inputFirstName" class="label">Nombre *</label>
-                            <input type="text" nbInput fullWidth id="inputFirstName" placeholder="Nombre"
-                                [value]="usuario.firstName | undefined" [(ngModel)]="usuario.firstName" name="firstName"
-                                #nombre="ngModel" required />
-
-                            <ng-container *ngIf="nombre.invalid && nombre.touched">
-                                <p class="caption status-danger" *ngIf="nombre.errors?.required">
-                                    Nombre es requerido!
-                                </p>
-                            </ng-container>
-                        </div>
-
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="inputLastName" class="label">Apellido Paterno</label>
-                            <input type="text" nbInput fullWidth id="inputLastName" placeholder="Apellido Paterno"
-                                [value]="usuario.lastName | undefined" [(ngModel)]="usuario.lastName" name="lastName" />
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="inputWebsite" class="label">Apellido Materno</label>
-                            <input type="text" nbInput fullWidth id="inputWebsite" placeholder="Apellido Materno"
-                                [value]="usuario.secondLastName | undefined" [(ngModel)]="usuario.secondLastName"
-                                name="secondLastName" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
                         <div class="form-group">
                             <label for="inputusername" class="label">Usuario *</label>
                             <input type="text" nbInput fullWidth id="inputusername" placeholder="Usuario"
@@ -124,13 +89,13 @@
                             </ng-container>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label for="inputcontrasena" class="label">Contraseña *</label>
                             <nb-form-field>
-                            <input [type]="getInputType()" nbInput fullWidth id="inputcontrasena" placeholder="Contraseña"
-                                [value]="usuario.password | undefined" [(ngModel)]="usuario.password" name="contrasena"
-                                #contrasena="ngModel" required>
+                                <input [type]="getInputType()" nbInput fullWidth id="inputcontrasena"
+                                    placeholder="Contraseña" [value]="usuario.password | undefined"
+                                    [(ngModel)]="usuario.password" name="contrasena" #contrasena="ngModel" required>
                                 <button nbSuffix nbButton ghost (click)="toggleShowPassword()">
                                     <nb-icon [icon]="showPassword ? 'eye-outline' : 'eye-off-2-outline'" pack="eva"
                                         [attr.aria-label]="showPassword ? 'hide password' : 'show password'">
@@ -144,14 +109,15 @@
                             </ng-container>
                         </div>
                     </div>
-                    <div class="col-sm-6"></div>
-                    <div class="col-sm-6">
+
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label for="inputconfcontrasena" class="label">Confirmación de contraseña *</label>
                             <nb-form-field>
-                            <input  [type]="getCInputType()" nbInput fullWidth id="inputconfcontrasena" placeholder="Confirma contraseña"
-                                [value]="confirmapassword | undefined" [(ngModel)]="confirmapassword"
-                                name="confcontrasena" #confcontrasena="ngModel" required >
+                                <input [type]="getCInputType()" nbInput fullWidth id="inputconfcontrasena"
+                                    placeholder="Confirma contraseña" [value]="confirmapassword | undefined"
+                                    [(ngModel)]="confirmapassword" name="confcontrasena" #confcontrasena="ngModel"
+                                    required>
                                 <button nbSuffix nbButton ghost (click)="toggleShowCPassword()">
                                     <nb-icon [icon]="showCPassword ? 'eye-outline' : 'eye-off-2-outline'" pack="eva"
                                         [attr.aria-label]="showCPassword ? 'hide password' : 'show password'">
@@ -169,34 +135,175 @@
                             </ng-container>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label for="inputDireccion" class="label">Dirección</label>
-                            <input type="email" nbInput fullWidth id="inputDireccion" placeholder="Dirección"
-                                [value]="usuario.address | undefined" [(ngModel)]="usuario.address" name="address" />
-                        </div>
-                    </div>
+
                 </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="inputCorreo" class="label">Correo</label>
-                            <input type="email" nbInput fullWidth id="inputCorreo" placeholder="Correo"
-                                [value]="usuario.email | undefined" [(ngModel)]="usuario.email" name="email" />
+            </div>
+        </div>
+        <span class="text-info font-weight-bold">Los campos marcados con * son requeridos</span>
+        <hr />
+
+        <div class="p-2">
+            <form>
+                <fieldset>
+                    <legend> Datos Personales:</legend>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="inputFirstName" class="label">Nombre *</label>
+                                <input type="text" nbInput fullWidth id="inputFirstName" placeholder="Nombre"
+                                    [value]="usuario.firstName | undefined" [(ngModel)]="usuario.firstName"
+                                    name="firstName" #nombre="ngModel" required />
+
+                                <ng-container *ngIf="nombre.invalid && nombre.touched">
+                                    <p class="caption status-danger" *ngIf="nombre.errors?.required">
+                                        Nombre es requerido!
+                                    </p>
+                                </ng-container>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="inputLastName" class="label">Apellido Paterno</label>
+                                <input type="text" nbInput fullWidth id="inputLastName" placeholder="Apellido Paterno"
+                                    [value]="usuario.lastName | undefined" [(ngModel)]="usuario.lastName"
+                                    name="lastName" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="inputWebsite" class="label">Apellido Materno</label>
+                                <input type="text" nbInput fullWidth id="inputWebsite" placeholder="Apellido Materno"
+                                    [value]="usuario.secondLastName | undefined" [(ngModel)]="usuario.secondLastName"
+                                    name="secondLastName" />
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="inputTelefono" class="label">Telefono</label>
-                            <input type="email" nbInput fullWidth id="inputTelefono" placeholder="Telefono"
-                                [value]="usuario.phoneNumber | undefined" [(ngModel)]="usuario.phoneNumber"
-                                name="phoneNumber" />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="inputCorreo" class="label">Correo *</label>
+                                <input type="email" nbInput fullWidth id="inputCorreo" placeholder="Correo"
+                                    [value]="usuario.email | undefined" [(ngModel)]="usuario.email" name="email"
+                                    #email="ngModel" required />
+                                <ng-container *ngIf="email.invalid && email.touched">
+                                    <p class="caption status-danger" *ngIf="email.errors?.required">
+                                        Correo es requerido
+                                    </p>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="inputTelefono" class="label">Teléfono</label>
+                                <input type="email" nbInput fullWidth id="inputTelefono" placeholder="Teléfono"
+                                    [value]="usuario.phoneNumber | undefined" [(ngModel)]="usuario.phoneNumber"
+                                    name="phoneNumber" />
+                            </div>
                         </div>
                     </div>
-                </div>
+                </fieldset>
+                <fieldset>
+                    <legend> Dirección:</legend>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="inputCalle" class="label">Calle *</label>
+                                <input type="text" nbInput fullWidth id="inputCalle" placeholder="Calle"
+                                    [value]="usuario.fullAddress.street | undefined"
+                                    [(ngModel)]="usuario.fullAddress.street" name="street" #street="ngModel" required />
+                                <ng-container *ngIf="street.invalid && street.touched">
+                                    <p class="caption status-danger" *ngIf="street.errors?.required">
+                                        Calle es requerido
+                                    </p>
+                                </ng-container>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="inputExternal" class="label">N° Exterior *</label>
+                                <input type="text" nbInput fullWidth id="inputExternal" placeholder="N° Exterior"
+                                    [value]="usuario.fullAddress.external | undefined"
+                                    [(ngModel)]="usuario.fullAddress.external" name="external" #external="ngModel"
+                                    required />
+                                <ng-container *ngIf="external.invalid && external.touched">
+                                    <p class="caption status-danger" *ngIf="external.errors?.required">
+                                        N° Exterior es requerido
+                                    </p>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="inputInternal" class="label">N° Interior</label>
+                                <input type="text" nbInput fullWidth id="inputInternal" placeholder="N° Interior"
+                                    [value]="usuario.fullAddress.internal | undefined"
+                                    [(ngModel)]="usuario.fullAddress.internal" name="internal" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="inputZip" class="label">Código Postal *</label>
+                                <input type="text" nbInput fullWidth id="inputZip" placeholder="Código Postal"
+                                    [value]="usuario.fullAddress.zipCode | undefined"
+                                    [(ngModel)]="usuario.fullAddress.zipCode" name="zipCode" #zipCode="ngModel"
+                                    required />
+                                <ng-container *ngIf="zipCode.invalid && zipCode.touched">
+                                    <p class="caption status-danger" *ngIf="zipCode.errors?.required">
+                                        Código Postal es requerido
+                                    </p>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="inputCommune" class="label">Comuna / Ciudad *</label>
+                                <input type="text" nbInput fullWidth id="inputCommune" placeholder="Comuna / Ciudad"
+                                    [value]="usuario.fullAddress.commune | undefined"
+                                    [(ngModel)]="usuario.fullAddress.commune" name="commune" #commune="ngModel"
+                                    required />
+                                <ng-container *ngIf="commune.invalid && commune.touched">
+                                    <p class="caption status-danger" *ngIf="commune.errors?.required">
+                                        Comuna / Ciudad es requerido
+                                    </p>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="inputProvince" class="label">Provincia / Estado *</label>
+                                <input type="text" nbInput fullWidth id="inputProvince" placeholder="Provincia / Estado"
+                                    [value]="usuario.fullAddress.province | undefined"
+                                    [(ngModel)]="usuario.fullAddress.province" name="province" #province="ngModel"
+                                    required />
+                                <ng-container *ngIf="province.invalid && province.touched">
+                                    <p class="caption status-danger" *ngIf="province.errors?.required">
+                                        Provincia / Estado es requerido
+                                    </p>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="inputCountry" class="label">País *</label>
+                                <input type="text" nbInput fullWidth id="inputCountry" placeholder="País"
+                                    [value]="usuario.fullAddress.country | undefined"
+                                    [(ngModel)]="usuario.fullAddress.country" name="country" #country="ngModel"
+                                    required />
+                                <ng-container *ngIf="country.invalid && country.touched">
+                                    <p class="caption status-danger" *ngIf="country.errors?.required">
+                                        País es requerido
+                                    </p>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
             </form>
         </div>
         <div class="d-flex justify-content-end">
@@ -204,9 +311,16 @@
                 <button mat-raised-button color="accent" matRipple (click)="accept()" [disabled]="selectedRolFormControl.hasError('required') || 
                     nombre.errors?.required ||  
                     username.errors?.required || 
+                    email.errors?.required || 
                     contrasena.errors?.required || 
                     confcontrasena.errors?.required || 
                     confirmapassword !== usuario.password ||
+                    street.errors?.required ||
+                    external.errors?.required ||
+                    commune.errors?.required ||
+                    zipCode.errors?.required ||
+                    province.errors?.required ||
+                    country.errors?.required ||
                     (selectedRolFormControl.value.vendorAssignment && tiendaF.errors?.required)">
                     <nb-icon icon="checkmark-square-2-outline"></nb-icon>
                     Aceptar

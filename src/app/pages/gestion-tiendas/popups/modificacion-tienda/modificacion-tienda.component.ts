@@ -26,6 +26,10 @@ export class ModificacionTiendaComponent implements OnInit {
     this.mtienda = new Tienda();
     this.mtienda.setTienda(this.tienda);
 
+    if(this.mtienda.direccionCompleta == undefined) {
+      this.mtienda.direccionCompleta = {};
+    }
+    
     this.imagePath = this._sanitizer.bypassSecurityTrustResourceUrl(
       'data:image/jpg;base64,' + this.mtienda.logo
     );
