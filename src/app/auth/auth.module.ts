@@ -15,6 +15,7 @@ import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { RegisterComponent } from './register/register.component';
 import { MaterialModule } from '../material/material.module';
+import { NgxLoadingXModule } from 'ngx-loading-x';
 
 /**
  * Módulo que carga los componentes de autenticación
@@ -32,6 +33,7 @@ import { MaterialModule } from '../material/material.module';
     NbAuthModule,
     MaterialModule,
     ReactiveFormsModule,
+    NgxLoadingXModule
   ],
   declarations: [LoginComponent, LogoutComponent, RegisterComponent],
 })
