@@ -20,9 +20,12 @@ import { CargaLayoutModule } from './carga-layout/carga-layout.module';
 import { NgxLoadingXModule } from 'ngx-loading-x';
 import { ConsultaInformacionModule } from './consulta-informacion/consulta-informacion.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { GestionUsuariosModule } from './gestion-usuarios/gestion-usuarios.module';
+import { GestionTiendasModule } from './gestion-tiendas/gestion-tiendas.module';
+import { GlobalAcceptanceComponent } from './common-popups/global-acceptance/global-acceptance.component';
 
 @NgModule({
-  declarations: [PagesComponent],
+  declarations: [PagesComponent, GlobalAcceptanceComponent],
   imports: [
     CommonModule,
     PagesRoutingModule,
@@ -39,8 +42,12 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     NbCardModule,
     NgxLoadingXModule,
     ConsultaInformacionModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    GestionUsuariosModule,
+    GestionTiendasModule,
+    
 ],
-  providers: []
+  providers: [],
+  exports: []
 })
 export class PagesModule { }

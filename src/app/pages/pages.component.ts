@@ -58,10 +58,9 @@ export class PagesComponent implements OnInit {
     if (!menuItem.hidden && menuItem.children != null) {
       menuItem.children.forEach(item => {
         if (item.data && item.data['permission'] && item.data['resource']) {
-
-
           this.accessChecker.isGranted(item.data['permission'], item.data['resource']).subscribe(granted => {
-            item.hidden = !granted;
+            if(granted)
+            item.hidden = false;
           });
         } else {
           // if child item do not config any `data.permission` and `data.resource` just inherit parent item's config

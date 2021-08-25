@@ -1,3 +1,4 @@
+
 <h1 id="title" class="title">Iniciar sesión</h1>
 <p class="sub-title">Hola, por favor identificate con tu usuario</p>
 
@@ -16,7 +17,7 @@
         </li>
     </ul>
 </nb-alert>
-
+<div NgxLoadingXBlur [show]="loading">
 <form (ngSubmit)="login()" #form="ngForm" aria-labelledby="title">
     <div class="login-container">
         <mat-form-field appearance="outline">
@@ -47,6 +48,12 @@
         </button>
     </div>
 </form>
+
+    <!-- This page content will be blurred/frosted when loading background overlay is showed -->
+  </div>
+
+<ngx-loading-x [show]="loading">
+</ngx-loading-x>
 
 <!-- <section class="another-action" aria-label="Register">
     ¿No tienes una cuenta?
