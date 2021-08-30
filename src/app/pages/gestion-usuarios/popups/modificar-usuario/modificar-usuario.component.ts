@@ -4,6 +4,7 @@ import { NbDialogRef } from '@nebular/theme';
 import { UsuarioCompleto } from 'src/app/models/usuario-completo.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { TiendaService } from 'src/app/services/tienda.service';
+import { RocketPatterns } from 'src/app/utils/patterns';
 
 @Component({
   selector: 'app-modificar-usuario',
@@ -16,6 +17,12 @@ export class ModificarUsuarioComponent implements OnInit {
   tiendas_combo: any[] = [];
   nombreTienda;
   imagePath;
+
+  emailPattern = RocketPatterns.email;
+  passwordPattern = RocketPatterns.password;
+  namePattern = RocketPatterns.personalName;
+  zipPattern = RocketPatterns.zipCode;
+  phoneNumberPattern = RocketPatterns.phoneNumber;
 
   @Output() loading: any = new EventEmitter<boolean>();
   @Output() registros: any = new EventEmitter<Usuario[]>();

@@ -2,32 +2,42 @@
   <nb-card-header>Modificación de tienda: [{{ mtienda.nombreTienda }}]
   </nb-card-header>
   <nb-card-body>
-    <div class="d-flex justify-content-left">
-      <div class="p-2">
-        <img class="border border-secondary" [src]="imagePath" width="150px" height="150px"
-          *ngIf="mtienda.logo && mtienda.logo != 'nologo'" />
-        <div class="border border-secondary" style="width: 150px; height: 150px"
-          *ngIf="!mtienda.logo || mtienda.logo == 'nologo'">
-          <div class="d-flex align-items-center justify-content-center h-100">
-            <div>
-              <div class="d-flex justify-content-center big-icon">
-                <nb-icon icon="video-off-outline" status="info"></nb-icon>
-              </div>
-              <div class="d-flex justify-content-center">
-                <span>Sin Imagen</span>
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <div class="d-flex justify-content-left">
+          <div class="p-2">
+            <img class="border border-secondary" [src]="imagePath" width="150px" height="150px"
+              *ngIf="mtienda.logo && mtienda.logo != 'nologo'" />
+            <div class="border border-secondary" style="width: 150px; height: 150px"
+              *ngIf="!mtienda.logo || mtienda.logo == 'nologo'">
+              <div class="d-flex align-items-center justify-content-center h-100">
+                <div>
+                  <div class="d-flex justify-content-center big-icon">
+                    <nb-icon icon="video-off-outline" status="info"></nb-icon>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <span>Sin Imagen</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <div class="p-2">
+            <p-fileUpload #form name="myfile[]" accept="image/*" mode="basic" chooseLabel="Reemplazar imagen"
+              chooseIcon="pi-search" uploadLabel="Cargar" cancelLabel="Cancelar" [customUpload]="true"
+              (uploadHandler)="myUploader($event, form)" (onBeforeUpload)="onBeforeUpload()" (onUpload)="onUpload()"
+              [auto]="true"></p-fileUpload>
+              <br>
+              <br>
+              <span class="text-danger font-weight-bold" *ngIf="!mtienda.logo || mtienda.logo == 'nologo'"> ** La imagen es
+              requerida **</span>
+            </div>
         </div>
       </div>
-      <div class="p-2">
-        <p-fileUpload #form name="myfile[]" accept="image/*" mode="basic" chooseLabel="Reemplazar imagen"
-          chooseIcon="pi-search" uploadLabel="Cargar" cancelLabel="Cancelar" [customUpload]="true"
-          (uploadHandler)="myUploader($event, form)" (onBeforeUpload)="onBeforeUpload()" (onUpload)="onUpload()"
-          [auto]="true"></p-fileUpload>
-      </div>
+     
     </div>
-
+    <span class="text-info font-weight-bold">Los campos marcados con * son requeridos</span>
+    <hr />
     <div class="p-2">
       <form>
         <fieldset>
@@ -39,7 +49,7 @@
                 <input type="text" nbInput fullWidth id="nombreTienda" placeholder="Nombre"
                   [value]="mtienda.nombreTienda | undefined" [(ngModel)]="mtienda.nombreTienda" name="nombre"
                   #nombre="ngModel" required />
-                <ng-container *ngIf="nombre.invalid && nombre.touched">
+                <ng-container *ngIf="nombre.invalid">
                   <p class="caption status-danger" *ngIf="nombre.errors?.required">
                     Nombre es requerido
                   </p>
@@ -51,7 +61,7 @@
                 <label for="sitio" class="label">Sitio *</label>
                 <input type="text" nbInput fullWidth id="sitio" placeholder="Sitio" [value]="mtienda.sitio | undefined"
                   [(ngModel)]="mtienda.sitio" name="sitio" #sitio="ngModel" required />
-                <ng-container *ngIf="sitio.invalid && sitio.touched">
+                <ng-container *ngIf="sitio.invalid">
                   <p class="caption status-danger" *ngIf="sitio.errors?.required">
                     Sitio es requerido
                   </p>
@@ -62,11 +72,14 @@
               <div class="form-group">
                 <label for="email" class="label">Correo *</label>
                 <input type="email" nbInput fullWidth id="email" placeholder="Correo"
-                  [value]="mtienda.email | undefined" [(ngModel)]="mtienda.email" name="email" #email="ngModel"
-                  required />
-                <ng-container *ngIf="email.invalid && email.touched">
+                  [value]="mtienda.email | undefined" [(ngModel)]="mtienda.email" name="email" #email="ngModel" required
+                  [pattern]="emailPattern" />
+                <ng-container *ngIf="email.invalid">
                   <p class="caption status-danger" *ngIf="email.errors?.required">
                     Correo es requerido
+                  </p>
+                  <p class="caption status-danger" *ngIf="email.errors?.pattern">
+                    No tiene un formato válido de correo
                   </p>
                 </ng-container>
               </div>
@@ -76,10 +89,13 @@
                 <label for="telefono" class="label">Teléfono *</label>
                 <input type="tel" nbInput fullWidth id="telefono" placeholder="Teléfono"
                   [value]="mtienda.telefono | undefined" [(ngModel)]="mtienda.telefono" name="telefono"
-                  #telefono="ngModel" required />
-                <ng-container *ngIf="telefono.invalid && telefono.touched">
+                  #telefono="ngModel" required [pattern]="phoneNumberPattern" />
+                <ng-container *ngIf="telefono.invalid">
                   <p class="caption status-danger" *ngIf="telefono.errors?.required">
                     Teléfono es requerido
+                  </p>
+                  <p class="caption status-danger" *ngIf="telefono.errors?.pattern">
+                    Teléfono no válido
                   </p>
                 </ng-container>
               </div>
@@ -95,7 +111,7 @@
                 <input type="text" nbInput fullWidth id="inputCalle" placeholder="Calle"
                   [value]="mtienda.direccionCompleta.street | undefined" [(ngModel)]="mtienda.direccionCompleta.street"
                   name="street" #street="ngModel" required />
-                <ng-container *ngIf="street.invalid && street.touched">
+                <ng-container *ngIf="street.invalid">
                   <p class="caption status-danger" *ngIf="street.errors?.required">
                     Calle es requerido
                   </p>
@@ -109,7 +125,7 @@
                 <input type="text" nbInput fullWidth id="inputExternal" placeholder="N° Exterior"
                   [value]="mtienda.direccionCompleta.external | undefined"
                   [(ngModel)]="mtienda.direccionCompleta.external" name="external" #external="ngModel" required />
-                <ng-container *ngIf="external.invalid && external.touched">
+                <ng-container *ngIf="external.invalid">
                   <p class="caption status-danger" *ngIf="external.errors?.required">
                     N° Exterior es requerido
                   </p>
@@ -129,10 +145,14 @@
                 <label for="inputZip" class="label">Código Postal *</label>
                 <input type="text" nbInput fullWidth id="inputZip" placeholder="Código Postal"
                   [value]="mtienda.direccionCompleta.zipCode | undefined"
-                  [(ngModel)]="mtienda.direccionCompleta.zipCode" name="zipCode" #zipCode="ngModel" required />
-                <ng-container *ngIf="zipCode.invalid && zipCode.touched">
+                  [(ngModel)]="mtienda.direccionCompleta.zipCode" name="zipCode" #zipCode="ngModel" required
+                  [pattern]="zipPattern" />
+                <ng-container *ngIf="zipCode.invalid">
                   <p class="caption status-danger" *ngIf="zipCode.errors?.required">
                     Código Postal es requerido
+                  </p>
+                  <p class="caption status-danger" *ngIf="zipCode.errors?.pattern">
+                    Código Postal es inválido
                   </p>
                 </ng-container>
               </div>
@@ -145,7 +165,7 @@
                 <input type="text" nbInput fullWidth id="inputCommune" placeholder="Comuna / Ciudad"
                   [value]="mtienda.direccionCompleta.commune | undefined"
                   [(ngModel)]="mtienda.direccionCompleta.commune" name="commune" #commune="ngModel" required />
-                <ng-container *ngIf="commune.invalid && commune.touched">
+                <ng-container *ngIf="commune.invalid">
                   <p class="caption status-danger" *ngIf="commune.errors?.required">
                     Comuna / Ciudad es requerido
                   </p>
@@ -158,7 +178,7 @@
                 <input type="text" nbInput fullWidth id="inputProvince" placeholder="Provincia / Estado"
                   [value]="mtienda.direccionCompleta.province | undefined"
                   [(ngModel)]="mtienda.direccionCompleta.province" name="province" #province="ngModel" required />
-                <ng-container *ngIf="province.invalid && province.touched">
+                <ng-container *ngIf="province.invalid">
                   <p class="caption status-danger" *ngIf="province.errors?.required">
                     Provincia / Estado es requerido
                   </p>
@@ -171,7 +191,7 @@
                 <input type="text" nbInput fullWidth id="inputCountry" placeholder="País"
                   [value]="mtienda.direccionCompleta.country | undefined"
                   [(ngModel)]="mtienda.direccionCompleta.country" name="country" #country="ngModel" required />
-                <ng-container *ngIf="country.invalid && country.touched">
+                <ng-container *ngIf="country.invalid">
                   <p class="caption status-danger" *ngIf="country.errors?.required">
                     País es requerido
                   </p>
@@ -195,7 +215,10 @@
         nombre.errors?.required || 
         sitio.errors?.required || 
         email.errors?.required || 
-        telefono.errors?.required || 
+        telefono.errors?.required ||
+        email.errors?.pattern ||
+        telefono.errors?.pattern ||
+        zipCode.errors?.pattern || 
         (!mtienda.logo || mtienda.logo == 'nologo')">
           <nb-icon icon="checkmark-square-2-outline"></nb-icon>
           Aceptar

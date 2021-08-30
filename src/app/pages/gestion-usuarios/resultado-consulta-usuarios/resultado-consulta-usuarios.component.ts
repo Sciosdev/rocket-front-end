@@ -10,7 +10,6 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NbDialogService, NbToastrService } from '@nebular/theme';
-import { element } from 'protractor';
 import { UsuarioCompleto } from 'src/app/models/usuario-completo.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -125,8 +124,10 @@ export class ResultadoConsultaUsuariosComponent
   }
 
   modificarUsuario(usuario: Usuario) {
+    this.loading.emit(true);
     this.usuarioService.obtenerUsuarioCompleto(usuario.username).subscribe(
       (usuarioCompleto: UsuarioCompleto) => {
+        this.loading.emit(false);
         this.dialogService
           .open(ModificarUsuarioComponent, {
             closeOnBackdropClick: false,
@@ -166,6 +167,7 @@ export class ResultadoConsultaUsuariosComponent
       },
       (error) => {
         console.error(error);
+        this.loading.emit(false);
       }
     );
   }

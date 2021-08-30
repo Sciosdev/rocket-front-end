@@ -5,6 +5,7 @@ import { NbDialogRef } from '@nebular/theme';
 import { UsuarioCompleto } from 'src/app/models/usuario-completo.model';
 import { RolesService } from 'src/app/services/roles.service';
 import { TiendaService } from 'src/app/services/tienda.service';
+import { RocketPatterns } from '../../../../utils/patterns';
 
 @Component({
   selector: 'app-alta-usuario',
@@ -27,6 +28,12 @@ export class AltaUsuarioComponent implements OnInit {
 
   selectedRolFormControl = new FormControl('', Validators.required);
   selectedTiendaFormControl = new FormControl('', Validators.required);
+
+  emailPattern = RocketPatterns.email;
+  passwordPattern = RocketPatterns.password;
+  namePattern = RocketPatterns.personalName;
+  zipPattern = RocketPatterns.zipCode;
+  phoneNumberPattern = RocketPatterns.phoneNumber;
 
   showPassword = false;
   showCPassword = false;

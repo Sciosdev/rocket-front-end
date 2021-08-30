@@ -23,9 +23,14 @@
           chooseIcon="pi-search" uploadLabel="Cargar" cancelLabel="Cancelar" [customUpload]="true"
           (uploadHandler)="myUploader($event, form)" (onBeforeUpload)="onBeforeUpload()" (onUpload)="onUpload()">
         </p-fileUpload>
+        <br>
+        <br>
+        <span class="text-danger font-weight-bold" *ngIf="!tienda.logo"> ** La imagen es
+        requerida **</span>
       </div>
     </div>
-
+    <span class="text-info font-weight-bold">Los campos marcados con * son requeridos</span>
+    <hr />
     <div class="p-2">
       <form>
         <fieldset>
@@ -61,12 +66,15 @@
               <div class="form-group">
                 <label for="email" class="label">Correo *</label>
                 <input type="email" nbInput fullWidth id="email" placeholder="Correo" [value]="tienda.email | undefined"
-                  [(ngModel)]="tienda.email" name="email" #email="ngModel" required />
-                <ng-container *ngIf="email.invalid && email.touched">
-                  <p class="caption status-danger" *ngIf="email.errors?.required">
-                    Correo es requerido
-                  </p>
-                </ng-container>
+                  [(ngModel)]="tienda.email" name="email" #email="ngModel" required  [pattern]="emailPattern"/>
+                  <ng-container *ngIf="email.invalid && email.touched">
+                      <p class="caption status-danger" *ngIf="email.errors?.required">
+                          Correo es requerido
+                      </p>
+                      <p class="caption status-danger" *ngIf="email.errors?.pattern">
+                          No tiene un formato válido de correo
+                      </p>
+                  </ng-container>
               </div>
             </div>
             <div class="col-sm-4">
@@ -74,10 +82,13 @@
                 <label for="telefono" class="label">Teléfono *</label>
                 <input type="tel" nbInput fullWidth id="telefono" placeholder="Teléfono"
                   [value]="tienda.telefono | undefined" [(ngModel)]="tienda.telefono" name="telefono"
-                  #telefono="ngModel" required />
+                  #telefono="ngModel" required [pattern]="phoneNumberPattern" />
                 <ng-container *ngIf="telefono.invalid && telefono.touched">
                   <p class="caption status-danger" *ngIf="telefono.errors?.required">
                     Teléfono es requerido
+                  </p>
+                  <p class="caption status-danger" *ngIf="telefono.errors?.pattern">
+                    Teléfono no válido
                   </p>
                 </ng-container>
               </div>
@@ -127,12 +138,15 @@
                 <label for="inputZip" class="label">Código Postal *</label>
                 <input type="text" nbInput fullWidth id="inputZip" placeholder="Código Postal"
                   [value]="tienda.direccionCompleta.zipCode | undefined" [(ngModel)]="tienda.direccionCompleta.zipCode"
-                  name="zipCode" #zipCode="ngModel" required />
-                <ng-container *ngIf="zipCode.invalid && zipCode.touched">
-                  <p class="caption status-danger" *ngIf="zipCode.errors?.required">
-                    Código Postal es requerido
-                  </p>
-                </ng-container>
+                  name="zipCode" #zipCode="ngModel" required [pattern]="zipPattern"/>
+                  <ng-container *ngIf="zipCode.invalid && zipCode.touched">
+                      <p class="caption status-danger" *ngIf="zipCode.errors?.required">
+                          Código Postal es requerido
+                      </p>
+                      <p class="caption status-danger" *ngIf="zipCode.errors?.pattern">
+                          Código Postal es inválido
+                      </p>
+                  </ng-container>
               </div>
             </div>
           </div>
@@ -194,6 +208,9 @@
         sitio.errors?.required || 
         email.errors?.required || 
         telefono.errors?.required || 
+        email.errors?.pattern ||
+        telefono.errors?.pattern ||
+        zipCode.errors?.pattern ||
         !tienda.logo">
           <nb-icon icon="checkmark-square-2-outline"></nb-icon>
           Aceptar
