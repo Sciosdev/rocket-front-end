@@ -34,6 +34,7 @@ export class AltaUsuarioComponent implements OnInit {
   namePattern = RocketPatterns.personalName;
   zipPattern = RocketPatterns.zipCode;
   phoneNumberPattern = RocketPatterns.phoneNumber;
+  usernamePattern = RocketPatterns.username;
 
   showPassword = false;
   showCPassword = false;

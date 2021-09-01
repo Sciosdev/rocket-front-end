@@ -78,13 +78,17 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="inputusername" class="label">Usuario *</label>
-                            <input type="text" nbInput fullWidth id="inputusername" placeholder="Usuario"
+                            <input type="text" nbInput fullWidth id="inputusername" placeholder="Usuario" autocomplete="new-password"
                                 [value]="usuario.user | undefined" [(ngModel)]="usuario.user" name="username"
-                                #username="ngModel" required />
+                                #username="ngModel" required  [nbPopover]="usernamerules" nbPopoverPlacement="bottom" nbPopoverTrigger="hover"
+                                [pattern]="usernamePattern"/>
 
                             <ng-container *ngIf="username.invalid && username.touched">
                                 <p class="caption status-danger" *ngIf="username.errors?.required">
-                                    Usuario es requerido!
+                                    Usuario es requerido.
+                                </p>
+                                <p class="caption status-danger" *ngIf="username.errors?.pattern">
+                                    El usuario no cumple con las reglas de validación.
                                 </p>
                             </ng-container>
                         </div>
@@ -93,7 +97,7 @@
                         <div class="form-group">
                             <label for="inputcontrasena" class="label">Contraseña *</label>
                             <nb-form-field>
-                                <input [type]="getInputType()" nbInput fullWidth id="inputcontrasena"
+                                <input [type]="getInputType()" nbInput fullWidth id="inputcontrasena" autocomplete="new-password"
                                     placeholder="Contraseña" [value]="usuario.password | undefined"
                                     [(ngModel)]="usuario.password" name="contrasena" required
                                     [nbPopover]="passwordrules" nbPopoverPlacement="bottom" nbPopoverTrigger="hover"
@@ -106,10 +110,10 @@
                             </nb-form-field>
                             <ng-container *ngIf="contrasena.invalid && contrasena.touched">
                                 <p class="caption status-danger" *ngIf="contrasena.errors?.required">
-                                    La contraseña es requerida!
+                                    La contraseña es requerida.
                                 </p>
                                 <p class="caption status-danger" *ngIf="contrasena.errors?.pattern">
-                                   La contraseña no cumple con las reglas de contraseña
+                                   La contraseña no cumple con las reglas de contraseña.
                                 </p>
                             </ng-container>
                         </div>
@@ -354,6 +358,7 @@
                     province.errors?.required ||
                     country.errors?.required ||
                     email.errors?.pattern ||
+                    username.errors?.pattern ||
                     phoneNumber.errors?.pattern ||
                     contrasena.errors?.pattern || 
                     zipCode.errors?.pattern ||
@@ -382,6 +387,17 @@
             <li>Al menos 8 caracteres</li>
             <li>Al menos 1 mayúscula, 1 minúscula y 1 número</li>
             <li>Puede contener caracteres especiales</li>
+        </ul>
+    </div>
+  </ng-template>
+<ng-template #usernamerules>
+    <div class="p-2 bg-info">
+        <p class="text-white">El usuario debe estar formado por:</p>
+        <ul>
+            <li class="text-white">Al menos 4 caracteres (máx 64)</li>
+            <li class="text-white">No iniciar con @, . , _ , - o un número </li>
+            <li class="text-white">No terminar con @, . , _ o -</li>
+            <li class="text-white">No más de un @, . , _ o - seguido de otro</li>
         </ul>
     </div>
   </ng-template>

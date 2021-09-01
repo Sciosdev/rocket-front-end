@@ -5,5 +5,6 @@ export class RocketPatterns{
     static personalName = "^([A-ZÁÉÍÓÚ][a-záéíóú]+([ ]?[a-záéíóú]?['-]?[A-ZÁÉÍÓÚ][a-záéíóú]+)*)$";
     static zipCode = "^[0-9 ]*$";
     static phoneNumber = "([+(\\d]{1})(([\\d+() -.]){5,16})([+(\\d]{1})";
+    static username = "(?!^[@\\.\\_\\-\\d])(?!.*[@\\.\\_\\-]$)(?!.*[@\\.\\_\\-]{2,})^([a-zA-Z0-9@\\-\\_\\.]{4,64})+$";
     
 }
