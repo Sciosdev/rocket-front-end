@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { Tienda } from 'src/app/models/tienda.model';
 import { DomSanitizer } from '@angular/platform-browser';
+import { RocketPatterns } from 'src/app/utils/patterns';
 
 @Component({
   selector: 'app-modificacion-tienda',
@@ -22,6 +23,10 @@ export class ModificacionTiendaComponent implements OnInit {
 
   imagePath;
 
+  emailPattern = RocketPatterns.email;
+  phoneNumberPattern = RocketPatterns.phoneNumber;
+  zipPattern = RocketPatterns.zipCode;
+  
   ngOnInit(): void {
     this.mtienda = new Tienda();
     this.mtienda.setTienda(this.tienda);

@@ -78,11 +78,14 @@
                                 <label for="inputFirstName" class="label">Nombre *</label>
                                 <input type="text" nbInput fullWidth id="inputFirstName" placeholder="Nombre"
                                     [value]="usuario.firstName | undefined" [(ngModel)]="usuario.firstName"
-                                    name="firstName" #nombre="ngModel" required />
+                                    name="firstName" #nombre="ngModel" required [pattern] = "namePattern" />
 
-                                <ng-container *ngIf="nombre.invalid && nombre.touched">
+                                <ng-container *ngIf="nombre.invalid">
                                     <p class="caption status-danger" *ngIf="nombre.errors?.required">
                                         Nombre es requerido!
+                                    </p>
+                                    <p class="caption status-danger" *ngIf="nombre.errors?.pattern">
+                                        No tiene un formato válido
                                     </p>
                                 </ng-container>
                             </div>
@@ -93,7 +96,13 @@
                                 <label for="inputLastName" class="label">Apellido Paterno</label>
                                 <input type="text" nbInput fullWidth id="inputLastName" placeholder="Apellido Paterno"
                                     [value]="usuario.lastName | undefined" [(ngModel)]="usuario.lastName"
-                                    name="lastName" />
+                                    name="lastName" [pattern]="namePattern" #lastName="ngModel"/>
+                                    <ng-container *ngIf="lastName.invalid">
+                                   
+                                        <p class="caption status-danger" *ngIf="lastName.errors?.pattern">
+                                            No tiene un formato válido
+                                        </p>
+                                    </ng-container>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -101,7 +110,13 @@
                                 <label for="inputSecondLastName" class="label">Apellido Materno</label>
                                 <input type="text" nbInput fullWidth id="inputSecondLastName"
                                     placeholder="Apellido Materno" [value]="usuario.secondLastName | undefined"
-                                    [(ngModel)]="usuario.secondLastName" name="secondLastName" />
+                                    [(ngModel)]="usuario.secondLastName" name="secondLastName" [pattern]="namePattern" #slastName="ngModel" />
+                                    <ng-container *ngIf="slastName.invalid">
+                                   
+                                        <p class="caption status-danger" *ngIf="slastName.errors?.pattern">
+                                            No tiene un formato válido
+                                        </p>
+                                    </ng-container>
                             </div>
                         </div>
                     </div>
@@ -112,12 +127,15 @@
                                 <input type="email" nbInput fullWidth id="inputCorreo" placeholder="Correo"
                                     [value]="usuario.email | undefined" [(ngModel)]="usuario.email" name="email" 
                                     
-                                    #email="ngModel" required />
-                                <ng-container *ngIf="email.invalid && email.touched">
-                                    <p class="caption status-danger" *ngIf="email.errors?.required">
-                                        Correo es requerido
-                                    </p>
-                                </ng-container>
+                                    #email="ngModel" required  [pattern]="emailPattern"/>
+                                    <ng-container *ngIf="email.invalid">
+                                        <p class="caption status-danger" *ngIf="email.errors?.required">
+                                            Correo es requerido
+                                        </p>
+                                        <p class="caption status-danger" *ngIf="email.errors?.pattern">
+                                            No tiene un formato válido de correo
+                                        </p>
+                                    </ng-container>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -125,7 +143,12 @@
                                 <label for="inputTelefono" class="label">Teléfono</label>
                                 <input type="email" nbInput fullWidth id="inputTelefono" placeholder="Teléfono"
                                     [value]="usuario.phoneNumber | undefined" [(ngModel)]="usuario.phoneNumber"
-                                    name="phoneNumber" />
+                                    name="phoneNumber"  #phoneNumber="ngModel" [pattern]="phoneNumberPattern"/>
+                                    <ng-container *ngIf="phoneNumber.invalid">
+                                    <p class="caption status-danger" *ngIf="phoneNumber.errors?.pattern">
+                                        Teléfono no válido
+                                    </p>
+                                    </ng-container>
                             </div>
                         </div>
                     </div>
@@ -139,7 +162,7 @@
                                 <input type="text" nbInput fullWidth id="inputCalle" placeholder="Calle"
                                     [value]="usuario.fullAddress.street | undefined"
                                     [(ngModel)]="usuario.fullAddress.street" name="street" #street="ngModel" required />
-                                <ng-container *ngIf="street.invalid && street.touched">
+                                <ng-container *ngIf="street.invalid">
                                     <p class="caption status-danger" *ngIf="street.errors?.required">
                                         Calle es requerido
                                     </p>
@@ -154,7 +177,7 @@
                                     [value]="usuario.fullAddress.external | undefined"
                                     [(ngModel)]="usuario.fullAddress.external" name="external" #external="ngModel"
                                     required />
-                                <ng-container *ngIf="external.invalid && external.touched">
+                                <ng-container *ngIf="external.invalid">
                                     <p class="caption status-danger" *ngIf="external.errors?.required">
                                         N° Exterior es requerido
                                     </p>
@@ -175,12 +198,15 @@
                                 <input type="text" nbInput fullWidth id="inputZip" placeholder="Código Postal"
                                     [value]="usuario.fullAddress.zipCode | undefined"
                                     [(ngModel)]="usuario.fullAddress.zipCode" name="zipCode" #zipCode="ngModel"
-                                    required />
-                                <ng-container *ngIf="zipCode.invalid && zipCode.touched">
-                                    <p class="caption status-danger" *ngIf="zipCode.errors?.required">
-                                        Código Postal es requerido
-                                    </p>
-                                </ng-container>
+                                    required [pattern]="zipPattern"/>
+                                    <ng-container *ngIf="zipCode.invalid">
+                                        <p class="caption status-danger" *ngIf="zipCode.errors?.required">
+                                            Código Postal es requerido
+                                        </p>
+                                        <p class="caption status-danger" *ngIf="zipCode.errors?.pattern">
+                                            Código Postal es inválido
+                                        </p>
+                                    </ng-container>
                             </div>
                         </div>
                     </div>
@@ -192,7 +218,7 @@
                                     [value]="usuario.fullAddress.commune | undefined"
                                     [(ngModel)]="usuario.fullAddress.commune" name="commune" #commune="ngModel"
                                     required />
-                                <ng-container *ngIf="commune.invalid && commune.touched">
+                                <ng-container *ngIf="commune.invalid">
                                     <p class="caption status-danger" *ngIf="commune.errors?.required">
                                         Comuna / Ciudad es requerido
                                     </p>
@@ -206,7 +232,7 @@
                                     [value]="usuario.fullAddress.province | undefined"
                                     [(ngModel)]="usuario.fullAddress.province" name="province" #province="ngModel"
                                     required />
-                                <ng-container *ngIf="province.invalid && province.touched">
+                                <ng-container *ngIf="province.invalid">
                                     <p class="caption status-danger" *ngIf="province.errors?.required">
                                         Provincia / Estado es requerido
                                     </p>
@@ -220,7 +246,7 @@
                                     [value]="usuario.fullAddress.country | undefined"
                                     [(ngModel)]="usuario.fullAddress.country" name="country" #country="ngModel"
                                     required />
-                                <ng-container *ngIf="country.invalid && country.touched">
+                                <ng-container *ngIf="country.invalid">
                                     <p class="caption status-danger" *ngIf="country.errors?.required">
                                         País es requerido
                                     </p>
@@ -242,7 +268,13 @@
                     commune.errors?.required ||
                     zipCode.errors?.required ||
                     province.errors?.required ||
-                    country.errors?.required">
+                    country.errors?.required ||
+                    email.errors?.pattern ||
+                    phoneNumber.errors?.pattern ||
+                    zipCode.errors?.pattern ||
+                    nombre.errors?.pattern ||
+                    lastName.errors?.pattern ||
+                    slastName.errors?.pattern ">
                     <nb-icon icon="checkmark-square-2-outline"></nb-icon>
                     Aceptar
                 </button>

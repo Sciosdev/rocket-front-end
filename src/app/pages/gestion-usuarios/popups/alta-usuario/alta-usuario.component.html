@@ -78,13 +78,17 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="inputusername" class="label">Usuario *</label>
-                            <input type="text" nbInput fullWidth id="inputusername" placeholder="Usuario"
+                            <input type="text" nbInput fullWidth id="inputusername" placeholder="Usuario" autocomplete="new-password"
                                 [value]="usuario.user | undefined" [(ngModel)]="usuario.user" name="username"
-                                #username="ngModel" required />
+                                #username="ngModel" required  [nbPopover]="usernamerules" nbPopoverPlacement="bottom" nbPopoverTrigger="hover"
+                                [pattern]="usernamePattern"/>
 
                             <ng-container *ngIf="username.invalid && username.touched">
                                 <p class="caption status-danger" *ngIf="username.errors?.required">
-                                    Usuario es requerido!
+                                    Usuario es requerido.
+                                </p>
+                                <p class="caption status-danger" *ngIf="username.errors?.pattern">
+                                    El usuario no cumple con las reglas de validación.
                                 </p>
                             </ng-container>
                         </div>
@@ -93,9 +97,11 @@
                         <div class="form-group">
                             <label for="inputcontrasena" class="label">Contraseña *</label>
                             <nb-form-field>
-                                <input [type]="getInputType()" nbInput fullWidth id="inputcontrasena"
+                                <input [type]="getInputType()" nbInput fullWidth id="inputcontrasena" autocomplete="new-password"
                                     placeholder="Contraseña" [value]="usuario.password | undefined"
-                                    [(ngModel)]="usuario.password" name="contrasena" #contrasena="ngModel" required>
+                                    [(ngModel)]="usuario.password" name="contrasena" required
+                                    [nbPopover]="passwordrules" nbPopoverPlacement="bottom" nbPopoverTrigger="hover"
+                                    #contrasena="ngModel"  [pattern]="passwordPattern">
                                 <button nbSuffix nbButton ghost (click)="toggleShowPassword()">
                                     <nb-icon [icon]="showPassword ? 'eye-outline' : 'eye-off-2-outline'" pack="eva"
                                         [attr.aria-label]="showPassword ? 'hide password' : 'show password'">
@@ -104,7 +110,10 @@
                             </nb-form-field>
                             <ng-container *ngIf="contrasena.invalid && contrasena.touched">
                                 <p class="caption status-danger" *ngIf="contrasena.errors?.required">
-                                    La contraseña es requerida!
+                                    La contraseña es requerida.
+                                </p>
+                                <p class="caption status-danger" *ngIf="contrasena.errors?.pattern">
+                                   La contraseña no cumple con las reglas de contraseña.
                                 </p>
                             </ng-container>
                         </div>
@@ -154,11 +163,14 @@
                                 <label for="inputFirstName" class="label">Nombre *</label>
                                 <input type="text" nbInput fullWidth id="inputFirstName" placeholder="Nombre"
                                     [value]="usuario.firstName | undefined" [(ngModel)]="usuario.firstName"
-                                    name="firstName" #nombre="ngModel" required />
+                                    name="firstName" #nombre="ngModel" required [pattern]="namePattern"/>
 
                                 <ng-container *ngIf="nombre.invalid && nombre.touched">
                                     <p class="caption status-danger" *ngIf="nombre.errors?.required">
                                         Nombre es requerido!
+                                    </p>
+                                    <p class="caption status-danger" *ngIf="nombre.errors?.pattern">
+                                        No tiene un formato válido
                                     </p>
                                 </ng-container>
                             </div>
@@ -169,7 +181,13 @@
                                 <label for="inputLastName" class="label">Apellido Paterno</label>
                                 <input type="text" nbInput fullWidth id="inputLastName" placeholder="Apellido Paterno"
                                     [value]="usuario.lastName | undefined" [(ngModel)]="usuario.lastName"
-                                    name="lastName" />
+                                    name="lastName" [pattern]="namePattern" #lastName="ngModel"/>
+                                    <ng-container *ngIf="lastName.invalid && lastName.touched">
+                                   
+                                        <p class="caption status-danger" *ngIf="lastName.errors?.pattern">
+                                            No tiene un formato válido
+                                        </p>
+                                    </ng-container>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -177,7 +195,13 @@
                                 <label for="inputWebsite" class="label">Apellido Materno</label>
                                 <input type="text" nbInput fullWidth id="inputWebsite" placeholder="Apellido Materno"
                                     [value]="usuario.secondLastName | undefined" [(ngModel)]="usuario.secondLastName"
-                                    name="secondLastName" />
+                                    name="secondLastName" [pattern]="namePattern" #slastName="ngModel" />
+                                    <ng-container *ngIf="slastName.invalid && slastName.touched">
+                                   
+                                        <p class="caption status-danger" *ngIf="slastName.errors?.pattern">
+                                            No tiene un formato válido
+                                        </p>
+                                    </ng-container>
                             </div>
                         </div>
                     </div>
@@ -187,10 +211,13 @@
                                 <label for="inputCorreo" class="label">Correo *</label>
                                 <input type="email" nbInput fullWidth id="inputCorreo" placeholder="Correo"
                                     [value]="usuario.email | undefined" [(ngModel)]="usuario.email" name="email"
-                                    #email="ngModel" required />
+                                    required #email="ngModel" [pattern]="emailPattern"/>
                                 <ng-container *ngIf="email.invalid && email.touched">
                                     <p class="caption status-danger" *ngIf="email.errors?.required">
                                         Correo es requerido
+                                    </p>
+                                    <p class="caption status-danger" *ngIf="email.errors?.pattern">
+                                        No tiene un formato válido de correo
                                     </p>
                                 </ng-container>
                             </div>
@@ -198,9 +225,14 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="inputTelefono" class="label">Teléfono</label>
-                                <input type="email" nbInput fullWidth id="inputTelefono" placeholder="Teléfono"
+                                <input type="text" nbInput fullWidth id="inputTelefono" placeholder="Teléfono"
                                     [value]="usuario.phoneNumber | undefined" [(ngModel)]="usuario.phoneNumber"
-                                    name="phoneNumber" />
+                                    name="phoneNumber" #phoneNumber="ngModel" [pattern]="phoneNumberPattern"/>
+                                    <ng-container *ngIf="phoneNumber.invalid && phoneNumber.touched && phoneNumber.dirty">
+                                    <p class="caption status-danger" *ngIf="phoneNumber.errors?.pattern">
+                                        Teléfono no válido
+                                    </p>
+                                    </ng-container>
                             </div>
                         </div>
                     </div>
@@ -250,10 +282,14 @@
                                 <input type="text" nbInput fullWidth id="inputZip" placeholder="Código Postal"
                                     [value]="usuario.fullAddress.zipCode | undefined"
                                     [(ngModel)]="usuario.fullAddress.zipCode" name="zipCode" #zipCode="ngModel"
-                                    required />
+                                    required 
+                                    [pattern]="zipPattern"/>
                                 <ng-container *ngIf="zipCode.invalid && zipCode.touched">
                                     <p class="caption status-danger" *ngIf="zipCode.errors?.required">
                                         Código Postal es requerido
+                                    </p>
+                                    <p class="caption status-danger" *ngIf="zipCode.errors?.pattern">
+                                        Código Postal es inválido
                                     </p>
                                 </ng-container>
                             </div>
@@ -321,6 +357,14 @@
                     zipCode.errors?.required ||
                     province.errors?.required ||
                     country.errors?.required ||
+                    email.errors?.pattern ||
+                    username.errors?.pattern ||
+                    phoneNumber.errors?.pattern ||
+                    contrasena.errors?.pattern || 
+                    zipCode.errors?.pattern ||
+                    nombre.errors?.pattern ||
+                    lastName.errors?.pattern ||
+                    slastName.errors?.pattern ||
                     (selectedRolFormControl.value.vendorAssignment && tiendaF.errors?.required)">
                     <nb-icon icon="checkmark-square-2-outline"></nb-icon>
                     Aceptar
@@ -335,3 +379,25 @@
         </div>
     </nb-card-body>
 </nb-card>
+
+<ng-template #passwordrules>
+    <div class="p-2 bg-warning">
+        <p>La contraseña debe cumplir:</p>
+        <ul>
+            <li>Al menos 8 caracteres</li>
+            <li>Al menos 1 mayúscula, 1 minúscula y 1 número</li>
+            <li>Puede contener caracteres especiales</li>
+        </ul>
+    </div>
+  </ng-template>
+<ng-template #usernamerules>
+    <div class="p-2 bg-info">
+        <p class="text-white">El usuario debe estar formado por:</p>
+        <ul>
+            <li class="text-white">Al menos 4 caracteres (máx 64)</li>
+            <li class="text-white">No iniciar con @, . , _ , - o un número </li>
+            <li class="text-white">No terminar con @, . , _ o -</li>
+            <li class="text-white">No más de un @, . , _ o - seguido de otro</li>
+        </ul>
+    </div>
+  </ng-template>

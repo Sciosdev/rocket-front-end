@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NbDialogRef } from '@nebular/theme';
 import { Tienda } from 'src/app/models/tienda.model';
+import { RocketPatterns } from 'src/app/utils/patterns';
 
 @Component({
   selector: 'app-alta-tienda',
@@ -21,6 +22,10 @@ export class AltaTiendaComponent implements OnInit {
   filename: string;
 
   imagePath;
+  
+  emailPattern = RocketPatterns.email;
+  phoneNumberPattern = RocketPatterns.phoneNumber;
+  zipPattern = RocketPatterns.zipCode;
 
   ngOnInit(): void {
     this.tienda = new Tienda();
