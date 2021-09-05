@@ -17,6 +17,13 @@ export class RolesService {
 
   }
 
+  obtenerRol(roleName: string) {
+
+    const url = this.URL_SERVICIOS + '/rol/' + roleName;
+    return this.http.get(url, this.getOptions());
+
+  }
+
   private getOptions() {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',

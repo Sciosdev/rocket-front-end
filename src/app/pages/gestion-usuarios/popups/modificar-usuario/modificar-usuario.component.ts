@@ -5,6 +5,7 @@ import { UsuarioCompleto } from 'src/app/models/usuario-completo.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { TiendaService } from 'src/app/services/tienda.service';
 import { RocketPatterns } from 'src/app/utils/patterns';
+import { RolesService } from '../../../../services/roles.service';
 
 @Component({
   selector: 'app-modificar-usuario',
@@ -24,6 +25,9 @@ export class ModificarUsuarioComponent implements OnInit {
   zipPattern = RocketPatterns.zipCode;
   phoneNumberPattern = RocketPatterns.phoneNumber;
 
+  selectedRol;
+  selectedTienda;
+
   @Output() loading: any = new EventEmitter<boolean>();
   @Output() registros: any = new EventEmitter<Usuario[]>();
   @Output() registrosCompletos: any = new EventEmitter<UsuarioCompleto[]>();
@@ -31,7 +35,8 @@ export class ModificarUsuarioComponent implements OnInit {
   constructor(
     protected ref: NbDialogRef<ModificarUsuarioComponent>,
     private _sanitizer: DomSanitizer,
-    private tiendaService: TiendaService
+    private tiendaService: TiendaService,
+    private rolesService: RolesService
   ) {}
 
   ngOnInit(): void {
@@ -48,17 +53,37 @@ export class ModificarUsuarioComponent implements OnInit {
 
     this.tiendaService.obtenerCatalogoTiendas().subscribe((tiendas: any[]) => {
       this.tiendas_combo = tiendas;
-      if (this.usuario.tienda) {
-        this.tiendas_combo.forEach((tienda) => {
-          if (tienda.id == this.usuario.tienda)
-            this.nombreTienda = tienda.nombreTienda;
-        });
-      }
+      this.tiendas_combo.forEach((tienda) => {
+        if (tienda.id == this.usuario.tienda)
+          this.nombreTienda = tienda.nombreTienda;
+      });
     });
+
+    this.rolesService.obtenerRol(this.usuario.rol).subscribe(
+      (response) => {
+        this.selectedRol = response;
+      }, (error) => {
+
+      }
+    )
   }
 
   accept() {
+
     this.loading.emit(true);
+
+    if (this.usuario.tienda && this.selectedTienda == undefined) {
+      this.tiendas_combo.forEach((tienda) => {
+        if (tienda.id == this.usuario.tienda)
+          this.nombreTienda = tienda.nombreTienda;
+      });
+    }
+
+    if(this.selectedTienda != undefined){
+      this.nombreTienda = this.selectedTienda.nombreTienda;
+      this.usuario.tienda = this.selectedTienda.id;
+    }
+
     this.usuario.name = '';
 
     if (this.usuario.firstName)
@@ -77,7 +102,7 @@ export class ModificarUsuarioComponent implements OnInit {
       if (this.usuario.foto == 'nofoto') this.usuario.foto = null;
     } 
 
-    this.ref.close({ accepted: true, usuario: this.usuario, tienda: null });
+    this.ref.close({ accepted: true, usuario: this.usuario, tienda:  this.nombreTienda });
   }
 
   cancel() {
@@ -101,6 +126,13 @@ export class ModificarUsuarioComponent implements OnInit {
 
   deleteFoto() {
     this.usuario.foto = 'nofoto';
+  }
+
+  validateTienda() {
+    if(this.usuario.tienda == 0 && this.selectedTienda == undefined) {
+      return false;
+    }
+    return true;
   }
 
   private readFile(file: File) {

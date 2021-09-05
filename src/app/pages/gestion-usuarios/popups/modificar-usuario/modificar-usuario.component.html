@@ -45,13 +45,35 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6  mb-3">
+                    <div class="col-sm-6  mb-3"
+                        *ngIf="!(selectedRol && selectedRol.vendorAssignment && usuario.tienda == 0)">
                         <div class="form-group">
                             <label class="label">Tienda</label>
                             <input type="text" nbInput fullWidth id="inputTienda" placeholder="Tienda"
-                                [value]="nombreTienda | undefined" readonly />
-
+                                [value]="nombreTienda | undefined" readonly  #tiendaF="ngModel" [(ngModel)]="nombreTienda" />
                         </div>
+                    </div>
+
+                    <div class="col-sm-6" *ngIf="selectedRol && selectedRol.vendorAssignment && usuario.tienda == 0">
+                        <label class="label">Tienda
+                            *</label>
+
+                        <nb-form-field class="full-width">
+                            <nb-select placeholder="Selecciona una tienda" [(ngModel)]="selectedTienda" name="tienda"
+                                #tiendaF="ngModel" [disabled]="!selectedRol || !selectedRol.vendorAssignment"
+                                [required]='selectedRol && selectedRol.vendorAssignment'>
+                                <nb-option>Sin Selección</nb-option>
+                                <nb-option *ngFor="let tienda of tiendas_combo" [value]="tienda">
+                                    {{ tienda.nombreTienda }}
+                                </nb-option>
+                            </nb-select>
+                        </nb-form-field>
+                        <ng-container
+                            *ngIf="selectedRol && selectedRol.vendorAssignment && tiendaF.hasError('required')">
+                            <p class="caption status-danger">
+                                La tienda es requerida
+                            </p>
+                        </ng-container>
                     </div>
 
                     <div class="col-sm-12">
@@ -78,7 +100,7 @@
                                 <label for="inputFirstName" class="label">Nombre *</label>
                                 <input type="text" nbInput fullWidth id="inputFirstName" placeholder="Nombre"
                                     [value]="usuario.firstName | undefined" [(ngModel)]="usuario.firstName"
-                                    name="firstName" #nombre="ngModel" required [pattern] = "namePattern" />
+                                    name="firstName" #nombre="ngModel" required [pattern]="namePattern" />
 
                                 <ng-container *ngIf="nombre.invalid">
                                     <p class="caption status-danger" *ngIf="nombre.errors?.required">
@@ -96,13 +118,13 @@
                                 <label for="inputLastName" class="label">Apellido Paterno</label>
                                 <input type="text" nbInput fullWidth id="inputLastName" placeholder="Apellido Paterno"
                                     [value]="usuario.lastName | undefined" [(ngModel)]="usuario.lastName"
-                                    name="lastName" [pattern]="namePattern" #lastName="ngModel"/>
-                                    <ng-container *ngIf="lastName.invalid">
-                                   
-                                        <p class="caption status-danger" *ngIf="lastName.errors?.pattern">
-                                            No tiene un formato válido
-                                        </p>
-                                    </ng-container>
+                                    name="lastName" [pattern]="namePattern" #lastName="ngModel" />
+                                <ng-container *ngIf="lastName.invalid">
+
+                                    <p class="caption status-danger" *ngIf="lastName.errors?.pattern">
+                                        No tiene un formato válido
+                                    </p>
+                                </ng-container>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -110,13 +132,14 @@
                                 <label for="inputSecondLastName" class="label">Apellido Materno</label>
                                 <input type="text" nbInput fullWidth id="inputSecondLastName"
                                     placeholder="Apellido Materno" [value]="usuario.secondLastName | undefined"
-                                    [(ngModel)]="usuario.secondLastName" name="secondLastName" [pattern]="namePattern" #slastName="ngModel" />
-                                    <ng-container *ngIf="slastName.invalid">
-                                   
-                                        <p class="caption status-danger" *ngIf="slastName.errors?.pattern">
-                                            No tiene un formato válido
-                                        </p>
-                                    </ng-container>
+                                    [(ngModel)]="usuario.secondLastName" name="secondLastName" [pattern]="namePattern"
+                                    #slastName="ngModel" />
+                                <ng-container *ngIf="slastName.invalid">
+
+                                    <p class="caption status-danger" *ngIf="slastName.errors?.pattern">
+                                        No tiene un formato válido
+                                    </p>
+                                </ng-container>
                             </div>
                         </div>
                     </div>
@@ -125,17 +148,16 @@
                             <div class="form-group">
                                 <label for="inputCorreo" class="label">Correo *</label>
                                 <input type="email" nbInput fullWidth id="inputCorreo" placeholder="Correo"
-                                    [value]="usuario.email | undefined" [(ngModel)]="usuario.email" name="email" 
-                                    
-                                    #email="ngModel" required  [pattern]="emailPattern"/>
-                                    <ng-container *ngIf="email.invalid">
-                                        <p class="caption status-danger" *ngIf="email.errors?.required">
-                                            Correo es requerido
-                                        </p>
-                                        <p class="caption status-danger" *ngIf="email.errors?.pattern">
-                                            No tiene un formato válido de correo
-                                        </p>
-                                    </ng-container>
+                                    [value]="usuario.email | undefined" [(ngModel)]="usuario.email" name="email"
+                                    #email="ngModel" required [pattern]="emailPattern" />
+                                <ng-container *ngIf="email.invalid">
+                                    <p class="caption status-danger" *ngIf="email.errors?.required">
+                                        Correo es requerido
+                                    </p>
+                                    <p class="caption status-danger" *ngIf="email.errors?.pattern">
+                                        No tiene un formato válido de correo
+                                    </p>
+                                </ng-container>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -143,12 +165,12 @@
                                 <label for="inputTelefono" class="label">Teléfono</label>
                                 <input type="email" nbInput fullWidth id="inputTelefono" placeholder="Teléfono"
                                     [value]="usuario.phoneNumber | undefined" [(ngModel)]="usuario.phoneNumber"
-                                    name="phoneNumber"  #phoneNumber="ngModel" [pattern]="phoneNumberPattern"/>
-                                    <ng-container *ngIf="phoneNumber.invalid">
+                                    name="phoneNumber" #phoneNumber="ngModel" [pattern]="phoneNumberPattern" />
+                                <ng-container *ngIf="phoneNumber.invalid">
                                     <p class="caption status-danger" *ngIf="phoneNumber.errors?.pattern">
                                         Teléfono no válido
                                     </p>
-                                    </ng-container>
+                                </ng-container>
                             </div>
                         </div>
                     </div>
@@ -197,16 +219,16 @@
                                 <label for="inputZip" class="label">Código Postal *</label>
                                 <input type="text" nbInput fullWidth id="inputZip" placeholder="Código Postal"
                                     [value]="usuario.fullAddress.zipCode | undefined"
-                                    [(ngModel)]="usuario.fullAddress.zipCode" name="zipCode" #zipCode="ngModel"
-                                    required [pattern]="zipPattern"/>
-                                    <ng-container *ngIf="zipCode.invalid">
-                                        <p class="caption status-danger" *ngIf="zipCode.errors?.required">
-                                            Código Postal es requerido
-                                        </p>
-                                        <p class="caption status-danger" *ngIf="zipCode.errors?.pattern">
-                                            Código Postal es inválido
-                                        </p>
-                                    </ng-container>
+                                    [(ngModel)]="usuario.fullAddress.zipCode" name="zipCode" #zipCode="ngModel" required
+                                    [pattern]="zipPattern" />
+                                <ng-container *ngIf="zipCode.invalid">
+                                    <p class="caption status-danger" *ngIf="zipCode.errors?.required">
+                                        Código Postal es requerido
+                                    </p>
+                                    <p class="caption status-danger" *ngIf="zipCode.errors?.pattern">
+                                        Código Postal es inválido
+                                    </p>
+                                </ng-container>
                             </div>
                         </div>
                     </div>
@@ -274,7 +296,8 @@
                     zipCode.errors?.pattern ||
                     nombre.errors?.pattern ||
                     lastName.errors?.pattern ||
-                    slastName.errors?.pattern ">
+                    slastName.errors?.pattern ||
+                    !validateTienda() ">
                     <nb-icon icon="checkmark-square-2-outline"></nb-icon>
                     Aceptar
                 </button>
