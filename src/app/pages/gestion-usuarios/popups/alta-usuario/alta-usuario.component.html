@@ -228,7 +228,7 @@
                                 <input type="text" nbInput fullWidth id="inputTelefono" placeholder="Teléfono"
                                     [value]="usuario.phoneNumber | undefined" [(ngModel)]="usuario.phoneNumber"
                                     name="phoneNumber" #phoneNumber="ngModel" [pattern]="phoneNumberPattern"/>
-                                    <ng-container *ngIf="phoneNumber.invalid && phoneNumber.touched && phoneNumber.dirty">
+                                    <ng-container *ngIf="phoneNumber.invalid && phoneNumber.touched">
                                     <p class="caption status-danger" *ngIf="phoneNumber.errors?.pattern">
                                         Teléfono no válido
                                     </p>

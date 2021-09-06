@@ -148,7 +148,7 @@ export class ResultadoConsultaUsuariosComponent
                       'Actualización de usuario'
                     );
 
-                    usuario = this.mapUsuarioCompletoToUsuario(
+                    this.mapUsuarioCompletoToUsuario2(usuario,
                       resp,
                       response.tienda
                     );
@@ -241,6 +241,23 @@ export class ResultadoConsultaUsuariosComponent
     }
 
     return usuarioSimple;
+  }
+
+  mapUsuarioCompletoToUsuario2(usuarioSimple: Usuario,
+    usuario: UsuarioCompleto,
+    tienda: string
+  ) {
+    
+    usuarioSimple.id = usuario.id;
+    usuarioSimple.nombre = usuario.name;
+    usuarioSimple.rol = usuario.rol;
+    usuarioSimple.username = usuario.user;
+    usuarioSimple.correo = usuario.email;
+    usuarioSimple.telefono = usuario.phoneNumber;
+    
+    if (tienda) {
+      usuarioSimple.tienda = tienda;
+    }
   }
 
   arrayRemove(arr: Usuario[], value: Usuario) {
