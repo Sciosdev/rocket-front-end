@@ -10,7 +10,13 @@ import { FormControl, Validators } from '@angular/forms';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
+
+
 export class LoginComponent extends NbLoginComponent {
+
+  loading: boolean;
+
+
   nameFormControl = new FormControl(localStorage.getItem('remember'), [
     Validators.required,
   ]);
@@ -20,6 +26,9 @@ export class LoginComponent extends NbLoginComponent {
    * Método para realizar el inicio de sesión
    */
   login() {
+
+    this.loading = true;
+
     if (this.rememberMeFormControl.value)
       localStorage.setItem('remember', this.nameFormControl.value);
     else localStorage.removeItem('remember');
@@ -35,7 +44,8 @@ export class LoginComponent extends NbLoginComponent {
     this.submitted = true;
     this.service
       .authenticate(this.strategy, this.user)
-      .subscribe(function(result) {
+      .subscribe((result) => {
+        _this.loading = false;
         _this.submitted = false;
         if (result.isSuccess()) {
           _this.messages = result.getMessages();
@@ -49,6 +59,9 @@ export class LoginComponent extends NbLoginComponent {
           }, _this.redirectDelay);
         }
         _this.cd.detectChanges();
+      },
+      (error) => {
+        _this.loading = false;
       });
   }
 }

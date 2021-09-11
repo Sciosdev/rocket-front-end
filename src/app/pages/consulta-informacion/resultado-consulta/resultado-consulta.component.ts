@@ -161,6 +161,9 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   ngOnChanges(): void {
     this.dataSource = new MatTableDataSource(this.registros);
     this.dataSource.paginator = this.paginator;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
     this.selection.clear();
     this.ToBeScheduled = [];
     this.columns = [];
