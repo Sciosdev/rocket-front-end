@@ -1,5 +1,15 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,14 +28,16 @@ import { ScheduleComponent } from '../popups/schedule/schedule.component';
 import { saveAs } from 'file-saver';
 import { CambioEstatusComponent } from '../popups/cambio-estatus/cambio-estatus.component';
 import { EstatusService } from 'src/app/services/estatus.service';
+import { CambioEstatusMultipleComponent } from '../popups/cambio-estatus-multiple/cambio-estatus-multiple.component';
+import { GlobalAcceptanceComponent } from '../../common-popups/global-acceptance/global-acceptance.component';
 
 @Component({
   selector: 'app-resultado-consulta',
   templateUrl: './resultado-consulta.component.html',
-  styleUrls: ['./resultado-consulta.component.scss']
+  styleUrls: ['./resultado-consulta.component.scss'],
 })
-export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewInit {
-
+export class ResultadoConsultaComponent
+  implements OnInit, OnChanges, AfterViewInit {
   @Input() registros: RegistroTable[];
   @Input() vendor;
   @Input() sEstatus: Estatus;
@@ -34,7 +46,20 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   @Output() loading: any = new EventEmitter<boolean>();
 
   columns: any[] = [];
-  defaultColumns = ['OrderKey', 'Name', 'Email', 'Shipping City', 'Shipping Address 1', 'Shipping Address 2', 'Status', 'CargaDT', 'Scheduled', 'Comentario', 'Courier', 'Vendedor'];
+  defaultColumns = [
+    'OrderKey',
+    'Name',
+    'Email',
+    'Shipping City',
+    'Shipping Address 1',
+    'Shipping Address 2',
+    'Status',
+    'CargaDT',
+    'Scheduled',
+    'Comentario',
+    'Courier',
+    'Vendedor',
+  ];
 
   displayedColumns: string[];
   dataSource: MatTableDataSource<RegistroTable>;
@@ -55,12 +80,16 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   scheduleAccepted: RegistroTable[] = [];
   scheduleRejected: RegistroTable[] = [];
   scheduleModified: RegistroTable[] = [];
+  statusChange: RegistroTable[] = [];
 
   comunas: any[] = [];
 
   selectedComuna: string = '';
 
-  constructor(public accessChecker: NbAccessChecker,
+  filtro;
+
+  constructor(
+    public accessChecker: NbAccessChecker,
     private dialogService: NbDialogService,
     private registroService: RegistroService,
     private authService: NbAuthService,
@@ -68,8 +97,12 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     protected cd: ChangeDetectorRef,
     private _snackBar: MatSnackBar,
     private primeNGConfig: PrimeNGConfig,
-    private toastrService: NbToastrService) {
-    this.selection = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);
+    private toastrService: NbToastrService
+  ) {
+    this.selection = new SelectionModel<any>(
+      this.allowMultiSelect,
+      this.initialSelection
+    );
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -78,60 +111,97 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.dataSource.paginator = this.paginator;
   }
 
-
   ngOnInit(): void {
-
     this.loadAccess();
     this.loadUser();
     this.authorizedStatus = [];
     this.estatusService.obtenerEstatusChange(this.loggedUser).subscribe(
       (response: Estatus[]) => {
-        response.forEach(r => {
+        response.forEach((r) => {
           this.authorizedStatus.push(r.id);
         });
 
         this.columns = [];
-        if (this.canRenderCustomer() || this.canRenderAdmin()) {
+        if (
+          this.canRenderCustomer() ||
+          this.canRenderAdmin() ||
+          this.canRenderCambioEstatus()
+        ) {
           this.columns.push('select', ...this.defaultColumns);
         } else if (this.canRenderEtiqueta()) {
           this.columns.push(...this.defaultColumns, 'actions');
-        } else
-          this.columns.push(...this.defaultColumns);
+        } else this.columns.push(...this.defaultColumns);
 
-
-        if (this.canRenderCambioEstatus() && !this.columns.includes('CambioEstatus')) {
+        if (
+          this.canRenderCambioEstatus() &&
+          !this.columns.includes('CambioEstatus')
+        ) {
           this.columns.push('CambioEstatus');
         }
 
         this.displayedColumns = this.columns;
-
-      }, (error) => {
+      },
+      (error) => {
         console.error(error);
-        this.toastrService.danger('Ocurrió un error al obtener el estatus', 'Estatus Change');
+        this.toastrService.danger(
+          'Ocurrió un error al obtener el estatus',
+          'Estatus Change'
+        );
       }
-
-
     );
 
     this.registroService.obtenerComunas().subscribe(
       (response: any[]) => {
         this.comunas = response;
-      }, (error) => {
+      },
+      (error) => {
         console.error(error);
       }
     );
 
-    this.primeNGConfig.setTranslation(
-      {
-        dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
-        dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
-        dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-        monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
-        today: 'Hoy',
-        clear: 'Limpiar',
-      }
-    );
+    this.primeNGConfig.setTranslation({
+      dayNames: [
+        'domingo',
+        'lunes',
+        'martes',
+        'miércoles',
+        'jueves',
+        'viernes',
+        'sábado',
+      ],
+      dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+      dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+      monthNames: [
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre',
+      ],
+      monthNamesShort: [
+        'ene',
+        'feb',
+        'mar',
+        'abr',
+        'may',
+        'jun',
+        'jul',
+        'ago',
+        'sep',
+        'oct',
+        'nov',
+        'dic',
+      ],
+      today: 'Hoy',
+      clear: 'Limpiar',
+    });
 
     this.dataSource.filterPredicate = (data: RegistroTable, filter: string) => {
       return data.shippingCity.trim().toLowerCase() == filter;
@@ -139,6 +209,8 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   }
 
   applyFilter(filtro) {
+    this.filtro = filtro;
+    console.log(filtro);
 
     if (filtro) {
       this.dataSource.filter = filtro.trim().toLowerCase();
@@ -151,7 +223,6 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
       this.dataSource.paginator = this.paginator;
       this.selection.clear();
     }
-
   }
 
   canRenderCambioEstatus() {
@@ -167,22 +238,33 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.selection.clear();
     this.ToBeScheduled = [];
     this.columns = [];
-    if (this.canRenderCustomer() || this.canRenderAdmin()) {
+    if (
+      this.canRenderCustomer() ||
+      this.canRenderAdmin() ||
+      this.canRenderCambioEstatus()
+    ) {
       this.columns.push('select', ...this.defaultColumns);
-    }
-    else if (this.canRenderEtiqueta()) {
+    } else if (this.canRenderEtiqueta()) {
       this.columns.push(...this.defaultColumns, 'actions');
-    }
-    else
-      this.columns.push(...this.defaultColumns);
+    } else this.columns.push(...this.defaultColumns);
 
-    if (this.canRenderCambioEstatus() && !this.columns.includes('CambioEstatus')) {
+    if (
+      this.canRenderCambioEstatus() &&
+      !this.columns.includes('CambioEstatus')
+    ) {
       this.columns.push('CambioEstatus');
     }
     this.selectedComuna = '';
 
     this.displayedColumns = this.columns;
 
+    this.dataSource.filterPredicate = (data: RegistroTable, filter: string) => {
+      return data.shippingCity.trim().toLowerCase() == filter;
+    };
+
+    if (this.filtro) {
+      this.applyFilter(this.filtro);
+    }
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -194,24 +276,26 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
   solicitarAgenda() {
-    this.dialogService.open(ScheduleComponent, {
-      closeOnBackdropClick: false,closeOnEsc: true
-    })
+    this.dialogService
+      .open(ScheduleComponent, {
+        closeOnBackdropClick: false,
+        closeOnEsc: true,
+      })
       .onClose.subscribe((result: any) => {
         if (result != undefined && result.fecha != null) {
-          this.selection.selected.forEach(element => {
+          this.selection.selected.forEach((element) => {
             element.scheduledDt = result.fecha;
             element.comment = result.comentario;
             if (!this.ToBeScheduled.includes(element)) {
               this.ToBeScheduled.push(element);
             }
-          })
+          });
         }
         this.selection.clear();
       });
@@ -219,58 +303,149 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   arrayRemove(arr: RegistroTable[], value: RegistroTable) {
 
+    console.log('value: ' + value.orderkey);
     return arr.filter(function (ele) {
       return ele.orderkey != value.orderkey;
     });
   }
 
   cambiarEstatus(registroTable: RegistroTable) {
-    this.dialogService.open(CambioEstatusComponent, {
-      closeOnBackdropClick: false, context: { currentEstatus: this.sEstatus, registro: registroTable }
-    }).onClose.subscribe((result: any) => {
-      if (result) {
-        this.loading.emit(true);
-        this.estatusService.actualizarEstatus(result.estatus, registroTable.orderkey, this.loggedUser, result.courier).subscribe((success) => {
-          this.registros = this.arrayRemove(this.registros, registroTable);
-          this.dataSource = new MatTableDataSource(this.registros);
-          this.dataSource.paginator = this.paginator;
-          this.loading.emit(false);
-          this.toastrService.success('Se actualizó correctamente el estatus', 'Cambio de estatus');
-        }, (error) => {
-          console.error(error);
-          this.loading.emit(false);
-          this.toastrService.danger('Ocurrió un error al cambiar el estatus', 'Cambio de estatus');
+    this.dialogService
+      .open(CambioEstatusComponent, {
+        closeOnBackdropClick: false,
+        context: { currentEstatus: this.sEstatus, registro: registroTable },
+      })
+      .onClose.subscribe((result: any) => {
+        if (result) {
+          this.loading.emit(true);
+          this.estatusService
+            .actualizarEstatus(
+              result.estatus,
+              registroTable.orderkey,
+              this.loggedUser,
+              result.courier
+            )
+            .subscribe(
+              (success) => {
+                this.registros = this.arrayRemove(
+                  this.registros,
+                  registroTable
+                );
+                this.dataSource = new MatTableDataSource(this.registros);
+                this.dataSource.paginator = this.paginator;
+                this.loading.emit(false);
+                this.toastrService.success(
+                  'Se actualizó correctamente el estatus',
+                  'Cambio de estatus'
+                );
+              },
+              (error) => {
+                console.error(error);
+                this.loading.emit(false);
+                this.toastrService.danger(
+                  'Ocurrió un error al cambiar el estatus',
+                  'Cambio de estatus'
+                );
+              }
+            );
+        }
+      });
+  }
+
+  cambiarEstatusMultiple() {
+    this.dialogService
+      .open(CambioEstatusMultipleComponent, {
+        closeOnBackdropClick: false,
+        context: {
+          currentEstatus: this.sEstatus,
+          totalRegistros: 3,
+        },
+      })
+      .onClose.subscribe((result: any) => {
+
+        let orderKeys: string[] = [];
+        this.selection.selected.forEach((register) => {
+          orderKeys.push(register.orderkey);
         });
-      }
-    });
+
+
+        if (result) {
+          this.loading.emit(true);
+          this.estatusService
+            .actualizarListaEstatus(
+              result.estatus,
+              orderKeys,
+              this.loggedUser,
+              result.courier
+            )
+            .subscribe(
+              (success: any[]) => {
+
+                console.warn(success);
+
+                success.forEach((registro) => {
+                  this.registros = this.arrayRemove(this.registros, registro);
+                });
+
+                this.selection.clear();
+                this.statusChange = [];
+                this.dataSource = new MatTableDataSource(this.registros);
+                this.dataSource.paginator = this.paginator;
+                this.loading.emit(false);
+                this.toastrService.success(
+                  'Se actualizó correctamente el estatus',
+                  'Cambio de estatus'
+                );
+
+              },
+              (error) => {
+                console.error(error);
+                this.loading.emit(false);
+                this.toastrService.danger(
+                  'Ocurrió un error al cambiar el estatus',
+                  'Cambio de estatus'
+                );
+              }
+            );
+        }
+
+
+      });
+
   }
 
   aceptarAgenda() {
-
-    this.dialogService.open(AcceptanceComponent, {
-      closeOnBackdropClick: false,
-    })
+    this.dialogService
+      .open(AcceptanceComponent, {
+        closeOnBackdropClick: false,
+      })
       .onClose.subscribe((result: any) => {
-
         if (result.accepted) {
-
           this.loading.emit(true);
           this.scheduleAccepted.push(...this.selection.selected);
 
-          this.selection.selected.forEach(ele => {
-            this.registros = this.arrayRemove(this.registros, ele)
+          this.selection.selected.forEach((ele) => {
+            this.registros = this.arrayRemove(this.registros, ele);
           });
 
           let data: ScheduleServiceInDto[] = [];
 
-          this.selection.selected.forEach(registro => {
+          this.selection.selected.forEach((registro) => {
             let scheduleServiceInDto: ScheduleServiceInDto = {};
             scheduleServiceInDto.orderkey = registro.orderkey;
             try {
-              scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
+              scheduleServiceInDto.scheduledDate =
+                registro.scheduledDt.toLocaleDateString() +
+                ' ' +
+                registro.scheduledDt.toLocaleTimeString();
             } catch (error) {
-              let scheduleDate = new Date(Date.parse(registro.scheduledDt.toString()));
-              scheduleServiceInDto.scheduledDate = scheduleDate.toLocaleDateString() + ' ' + scheduleDate.toLocaleTimeString();
+              let scheduleDate = new Date(
+                Date.parse(registro.scheduledDt.toString())
+              );
+              scheduleServiceInDto.scheduledDate =
+                scheduleDate.toLocaleDateString() +
+                ' ' +
+                scheduleDate.toLocaleTimeString();
             }
             scheduleServiceInDto.comment = registro.comment;
             scheduleServiceInDto.vendor = this.vendor;
@@ -279,14 +454,22 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
             data.push(scheduleServiceInDto);
           });
 
-          this.registroService.aceptarAgenda(data).subscribe(response => {
-            this.loading.emit(false);
-            this.toastrService.success('Se acepto la agenda correctamente', 'Proceso');
-
-          }, error => {
-            this.loading.emit(false);
-            this.toastrService.danger('Ocurrió un error al aceptar la agenda', 'Proceso');
-          })
+          this.registroService.aceptarAgenda(data).subscribe(
+            (response) => {
+              this.loading.emit(false);
+              this.toastrService.success(
+                'Se acepto la agenda correctamente',
+                'Proceso'
+              );
+            },
+            (error) => {
+              this.loading.emit(false);
+              this.toastrService.danger(
+                'Ocurrió un error al aceptar la agenda',
+                'Proceso'
+              );
+            }
+          );
 
           this.dataSource = new MatTableDataSource(this.registros);
           this.dataSource.paginator = this.paginator;
@@ -297,37 +480,41 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   }
 
   rechazarAgenda() {
-
     let data: ScheduleServiceInDto[] = [];
 
-    this.dialogService.open(ScheduleComponent, {
-      closeOnBackdropClick: false,
-      context: { 'disabled': true }
-    })
+    this.dialogService
+      .open(ScheduleComponent, {
+        closeOnBackdropClick: false,
+        context: { disabled: true },
+      })
       .onClose.subscribe((result: any) => {
-
         if (result != null || result != undefined) {
-
           this.loading.emit(true);
 
           this.scheduleRejected.push(...this.selection.selected);
 
-          this.selection.selected.forEach(ele => {
-            this.registros = this.arrayRemove(this.registros, ele)
+          this.selection.selected.forEach((ele) => {
+            this.registros = this.arrayRemove(this.registros, ele);
           });
 
-          this.selection.selected.forEach(registro => {
-
+          this.selection.selected.forEach((registro) => {
             let scheduleServiceInDto: ScheduleServiceInDto = {};
 
             if (result != undefined && result.fecha != null) {
-
               scheduleServiceInDto.orderkey = registro.orderkey;
               try {
-                scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
+                scheduleServiceInDto.scheduledDate =
+                  registro.scheduledDt.toLocaleDateString() +
+                  ' ' +
+                  registro.scheduledDt.toLocaleTimeString();
               } catch (error) {
-                let scheduleDate = new Date(Date.parse(registro.scheduledDt.toString()));
-                scheduleServiceInDto.scheduledDate = scheduleDate.toLocaleDateString() + ' ' + scheduleDate.toLocaleTimeString();
+                let scheduleDate = new Date(
+                  Date.parse(registro.scheduledDt.toString())
+                );
+                scheduleServiceInDto.scheduledDate =
+                  scheduleDate.toLocaleDateString() +
+                  ' ' +
+                  scheduleDate.toLocaleTimeString();
               }
               scheduleServiceInDto.comment = result.comentario;
               scheduleServiceInDto.vendor = this.vendor;
@@ -336,15 +523,24 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
             }
           });
 
-          this.registroService.rechazarAgenda(data).subscribe(response => {
-            this.loading.emit(false);
-            this.toastrService.success('Se rechazo la agenda correctamente', 'Proceso');
-            this.dataSource = new MatTableDataSource(this.registros);
-            this.dataSource.paginator = this.paginator;
-          }, error => {
-            this.loading.emit(false);
-            this.toastrService.danger('Ocurrió un error al rechazar la agenda', 'Proceso');
-          })
+          this.registroService.rechazarAgenda(data).subscribe(
+            (response) => {
+              this.loading.emit(false);
+              this.toastrService.success(
+                'Se rechazo la agenda correctamente',
+                'Proceso'
+              );
+              this.dataSource = new MatTableDataSource(this.registros);
+              this.dataSource.paginator = this.paginator;
+            },
+            (error) => {
+              this.loading.emit(false);
+              this.toastrService.danger(
+                'Ocurrió un error al rechazar la agenda',
+                'Proceso'
+              );
+            }
+          );
         }
 
         this.selection.clear();
@@ -352,10 +548,10 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   }
 
   limpiarAgenda() {
-    this.ToBeScheduled.forEach(element => {
+    this.ToBeScheduled.forEach((element) => {
       element.scheduledDt = null;
       element.comment = null;
-    })
+    });
 
     this.ToBeScheduled = [];
     this.selection.clear();
@@ -365,10 +561,13 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
     this.loading.emit(true);
     let agenda: ScheduleServiceInDto[] = [];
 
-    this.ToBeScheduled.forEach(registro => {
+    this.ToBeScheduled.forEach((registro) => {
       let scheduleServiceInDto: ScheduleServiceInDto = {};
       scheduleServiceInDto.orderkey = registro.orderkey;
-      scheduleServiceInDto.scheduledDate = registro.scheduledDt.toLocaleDateString() + ' ' + registro.scheduledDt.toLocaleTimeString();
+      scheduleServiceInDto.scheduledDate =
+        registro.scheduledDt.toLocaleDateString() +
+        ' ' +
+        registro.scheduledDt.toLocaleTimeString();
       scheduleServiceInDto.comment = registro.comment;
       scheduleServiceInDto.courier = registro.courier;
       scheduleServiceInDto.vendor = this.vendor;
@@ -376,52 +575,61 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
       agenda.push(scheduleServiceInDto);
     });
 
-    this.registroService.solicitarAgenda(agenda).subscribe(response => {
-      this.limpiarAgenda();
-      this.registros = null;
-      this.regis.emit(this.registros);
-      this.loading.emit(false);
-      this.toastrService.success('Registros actualizados correctamente', 'Proceso');
-
-    }, error => {
-      this.limpiarAgenda();
-      this.registros = null;
-      this.regis.emit(this.registros);
-      this.loading.emit(false);
-      this.toastrService.danger('Ocurrió un error al actualizar los registros', 'Proceso');
-    })
+    this.registroService.solicitarAgenda(agenda).subscribe(
+      (response) => {
+        this.limpiarAgenda();
+        this.registros = null;
+        this.regis.emit(this.registros);
+        this.loading.emit(false);
+        this.toastrService.success(
+          'Registros actualizados correctamente',
+          'Proceso'
+        );
+      },
+      (error) => {
+        this.limpiarAgenda();
+        this.registros = null;
+        this.regis.emit(this.registros);
+        this.loading.emit(false);
+        this.toastrService.danger(
+          'Ocurrió un error al actualizar los registros',
+          'Proceso'
+        );
+      }
+    );
   }
 
   imprimir(registro: RegistroTable) {
     this.loading.emit(true);
-    this.registroService.obtenerEtiqueta(registro.orderkey).subscribe((response: any) => {
-      this.loading.emit(false);
-      var blob = new Blob([response], { type: 'application/pdf' });
-      saveAs(blob, registro.orderkey + ".pdf");
-    }, (error) => {
-      this.loading.emit(false);
-      console.error(error);
-    });
-
+    this.registroService.obtenerEtiqueta(registro.orderkey).subscribe(
+      (response: any) => {
+        this.loading.emit(false);
+        var blob = new Blob([response], { type: 'application/pdf' });
+        saveAs(blob, registro.orderkey + '.pdf');
+      },
+      (error) => {
+        this.loading.emit(false);
+        console.error(error);
+      }
+    );
   }
 
   hasAccess(permission, resources: any[]) {
     let access = false;
-    this.authService.isAuthenticatedOrRefresh().subscribe(
-      authenticated => {
-        if (authenticated) {
-          resources.forEach(element => {
-            this.accessChecker.isGranted(permission, element).subscribe(granted => {
-              if (granted)
-                access = true;
+    this.authService.isAuthenticatedOrRefresh().subscribe((authenticated) => {
+      if (authenticated) {
+        resources.forEach((element) => {
+          this.accessChecker
+            .isGranted(permission, element)
+            .subscribe((granted) => {
+              if (granted) access = true;
             });
-          });
-        } else {
-          access = false;
-        }
-      });
+        });
+      } else {
+        access = false;
+      }
+    });
     return access;
-
   }
 
   loadAccess() {
@@ -432,7 +640,7 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
 
   canRenderCustomer() {
     if (this.isCustomer) {
-      return this.sEstatus.tipo === "inicial";
+      return this.sEstatus.tipo === 'inicial';
     } else {
       return false;
     }
@@ -451,20 +659,15 @@ export class ResultadoConsultaComponent implements OnInit, OnChanges, AfterViewI
   }
 
   loadUser() {
-    this.authService.isAuthenticatedOrRefresh().subscribe(
-      authenticated => {
-        if (authenticated) {
-          this.authService.getToken().subscribe(
-            (token: NbAuthOAuth2JWTToken) => {
-              if (token.isValid()) {
-                let user = token.getAccessTokenPayload();
-                this.loggedUser = user.user_name;
-              }
-            }
-          );
-        }
+    this.authService.isAuthenticatedOrRefresh().subscribe((authenticated) => {
+      if (authenticated) {
+        this.authService.getToken().subscribe((token: NbAuthOAuth2JWTToken) => {
+          if (token.isValid()) {
+            let user = token.getAccessTokenPayload();
+            this.loggedUser = user.user_name;
+          }
+        });
       }
-    );
+    });
   }
 }
-

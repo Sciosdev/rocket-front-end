@@ -38,7 +38,7 @@ const ngxLoadingXConfig: NgxLoadingXConfig = {
   bgBlur: 2,
   bgColor: 'rgba(40, 40, 40, 0.5)',
   bgOpacity: 5,
-  bgLogoUrl: 'assets/images/rocket_courier.png',
+  bgLogoUrl: 'assets/images/water_mark.png',
   bgLogoUrlPosition: POSITION.bottomRight,
   bgLogoUrlSize: 100,
   spinnerType: SPINNER.wanderingCubes,
