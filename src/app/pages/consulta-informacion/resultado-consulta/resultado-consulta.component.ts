@@ -132,6 +132,10 @@ export class ResultadoConsultaComponent
           this.columns.push(...this.defaultColumns, 'actions');
         } else this.columns.push(...this.defaultColumns);
 
+        if(this.canRenderDeliveryComment()) {
+          this.columns.push('DeliveryComment');
+        }
+        
         if (
           this.canRenderCambioEstatus() &&
           !this.columns.includes('CambioEstatus')
@@ -248,12 +252,17 @@ export class ResultadoConsultaComponent
       this.columns.push(...this.defaultColumns, 'actions');
     } else this.columns.push(...this.defaultColumns);
 
+    if(this.canRenderDeliveryComment()) {
+      this.columns.push('DeliveryComment');
+    }
+
     if (
       this.canRenderCambioEstatus() &&
       !this.columns.includes('CambioEstatus')
     ) {
       this.columns.push('CambioEstatus');
     }
+
     this.selectedComuna = '';
 
     this.displayedColumns = this.columns;
@@ -358,7 +367,7 @@ export class ResultadoConsultaComponent
         closeOnBackdropClick: false,
         context: {
           currentEstatus: this.sEstatus,
-          totalRegistros: 3,
+          totalRegistros: this.selection.selected.length,
         },
       })
       .onClose.subscribe((result: any) => {
@@ -376,7 +385,8 @@ export class ResultadoConsultaComponent
               result.estatus,
               orderKeys,
               this.loggedUser,
-              result.courier
+              result.courier,
+              result.comment
             )
             .subscribe(
               (success: any[]) => {
@@ -656,6 +666,10 @@ export class ResultadoConsultaComponent
 
   canRenderEtiqueta() {
     return this.sEstatus.id == 3;
+  }
+
+  canRenderDeliveryComment() {
+    return this.sEstatus.id == 10 || this.sEstatus.id == 11;
   }
 
   loadUser() {

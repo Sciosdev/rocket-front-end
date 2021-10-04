@@ -22,6 +22,8 @@ export class CambioEstatusComponent implements OnInit {
   selectedCourier: any;
   courierFormControl = new FormControl('', Validators.required);
   courierList: any[] = [];
+  enableFinalComment: boolean = false;
+  comentario: string;
 
   constructor(
     protected ref: NbDialogRef<CambioEstatusComponent>,
@@ -34,6 +36,10 @@ export class CambioEstatusComponent implements OnInit {
     this.estatusService
       .obtenerEstatusSiguiente(this.currentEstatus.id)
       .subscribe((result: Estatus) => {
+        if(result.tipo === TipoEstatus.FINAL){
+          this.enableFinalComment = true;
+        }
+        
         this.estatusList.push(result);
       });
     this.estatusService
@@ -73,6 +79,7 @@ export class CambioEstatusComponent implements OnInit {
     this.ref.close({
       estatus: this.selectedEstatus,
       courier: this.selectedCourier,
+      comment: this.comentario
     });
   }
 

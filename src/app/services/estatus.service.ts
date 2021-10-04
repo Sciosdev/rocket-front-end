@@ -52,11 +52,17 @@ export class EstatusService {
     return this.http.put(url, data, options);
   }
 
-  actualizarListaEstatus(estatusDto: Estatus, orderkeys: string[], user: string, courier: string) {
+  actualizarListaEstatus(estatusDto: Estatus, orderkeys: string[], user: string, courier: string, comment: string) {
 
     let body = [];
     orderkeys.forEach(orderKey => {
-      const data = { estatusDto, orderKey: orderKey, user: user, courier: courier}; 
+      let data;
+      if(comment){
+         data = { estatusDto, orderKey: orderKey, user: user, courier: courier, comment: comment}; 
+      } else {
+         data = { estatusDto, orderKey: orderKey, user: user, courier: courier}; 
+      }
+
       body.push(data);
     })
     

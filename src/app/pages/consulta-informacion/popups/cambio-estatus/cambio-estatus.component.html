@@ -9,7 +9,27 @@
     <hr>
     <div class="row">
       <div class="col-md-6">
-        <div class="d-flex align-items-center" style="height: 100%;">
+        <div class="p-2 text-info">
+          <b>
+            Selecciona el nuevo estatus
+          </b>
+          <br />
+          <mat-form-field appearance="standard">
+            <mat-label>Estatus</mat-label>
+            <mat-select [(value)]="selectedEstatus" [formControl]="estatusFormControl" required style="width: 100%;">
+              <mat-option *ngFor="let estatus of estatusList" [value]="estatus">
+                {{estatus.desc}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="estatusFormControl.hasError('required')">
+              Este campo es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="d-flex justify-content-center" style="height: 100%;">
           <div class="p-2">
             <dl>
               <dt>
@@ -31,42 +51,32 @@
               <dd>
                 {{registro.vendedor}}
               </dd>
-            
-
             </dl>
           </div>
         </div>
       </div>
       <div class="col-md-6">
-        <div class="d-flex flex-column align-items-center" style="height: 100%;">
-          <div class="p-2 text-info">
-            <b>
-              Selecciona el nuevo estatus
-            </b>
-            <mat-form-field appearance="standard">
-              <mat-label>Estatus</mat-label>
-              <mat-select [(value)]="selectedEstatus" [formControl]="estatusFormControl" required style="width: 100%;">
-                <mat-option *ngFor="let estatus of estatusList" [value]="estatus">
-                  {{estatus.desc}}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="estatusFormControl.hasError('required')">
-                Este campo es requerido
-              </mat-error>
-            </mat-form-field>
+
+        <div class="d-flex flex-column align-items-left" style="height: 100%;">
+
+          <div class="p-2 text-info" *ngIf="enableFinalComment">
+            <h5>Comentarios</h5>
+            <textarea rows="7" [(ngModel)]="comentario" cols="50" pInputTextarea
+              placeholder="Escribe un comentario ... "></textarea>
           </div>
           <div class="p-2 text-success" *ngIf="activateReassignCourier()">
             <b>
               Reasignar Courier
             </b>
-            <mat-form-field >
+            <br/>
+            <mat-form-field>
               <mat-label>Courier</mat-label>
               <mat-select [(value)]="selectedCourier" style="width: 100%;">
                 <mat-option *ngFor="let courier of courierList" [value]="courier.user">
                   {{courier.name}}
                 </mat-option>
               </mat-select>
-             
+
             </mat-form-field>
           </div>
         </div>

@@ -22,6 +22,8 @@ export class CambioEstatusMultipleComponent implements OnInit {
   courierList: any[] = [];
 
   totalRegistros: number;
+  enableFinalComment: boolean = false;
+  comentario: string;
 
   constructor(
     protected ref: NbDialogRef<CambioEstatusMultipleComponent>,
@@ -34,6 +36,9 @@ export class CambioEstatusMultipleComponent implements OnInit {
     this.estatusService
       .obtenerEstatusSiguiente(this.currentEstatus.id)
       .subscribe((result: Estatus) => {
+        if(result.tipo === TipoEstatus.FINAL){
+          this.enableFinalComment = true;
+        }
         this.estatusList.push(result);
       });
 
@@ -72,6 +77,7 @@ export class CambioEstatusMultipleComponent implements OnInit {
     this.ref.close({
       estatus: this.selectedEstatus,
       courier: this.selectedCourier,
+      comment: this.comentario
     });
   }
 
