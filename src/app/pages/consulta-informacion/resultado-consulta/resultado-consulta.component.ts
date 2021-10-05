@@ -30,6 +30,7 @@ import { CambioEstatusComponent } from '../popups/cambio-estatus/cambio-estatus.
 import { EstatusService } from 'src/app/services/estatus.service';
 import { CambioEstatusMultipleComponent } from '../popups/cambio-estatus-multiple/cambio-estatus-multiple.component';
 import { GlobalAcceptanceComponent } from '../../common-popups/global-acceptance/global-acceptance.component';
+import { TipoEstatus } from '../../../models/tipo.estatus.model';
 
 @Component({
   selector: 'app-resultado-consulta',
@@ -37,7 +38,8 @@ import { GlobalAcceptanceComponent } from '../../common-popups/global-acceptance
   styleUrls: ['./resultado-consulta.component.scss'],
 })
 export class ResultadoConsultaComponent
-  implements OnInit, OnChanges, AfterViewInit {
+  implements OnInit, OnChanges, AfterViewInit
+{
   @Input() registros: RegistroTable[];
   @Input() vendor;
   @Input() sEstatus: Estatus;
@@ -125,17 +127,18 @@ export class ResultadoConsultaComponent
         if (
           this.canRenderCustomer() ||
           this.canRenderAdmin() ||
-          this.canRenderCambioEstatus()
+          this.canRenderCambioEstatus() ||
+          this.canRenderDiscarded()
         ) {
           this.columns.push('select', ...this.defaultColumns);
         } else if (this.canRenderEtiqueta()) {
           this.columns.push(...this.defaultColumns, 'actions');
         } else this.columns.push(...this.defaultColumns);
 
-        if(this.canRenderDeliveryComment()) {
+        if (this.canRenderDeliveryComment()) {
           this.columns.push('DeliveryComment');
         }
-        
+
         if (
           this.canRenderCambioEstatus() &&
           !this.columns.includes('CambioEstatus')
@@ -245,14 +248,15 @@ export class ResultadoConsultaComponent
     if (
       this.canRenderCustomer() ||
       this.canRenderAdmin() ||
-      this.canRenderCambioEstatus()
+      this.canRenderCambioEstatus() ||
+      this.canRenderDiscarded()
     ) {
       this.columns.push('select', ...this.defaultColumns);
     } else if (this.canRenderEtiqueta()) {
       this.columns.push(...this.defaultColumns, 'actions');
     } else this.columns.push(...this.defaultColumns);
 
-    if(this.canRenderDeliveryComment()) {
+    if (this.canRenderDeliveryComment()) {
       this.columns.push('DeliveryComment');
     }
 
@@ -311,7 +315,6 @@ export class ResultadoConsultaComponent
   }
 
   arrayRemove(arr: RegistroTable[], value: RegistroTable) {
-
     console.log('value: ' + value.orderkey);
     return arr.filter(function (ele) {
       return ele.orderkey != value.orderkey;
@@ -371,12 +374,10 @@ export class ResultadoConsultaComponent
         },
       })
       .onClose.subscribe((result: any) => {
-
         let orderKeys: string[] = [];
         this.selection.selected.forEach((register) => {
           orderKeys.push(register.orderkey);
         });
-
 
         if (result) {
           this.loading.emit(true);
@@ -390,7 +391,6 @@ export class ResultadoConsultaComponent
             )
             .subscribe(
               (success: any[]) => {
-
                 console.warn(success);
 
                 success.forEach((registro) => {
@@ -406,7 +406,6 @@ export class ResultadoConsultaComponent
                   'Se actualizó correctamente el estatus',
                   'Cambio de estatus'
                 );
-
               },
               (error) => {
                 console.error(error);
@@ -418,10 +417,7 @@ export class ResultadoConsultaComponent
               }
             );
         }
-
-
       });
-
   }
 
   aceptarAgenda() {
@@ -624,6 +620,70 @@ export class ResultadoConsultaComponent
     );
   }
 
+  descartarRegistro() {
+    this.dialogService
+      .open(GlobalAcceptanceComponent, {
+        closeOnBackdropClick: false,
+        closeOnEsc: true,
+        context: {
+          headerMessage: 'Descartar Registros',
+          bodyMessage:
+            '¿Desea descartar [' +
+            this.selection.selected.length +
+            '] registro(s)?',
+          acceptanceLabel: 'Si',
+          cancelLabel: 'No',
+        },
+      })
+      .onClose.subscribe((response) => {
+        if (response.accept == true) {
+          let orderKeys: string[] = [];
+          this.selection.selected.forEach((register) => {
+            orderKeys.push(register.orderkey);
+          });
+
+          this.loading.emit(true);
+          this.estatusService
+            .descartarListaEstatus(
+              TipoEstatus.DESCARTADO,
+              orderKeys,
+              this.loggedUser
+            )
+            .subscribe(
+              (success: any[]) => {
+
+                console.warn(success);
+
+                success.forEach((registro) => {
+                  this.registros = this.arrayRemove(this.registros, registro);
+                });
+
+                this.selection.clear();
+                this.statusChange = [];
+                this.dataSource = new MatTableDataSource(this.registros);
+                this.dataSource.paginator = this.paginator;
+                this.loading.emit(false);
+                this.toastrService.success(
+                  'Se descartó correctamente la selección',
+                  'Descartar estatus'
+                );
+
+              },
+              (error) => {
+                console.error(error);
+                this.loading.emit(false);
+                this.toastrService.danger(
+                  'Ocurrió un error al descartar la selección',
+                  'Descartar estatus'
+                );
+              }
+            );
+        } else {
+          this.selection.clear();
+        }
+      });
+  }
+
   hasAccess(permission, resources: any[]) {
     let access = false;
     this.authService.isAuthenticatedOrRefresh().subscribe((authenticated) => {
@@ -659,6 +719,14 @@ export class ResultadoConsultaComponent
   canRenderAdmin() {
     if (this.isAdmin) {
       return this.sEstatus.id == 2;
+    } else {
+      return false;
+    }
+  }
+
+  canRenderDiscarded(){
+    if (this.isAdmin) {
+      return this.sEstatus.id != TipoEstatus.DESCARTADO;
     } else {
       return false;
     }

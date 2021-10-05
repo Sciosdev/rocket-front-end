@@ -71,6 +71,19 @@ export class EstatusService {
     return this.http.put(url, body, options);
   }
 
+  descartarListaEstatus(idEstatus: number, orderkeys: string[], user: string) {
+
+    let body = [];
+    orderkeys.forEach(orderKey => {
+      let data = { idEstatus: idEstatus, orderKey: orderKey, user: user}; 
+      body.push(data);
+    })
+    
+    const url = this.URL_SERVICIOS + '/estatus/discard';
+    const options = { headers: this.getHeaders() };
+    return this.http.put(url, body, options);
+  }
+
 
   private getHeaders() {
 

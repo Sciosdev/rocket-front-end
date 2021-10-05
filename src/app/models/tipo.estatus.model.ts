@@ -3,5 +3,6 @@ export enum TipoEstatus {
     PROCESO = 'proceso',
     REASIGNACION = 'reasignacion',
     EXCEPCION = 'excepcion',
-    FINAL = 'final'
+    FINAL = 'final',
+    DESCARTADO = -1
 }

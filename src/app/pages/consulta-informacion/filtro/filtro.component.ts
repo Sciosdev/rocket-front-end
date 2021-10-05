@@ -162,8 +162,6 @@ export class FiltroComponent implements OnInit, OnChanges {
       this.selectedCourier = null;
     }
 
-    console.log(this.selectedVendor);
-
     this.vendor.emit(this.selectedVendor);
 
     if (this.isCourier) {
