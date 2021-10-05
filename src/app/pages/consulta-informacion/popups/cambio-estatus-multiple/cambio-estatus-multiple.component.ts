@@ -2,31 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import { Estatus } from 'src/app/models/estatus.model';
-import { RegistroTable } from 'src/app/models/registro.table.model';
 import { TipoEstatus } from 'src/app/models/tipo.estatus.model';
 import { EstatusService } from 'src/app/services/estatus.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { ScheduleComponent } from '../schedule/schedule.component';
 
 @Component({
-  selector: 'app-cambio-estatus',
-  templateUrl: './cambio-estatus.component.html',
-  styleUrls: ['./cambio-estatus.component.scss'],
+  selector: 'app-cambio-estatus-multiple',
+  templateUrl: './cambio-estatus-multiple.component.html',
+  styleUrls: ['./cambio-estatus-multiple.component.scss'],
 })
-export class CambioEstatusComponent implements OnInit {
+export class CambioEstatusMultipleComponent implements OnInit {
+  
   currentEstatus: Estatus;
-  registro: RegistroTable;
   selectedEstatus: Estatus;
   estatusFormControl = new FormControl('', Validators.required);
   estatusList: Estatus[] = [];
   selectedCourier: any;
   courierFormControl = new FormControl('', Validators.required);
   courierList: any[] = [];
+
+  totalRegistros: number;
   enableFinalComment: boolean = false;
   comentario: string;
 
   constructor(
-    protected ref: NbDialogRef<CambioEstatusComponent>,
+    protected ref: NbDialogRef<CambioEstatusMultipleComponent>,
     protected estatusService: EstatusService,
     protected usuarioService: UsuarioService
   ) {}
@@ -39,9 +39,9 @@ export class CambioEstatusComponent implements OnInit {
         if(result.tipo === TipoEstatus.FINAL){
           this.enableFinalComment = true;
         }
-        
         this.estatusList.push(result);
       });
+
     this.estatusService
       .obtenerEstatusSiguienteException(this.currentEstatus.id)
       .subscribe(
@@ -71,8 +71,6 @@ export class CambioEstatusComponent implements OnInit {
         console.warn(error);
       }
     );
-
-    this.selectedCourier = this.registro.courier;
   }
 
   accept() {
