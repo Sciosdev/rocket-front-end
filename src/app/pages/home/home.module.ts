@@ -8,8 +8,11 @@ import { MaterialModule } from '../../material/material.module';
 import {ButtonModule} from 'primeng/button';
 import { ThemeModule } from 'src/app/theme/theme.module';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-
-
+import {TimelineModule} from 'primeng/timeline';
+import { CardModule } from "primeng/card";
+import { NgxLoadingXModule } from 'ngx-loading-x';
+import {DividerModule} from 'primeng/divider';
+import {ScrollPanelModule} from 'primeng/scrollpanel';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -30,7 +33,12 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
     NbEvaIconsModule,
     NbIconModule,
     ThemeModule,
-    ButtonModule
+    ButtonModule,
+    TimelineModule,
+    CardModule,
+    NgxLoadingXModule,
+    DividerModule,
+    ScrollPanelModule
   ]
 })
 export class HomeModule { }

@@ -22,6 +22,14 @@ export class RegistroService {
     public authService: NbAuthService
   ) {}
 
+  obtenerEstatusLogRegistro(registerKey: string) {
+    if (registerKey == undefined || registerKey == null || registerKey.trim() == '') registerKey = 'no-register-key';
+
+    const url = this.URL_SERVICIOS + '/guest/registro/' + registerKey + '/estatus-log';
+    const options = { headers: this.getHeaders() };
+    return this.http.get(url, options);
+  }
+
   registrarCarga(data: any) {
     const url = this.URL_SERVICIOS + '/registro';
     const options = { headers: this.getHeaders() };

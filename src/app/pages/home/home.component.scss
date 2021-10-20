@@ -1,11 +1,29 @@
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+
 @import '../../theme/styles/themes';
 
 @include nb-install-component() {
   nb-progress-bar ~ nb-progress-bar {
     margin-top: 1rem;
   }
+  
+  @include media-breakpoint-down(is) {
+    .timeline {
+      display: none;
+    }
+
+    .historial {
+      border: none;
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+    }
+  }
 }
 
+.historial {
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
 .parent {
   position: relative;
   margin: auto;
@@ -97,4 +115,116 @@ nb-card-body {
 
 @media screen and (max-width:1200px){
   .background { width: 1000px; /* fixed width under 700px */ }
+}
+
+.custom-marker {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+::ng-deep {
+  .p-timeline-event-content,
+  .p-timeline-event-opposite {
+    line-height: 1;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  ::ng-deep {
+    .customized-timeline {
+      .p-timeline-event:nth-child(even) {
+        flex-direction: row !important;
+
+        .p-timeline-event-content {
+          text-align: center !important;
+        }
+      }
+
+      .p-timeline-event-opposite {
+        flex: 0;
+      }
+
+      .p-card {
+        margin-top: 1rem;
+      }
+    }
+  }
+}
+
+.callout {
+  padding: 20px;
+  margin: 20px 0;
+  border: 2px solid #eee;
+  border-radius: 3px;
+  h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+  code {
+    border-radius: 3px;
+  }
+  & + .bs-callout {
+    margin-top: -5px;
+  }
+}
+@each $name,$color in (default,#777),(primary,#428bca),(success,#5cb85c),(danger,#d9534f),(warning,#f0ad4e),(info,#5bc0de), (bdc,#29527a) {
+  .callout-#{$name} {
+    border-color: $color;
+    h4 {
+      color: $color;
+    }
+
+    i {
+      color: $color;
+    }
+
+    nb-icon {
+      color: $color;
+    }
+  }
+}
+.p-scrollpanel {
+  p {
+      padding: .5rem;
+      line-height: 1.5;
+      margin: 0;
+  }
+
+  &.custom {
+      .p-scrollpanel-wrapper {
+          border-right: 9px solid var(--layer-1);
+      }
+
+      .p-scrollpanel-bar {
+          background-color: var(--primary-color);
+          opacity: 1;
+          transition: background-color .2s;
+
+          &:hover {
+              background-color: #007ad9;
+          }
+      }
+  }
+}
+
+nb-card {
+  min-width: 18rem;
+}
+
+
+.mat-list-item:hover{
+  background-color: #cee6f8;
+}
+
+.mat-divider {
+  margin-bottom: 10px;
 }
