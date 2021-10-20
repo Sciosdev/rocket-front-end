@@ -12,10 +12,11 @@ import { ScheduleComponent } from './popups/schedule/schedule.component';
 import { CalendarModule } from 'primeng/calendar';
 import { AcceptanceComponent } from './popups/acceptance/acceptance.component';
 import { CambioEstatusComponent } from './popups/cambio-estatus/cambio-estatus.component';
+import { CambioEstatusMultipleComponent } from './popups/cambio-estatus-multiple/cambio-estatus-multiple.component';
 
 
 @NgModule({
-  declarations: [ConsultaInformacionComponent, FiltroComponent, ResultadoConsultaComponent, ScheduleComponent, AcceptanceComponent, CambioEstatusComponent],
+  declarations: [ConsultaInformacionComponent, FiltroComponent, ResultadoConsultaComponent, ScheduleComponent, AcceptanceComponent, CambioEstatusComponent, CambioEstatusMultipleComponent],
   imports: [
     CommonModule,
     MaterialModule,
