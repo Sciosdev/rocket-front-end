@@ -21,13 +21,16 @@ export class HomeComponent implements OnInit {
   mainEvents: any[];
   mainIcon: string;
   destino: any;
+  orderKey;
 
   constructor(private route: ActivatedRoute,
     private primengConfig: PrimeNGConfig,
     protected registroService: RegistroService,
     private toastrService: NbToastrService,
     private router: Router
-  ) {}
+  ) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
 
  blueColor = '#3F5AA5';
  grayColor = '#DFDFDF';
@@ -46,28 +49,27 @@ export class HomeComponent implements OnInit {
       {
         type: "Orden creada",
         color: this.grayColor,
-        icon: PrimeIcons.CLOCK
+        icon: "clock-o"
       },
       {
-        type: "En proceso",
+        type: "Preparando orden",
         color: this.grayColor,
-        icon: PrimeIcons.CLOCK
+        icon: "clock-o"
       },
       {
         type: "Entrega en curso",
         color: this.grayColor,
-        icon: PrimeIcons.CLOCK
+        icon: "clock-o"
       },
       {
         type: "Entregado",
         color: this.grayColor,
-        icon: PrimeIcons.CLOCK
+        icon: "clock-o"
       }
     ]
 
     this.route.queryParams
     .subscribe(params => {
-      console.log(params);
       if(params.orderKey) {
         this.registerKey = params.orderKey;
         this.obtenerRegistro();
@@ -78,10 +80,11 @@ export class HomeComponent implements OnInit {
   }
 
   public myMethodChangingQueryParams() {
+
     const queryParams: Params = { orderKey: this.registerKey };
   
     this.router.navigate(
-      [], 
+      ['/'], 
       {
         relativeTo: this.route,
         queryParams: queryParams, 
@@ -97,6 +100,7 @@ export class HomeComponent implements OnInit {
         this.loading = false;
 
         this.estatusActual = response.estatus_actual;
+        this.orderKey = this.registerKey;
 
         switch (this.estatusActual.tipo) {
           case TipoEstatus.INICIAL:
@@ -107,49 +111,49 @@ export class HomeComponent implements OnInit {
               {
                 type: "Orden creada",
                 color: this.blueColor,
-                icon: PrimeIcons.MAP_MARKER
+                icon: "calendar-check-o"
               },
               {
-                type: "En proceso",
+                type: "Preparando orden",
                 color: this.grayColor,
-                icon: PrimeIcons.CLOCK
+                icon: "clock-o"
               },
               {
                 type: "Entrega en curso",
                 color: this.grayColor,
-                icon: PrimeIcons.CLOCK
+                icon: "clock-o"
               },
               {
                 type: "Entregado",
                 color: this.grayColor,
-                icon: PrimeIcons.CLOCK
+                icon: "clock-o"
               }
             ]
             break;
           case TipoEstatus.PROCESO:
-            this.tipoEstatus = 'En proceso';
+            this.tipoEstatus = 'Preparando orden';
             this.colorEstatus = 'callout callout-info';
             this.mainIcon = "hourglass-half";
             this.mainEvents = [
               {
                 type: "Orden creada",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "calendar-check-o"
               },
               {
-                type: "En proceso",
+                type: "Preparando orden",
                 color: this.blueColor,
-                icon: PrimeIcons.MAP_MARKER
+                icon: "hourglass-half"
               },
               {
                 type: "Entrega en curso",
                 color: this.grayColor,
-                icon: PrimeIcons.CLOCK
+                icon: "clock-o"
               },
               {
                 type: "Entregado",
                 color: this.grayColor,
-                icon: PrimeIcons.CLOCK
+                icon: "clock-o"
               }
             ]
             break;
@@ -161,22 +165,22 @@ export class HomeComponent implements OnInit {
               {
                 type: "Orden creada",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "calendar-check-o"
               },
               {
-                type: "En proceso",
+                type: "Preparando orden",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "hourglass-half"
               },
               {
                 type: "Entrega en curso",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "rocket"
               },
               {
                 type: "Entregado",
                 color: this.grayColor,
-                icon: PrimeIcons.CLOCK
+                icon: "clock-o"
               }
             ]
             break;
@@ -188,98 +192,98 @@ export class HomeComponent implements OnInit {
               {
                 type: "Orden creada",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "calendar-check-o"
               },
               {
-                type: "En proceso",
+                type: "Preparando orden",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "hourglass-half"
               },
               {
                 type: "Entrega en curso",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "rocket"
               },
               {
                 type: "Entregado",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "check-square-o"
               }
             ]
             break;
           case TipoEstatus.EXCEPCION:
-            this.tipoEstatus = 'Orden rechazada';
-            this.colorEstatus = 'callout callout-danger';
+            this.tipoEstatus = 'Advertencia';
+            this.colorEstatus = 'callout callout-warning';
             this.mainIcon = "exclamation-triangle";
             this.mainEvents = [
               {
                 type: "Orden creada",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "calendar-check-o"
               },
               {
-                type: "En proceso",
+                type: "Preparando orden",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "hourglass-half"
               },
               {
-                type: "Orden rechazada",
+                type: "Excepción",
                 color: this.redColor,
-                icon: PrimeIcons.TIMES_CIRCLE
+                icon: "exclamation-triangle"
               }
             ]
             break;
           case TipoEstatus.REASIGNACION:
-            this.tipoEstatus = 'En proceso';
+            this.tipoEstatus = 'Preparando orden';
             this.colorEstatus = 'callout callout-info';
             this.mainIcon = "hourglass-half";
             this.mainEvents = [
               {
                 type: "Orden creada",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "calendar-check-o"
               },
               {
-                type: "En proceso",
+                type: "Preparando orden",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "hourglass-half"
               },
               {
                 type: "Entrega en curso",
                 color: this.grayColor,
-                icon: PrimeIcons.CLOCK
+                icon: "clock-o"
               },
               {
                 type: "Entregado",
                 color: this.grayColor,
-                icon: PrimeIcons.CLOCK
+                icon: "clock-o"
               }
             ]
             break;
         
           default:
-            this.tipoEstatus = 'En proceso';
+            this.tipoEstatus = 'Preparando orden';
             this.colorEstatus = 'callout callout-warning';
             this.mainEvents = [
               {
                 type: "Orden creada",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "calendar-check-o"
               },
               {
-                type: "En proceso",
+                type: "Preparando orden",
                 color: this.blueColor,
-                icon: PrimeIcons.CHECK_SQUARE
+                icon: "hourglass-half"
               },
               {
                 type: "Entrega en curso",
                 color: this.grayColor,
-                icon: PrimeIcons.CLOCK
+                icon: "clock-o"
               },
               {
                 type: "Entregado",
                 color: this.grayColor,
-                icon: PrimeIcons.CLOCK
+                icon: "clock-o"
               }
             ]
             break;
@@ -298,11 +302,7 @@ export class HomeComponent implements OnInit {
 
   public toDate(year: number, month:number, day: number): Date {
     let fecha = new Date();
-
     fecha.setUTCFullYear(year,month-1,day);
-
-    console.log(fecha);
-
     return fecha;
   }
 }

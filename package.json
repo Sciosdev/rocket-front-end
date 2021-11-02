@@ -48,11 +48,11 @@
     "popper.js": "^1.16.1",
     "primeflex": "^3.1.0",
     "primeicons": "^4.1.0",
-    "primeng": "^11.2.3",
+    "primeng": "^11.4.5",
     "rxjs": "~6.6.0",
     "sweetalert2": "^10.14.0",
     "tslib": "^2.0.0",
-    "xlsx": "^0.16.9",
+    "xlsx": "^0.17.3",
     "zone.js": "~0.11.3"
   },
   "devDependencies": {

@@ -23,6 +23,7 @@ export class RegistroService {
   ) {}
 
   obtenerEstatusLogRegistro(registerKey: string) {
+    console.log(registerKey);
     if (registerKey == undefined || registerKey == null || registerKey.trim() == '') registerKey = 'no-register-key';
 
     const url = this.URL_SERVICIOS + '/guest/registro/' + registerKey + '/estatus-log';
