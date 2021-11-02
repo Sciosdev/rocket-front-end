@@ -454,7 +454,7 @@ export class ResultadoConsultaComponent
                 scheduleDate.toLocaleTimeString();
             }
             scheduleServiceInDto.comment = registro.comment;
-            scheduleServiceInDto.vendor = this.vendor;
+            scheduleServiceInDto.vendor = null;
             scheduleServiceInDto.user = this.loggedUser;
             scheduleServiceInDto.courier = result.courier;
             data.push(scheduleServiceInDto);
