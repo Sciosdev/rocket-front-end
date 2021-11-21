@@ -149,7 +149,9 @@ registerLocaleData(es);
     provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
     useValue: function (req: HttpRequest<any>) {
       //console.log(req.url);
-      if (req.url === environment.endpoint + '/auth/login' || req.url === environment.endpoint + '/oauth/token' || req.url === environment.endpoint + '/oauth/suthorize') {
+      if (req.url === environment.endpoint + '/auth/login' || 
+      req.url === environment.endpoint + '/oauth/token' || 
+      req.url === environment.endpoint + '/oauth/authorize') {
 
         return true;
       }
