@@ -128,7 +128,8 @@ export class ResultadoConsultaComponent
           this.canRenderCustomer() ||
           this.canRenderAdmin() ||
           this.canRenderCambioEstatus() ||
-          this.canRenderDiscarded()
+          this.canRenderDiscarded() ||
+          this.canRenderEtiqueta()
         ) {
           this.columns.push('select', ...this.defaultColumns);
         } else if (this.canRenderEtiqueta()) {
@@ -249,7 +250,8 @@ export class ResultadoConsultaComponent
       this.canRenderCustomer() ||
       this.canRenderAdmin() ||
       this.canRenderCambioEstatus() ||
-      this.canRenderDiscarded()
+      this.canRenderDiscarded()||
+      this.canRenderEtiqueta()
     ) {
       this.columns.push('select', ...this.defaultColumns);
     } else if (this.canRenderEtiqueta()) {
@@ -618,6 +620,39 @@ export class ResultadoConsultaComponent
         console.error(error);
       }
     );
+  }
+
+  generarDescargaZip(){
+    this.loading.emit(true);
+
+    let orderkeys = [];
+
+    this.selection.selected.forEach(registro => {
+      orderkeys.push(registro.orderkey);
+    })
+
+    this.registroService.obtenerEtiquetaZip(orderkeys).subscribe(
+      (response: any) => {
+        this.loading.emit(false);
+        var blob = new Blob([response], { type: 'application/zip' });
+        saveAs(blob,  `Etiquetas_${this.getDateString()}.zip`);
+      },
+      (error) => {
+        this.loading.emit(false);
+        console.error(error);
+      }
+    );  
+
+    this.selection.clear();
+  }
+
+  getDateString() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day =`${date.getDate()}`.padStart(2, '0');
+    const time = date.getTime();
+    return `${year}${month}${day}_${time}`
   }
 
   descartarRegistro() {

@@ -20,7 +20,7 @@ export class RegistroService {
     public http: HttpClient,
     public tokenService: NbTokenService,
     public authService: NbAuthService
-  ) {}
+  ) { }
 
   obtenerEstatusLogRegistro(registerKey: string) {
     console.log(registerKey);
@@ -177,6 +177,25 @@ export class RegistroService {
     });
 
     return this.http.get(url, { responseType: 'blob' });
+  }
+
+  obtenerEtiquetaZip(orderKeys: any) {
+    const url = this.URL_SERVICIOS + '/api/registro/etiqueta';
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/pdf',
+      Accepts: 'application/pdf',
+    });
+
+    const httpParams: HttpParamsOptions = {
+      fromObject: { orderkeys: orderKeys },
+    } as HttpParamsOptions;
+
+    return this.http.get(url, {
+      params: new HttpParams(httpParams),
+      headers: headers,
+      responseType: "blob"
+    });
   }
 
   private getHeaders() {
