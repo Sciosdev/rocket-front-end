@@ -73,13 +73,23 @@
       </button>
     </div>
   </div>
+  
+  <div class="d-flex justify-content-lg-end flex-wrap" *ngIf="canRenderEtiqueta()">
+    <div class="p-2">
+      <button mat-raised-button color="accent" matRipple [disabled]="selection.selected.length == 0"
+        (click)="generarDescargaZip()">
+        <nb-icon icon="file-text-outline"></nb-icon>
+        Generar PDF Multiple
+      </button>
+    </div>
+  </div>
 </div>
 
 <div class="mat-elevation-z8">
 
   <mat-table [dataSource]="dataSource">
 
-    <ng-container matColumnDef="select" *ngIf="canRenderCustomer() || canRenderAdmin() || canRenderCambioEstatus() || isAdmin">
+    <ng-container matColumnDef="select" *ngIf="canRenderCustomer() || canRenderAdmin() || canRenderCambioEstatus() || isAdmin || canRenderEtiqueta()">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
           [indeterminate]="selection.hasValue() && !isAllSelected()">
