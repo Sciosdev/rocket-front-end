@@ -47,6 +47,9 @@ export class ResultadoConsultaComponent
   @Output() regis: any = new EventEmitter<RegistroTable[]>();
   @Output() loading: any = new EventEmitter<boolean>();
 
+  filterSelectObj = [];
+  filterValues = {};
+
   columns: any[] = [];
   defaultColumns = [
     'OrderKey',
@@ -105,9 +108,39 @@ export class ResultadoConsultaComponent
       this.allowMultiSelect,
       this.initialSelection
     );
+
+    this.filterSelectObj = [
+      {
+        name: 'Comuna',
+        columnProp: 'shippingCity',
+        options: [],
+      },
+    ];
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  getFilterObject(fullObj, key) {
+    const uniqChk = [];
+    fullObj.filter((obj) => {
+
+      if (!uniqChk.includes(this.capitalize(obj[key]))) {
+        uniqChk.push(this.capitalize(obj[key]));
+      }
+
+      return obj;
+    });
+
+    uniqChk.sort();
+    return uniqChk;
+  }
+
+  capitalize(mySentence) {
+    return mySentence
+      .toLowerCase()
+      .trim()
+      .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+  }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -132,9 +165,11 @@ export class ResultadoConsultaComponent
           this.canRenderEtiqueta()
         ) {
           this.columns.push('select', ...this.defaultColumns);
-        } else if (this.canRenderEtiqueta()) {
-          this.columns.push(...this.defaultColumns, 'actions');
         } else this.columns.push(...this.defaultColumns);
+
+        if (this.canRenderEtiqueta()) {
+          this.columns.push(...this.defaultColumns, 'actions');
+        }
 
         if (this.canRenderDeliveryComment()) {
           this.columns.push('DeliveryComment');
@@ -211,9 +246,77 @@ export class ResultadoConsultaComponent
       clear: 'Limpiar',
     });
 
-    this.dataSource.filterPredicate = (data: RegistroTable, filter: string) => {
-      return data.shippingCity.trim().toLowerCase() == filter;
+    this.dataSource.filterPredicate = this.createFilter();
+
+    this.filterSelectObj.filter((o) => {
+      o.options = this.getFilterObject(this.registros, o.columnProp);
+    });
+
+    this.filterSelectObj.sort();
+  }
+
+  // Called on Filter change
+  filterChange(filter, event) {
+    //let filterValues = {}
+    this.filterValues[filter.columnProp] = event.target.value
+      .trim()
+      .toLowerCase();
+
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+
+    this.dataSource.paginator = this.paginator;
+      this.selection.clear();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  // Custom filter method fot Angular Material Datatable
+  createFilter() {
+    let filterFunction = function (data: any, filter: string): boolean {
+      let searchTerms = JSON.parse(filter);
+      let isFilterSet = false;
+      for (const col in searchTerms) {
+        if (searchTerms[col].toString() !== '') {
+          isFilterSet = true;
+        } else {
+          delete searchTerms[col];
+        }
+      }
+
+      let nameSearch = () => {
+        let found = false;
+        if (isFilterSet) {
+          for (const col in searchTerms) {
+            if (
+              data[col]
+                .toString()
+                .trim()
+                .toLowerCase()
+                .indexOf(searchTerms[col].trim().toLowerCase()) != -1 &&
+              isFilterSet
+            ) {
+              found = true;
+            }
+          }
+          return found;
+        } else {
+          return true;
+        }
+      };
+      return nameSearch();
     };
+    return filterFunction;
+  }
+
+  // Reset table filters
+  resetFilters() {
+    this.filterValues = {};
+    this.filterSelectObj.forEach((value, key) => {
+      value.modelValue = undefined;
+    });
+    this.dataSource.filter = '';
   }
 
   applyFilter(filtro) {
@@ -250,13 +353,15 @@ export class ResultadoConsultaComponent
       this.canRenderCustomer() ||
       this.canRenderAdmin() ||
       this.canRenderCambioEstatus() ||
-      this.canRenderDiscarded()||
+      this.canRenderDiscarded() ||
       this.canRenderEtiqueta()
     ) {
       this.columns.push('select', ...this.defaultColumns);
-    } else if (this.canRenderEtiqueta()) {
-      this.columns.push(...this.defaultColumns, 'actions');
     } else this.columns.push(...this.defaultColumns);
+
+    if (this.canRenderEtiqueta()) {
+      this.columns.push(...this.defaultColumns, 'actions');
+    }
 
     if (this.canRenderDeliveryComment()) {
       this.columns.push('DeliveryComment');
@@ -273,19 +378,21 @@ export class ResultadoConsultaComponent
 
     this.displayedColumns = this.columns;
 
-    this.dataSource.filterPredicate = (data: RegistroTable, filter: string) => {
-      return data.shippingCity.trim().toLowerCase() == filter;
-    };
+    this.resetFilters();
 
-    if (this.filtro) {
-      this.applyFilter(this.filtro);
-    }
+    this.dataSource.filterPredicate = this.createFilter();
+
+    this.filterSelectObj.filter((o) => {
+      o.options = this.getFilterObject(this.registros, o.columnProp);
+    });
+
+    this.filterSelectObj.sort();
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.dataSource.filteredData.length;
     return numSelected == numRows;
   }
 
@@ -293,7 +400,7 @@ export class ResultadoConsultaComponent
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
+      : this.dataSource.filteredData.forEach((row) => this.selection.select(row));
   }
 
   solicitarAgenda() {
@@ -622,26 +729,26 @@ export class ResultadoConsultaComponent
     );
   }
 
-  generarDescargaZip(){
+  generarDescargaZip() {
     this.loading.emit(true);
 
     let orderkeys = [];
 
-    this.selection.selected.forEach(registro => {
+    this.selection.selected.forEach((registro) => {
       orderkeys.push(registro.orderkey);
-    })
+    });
 
     this.registroService.obtenerEtiquetaZip(orderkeys).subscribe(
       (response: any) => {
         this.loading.emit(false);
         var blob = new Blob([response], { type: 'application/zip' });
-        saveAs(blob,  `Etiquetas_${this.getDateString()}.zip`);
+        saveAs(blob, `Etiquetas_${this.getDateString()}.zip`);
       },
       (error) => {
         this.loading.emit(false);
         console.error(error);
       }
-    );  
+    );
 
     this.selection.clear();
   }
@@ -650,9 +757,9 @@ export class ResultadoConsultaComponent
     const date = new Date();
     const year = date.getFullYear();
     const month = `${date.getMonth() + 1}`.padStart(2, '0');
-    const day =`${date.getDate()}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
     const time = date.getTime();
-    return `${year}${month}${day}_${time}`
+    return `${year}${month}${day}_${time}`;
   }
 
   descartarRegistro() {
@@ -686,7 +793,6 @@ export class ResultadoConsultaComponent
             )
             .subscribe(
               (success: any[]) => {
-
                 console.warn(success);
 
                 success.forEach((registro) => {
@@ -702,7 +808,6 @@ export class ResultadoConsultaComponent
                   'Se descartó correctamente la selección',
                   'Descartar estatus'
                 );
-
               },
               (error) => {
                 console.error(error);
@@ -759,7 +864,7 @@ export class ResultadoConsultaComponent
     }
   }
 
-  canRenderDiscarded(){
+  canRenderDiscarded() {
     if (this.isAdmin) {
       return this.sEstatus.id != TipoEstatus.DESCARTADO;
     } else {
