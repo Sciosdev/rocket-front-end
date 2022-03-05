@@ -1,15 +1,17 @@
 <div class="d-flex justify-content-between flex-wrap">
   <div class="p-2"> 
-    <mat-form-field>
 
-      <mat-label>Filtro Comuna</mat-label>
-      <mat-select ([value])="selectedComuna" (selectionChange)="applyFilter($event.value)">
-        <mat-option>Ninguno</mat-option>
-        <mat-option *ngFor="let comuna of comunas" [value]="comuna">
-          {{comuna | titlecase}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field *ngFor="let filter of filterSelectObj" style="margin-left: 15px;">
+        <mat-label>Filtro por {{filter.name}}</mat-label>
+        <select matNativeControl name="{{filter.columnProp}}" [(ngModel)]="filter.modelValue"
+          (change)="filterChange(filter,$event)">
+          <option value="">-- Selecciona la {{filter.name}} --</option>
+          <option [value]="item" *ngFor="let item of filter.options">{{item}}</option>
+        </select>
+      </mat-form-field>
+      &nbsp;
+      <button mat-flat-button color="warn" (click)="resetFilters()">Reset</button>
+ 
   </div>
 
   <div class="d-flex justify-content-lg-start flex-wrap" *ngIf="canRenderCambioEstatus()">
@@ -66,7 +68,7 @@
   
   <div class="d-flex justify-content-lg-end flex-wrap" *ngIf="canRenderDiscarded()">
     <div class="p-2">
-      <button mat-raised-button color="accent" matRipple [disabled]="selection.selected.length == 0"
+      <button mat-raised-button color="accent" matRipple [disabled]="selection.selected.length == 0 "
         (click)="descartarRegistro()">
         <nb-icon icon="trash-outline"></nb-icon>
         Descartar
@@ -180,6 +182,6 @@
   <div class="d-flex align-content-center justify-content-center"
     *ngIf="registros.length === 0 ||  dataSource.filteredData.length  === 0">No se encontraron
     registros</div>
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 100]" showFirstLastButtons></mat-paginator>
 
 </div>
