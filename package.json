@@ -1,6 +1,6 @@
 {
   "name": "rocket-front-end",
-  "version": "1.5.0-SNAPSHOT",
+  "version": "1.5.0-RELEASE",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
