@@ -168,7 +168,7 @@ export class ResultadoConsultaComponent
         } else this.columns.push(...this.defaultColumns);
 
         if (this.canRenderEtiqueta()) {
-          this.columns.push(...this.defaultColumns, 'actions');
+          this.columns.push('actions');
         }
 
         if (this.canRenderDeliveryComment()) {
@@ -360,7 +360,7 @@ export class ResultadoConsultaComponent
     } else this.columns.push(...this.defaultColumns);
 
     if (this.canRenderEtiqueta()) {
-      this.columns.push(...this.defaultColumns, 'actions');
+      this.columns.push('actions');
     }
 
     if (this.canRenderDeliveryComment()) {
