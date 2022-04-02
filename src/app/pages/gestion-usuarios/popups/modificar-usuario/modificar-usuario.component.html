@@ -216,19 +216,10 @@
                         </div>
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <label for="inputZip" class="label">Código Postal *</label>
+                                <label for="inputZip" class="label">Código Postal</label>
                                 <input type="text" nbInput fullWidth id="inputZip" placeholder="Código Postal"
                                     [value]="usuario.fullAddress.zipCode | undefined"
-                                    [(ngModel)]="usuario.fullAddress.zipCode" name="zipCode" #zipCode="ngModel" required
-                                    [pattern]="zipPattern" />
-                                <ng-container *ngIf="zipCode.invalid">
-                                    <p class="caption status-danger" *ngIf="zipCode.errors?.required">
-                                        Código Postal es requerido
-                                    </p>
-                                    <p class="caption status-danger" *ngIf="zipCode.errors?.pattern">
-                                        Código Postal es inválido
-                                    </p>
-                                </ng-container>
+                                    [(ngModel)]="usuario.fullAddress.zipCode" name="zipCode" #zipCode="ngModel"/>
                             </div>
                         </div>
                     </div>
