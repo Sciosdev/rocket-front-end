@@ -142,19 +142,10 @@
             </div>
             <div class="col-sm-2">
               <div class="form-group">
-                <label for="inputZip" class="label">Código Postal *</label>
+                <label for="inputZip" class="label">Código Postal</label>
                 <input type="text" nbInput fullWidth id="inputZip" placeholder="Código Postal"
                   [value]="mtienda.direccionCompleta.zipCode | undefined"
-                  [(ngModel)]="mtienda.direccionCompleta.zipCode" name="zipCode" #zipCode="ngModel" required
-                  [pattern]="zipPattern" />
-                <ng-container *ngIf="zipCode.invalid">
-                  <p class="caption status-danger" *ngIf="zipCode.errors?.required">
-                    Código Postal es requerido
-                  </p>
-                  <p class="caption status-danger" *ngIf="zipCode.errors?.pattern">
-                    Código Postal es inválido
-                  </p>
-                </ng-container>
+                  [(ngModel)]="mtienda.direccionCompleta.zipCode" name="zipCode" #zipCode="ngModel"/>
               </div>
             </div>
           </div>
@@ -218,7 +209,6 @@
         telefono.errors?.required ||
         email.errors?.pattern ||
         telefono.errors?.pattern ||
-        zipCode.errors?.pattern || 
         (!mtienda.logo || mtienda.logo == 'nologo')">
           <nb-icon icon="checkmark-square-2-outline"></nb-icon>
           Aceptar

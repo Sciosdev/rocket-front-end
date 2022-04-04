@@ -188,7 +188,7 @@ export const layout_map = {
     "Billing Zip": {
         "column_id": "zip",
         "type": "billing_address",
-        "required": true,
+        "required": false,
         "nullable": true
     },
     "Billing Province": {
@@ -248,8 +248,8 @@ export const layout_map = {
     "Shipping Zip": {
         "column_id": "zip",
         "type": "shipping_address",
-        "required": true,
-        "nullable": false
+        "required": false,
+        "nullable": true
     },
     "Shipping Province": {
         "column_id": "province",
