@@ -14,6 +14,7 @@ export class CargaLayoutComponent implements OnInit {
 
   archivoCargado:any;
   procesado:boolean;
+  tipoCarga: number;
   resultado: any;
   errores: any[];
 
@@ -31,5 +32,9 @@ export class CargaLayoutComponent implements OnInit {
 
   setErrores($event) {
     this.errores = $event;
+  }
+
+  setTipoCarga($event) {
+    this.tipoCarga = $event;
   }
 }
