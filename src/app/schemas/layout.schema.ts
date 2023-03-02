@@ -1,4 +1,4 @@
-export const layout_map = {
+export const layout_map = [{
     "Id": {
         "column_id": "id",
         "type": "order",
@@ -431,4 +431,49 @@ export const layout_map = {
         "required": false,
         "nullable": true
     }
+},
+{
+  "# de venta": {
+      "column_id": "name",
+      "type": "order",
+      "required": false,
+      "nullable": true
+  },
+  "Comprador": {
+      "column_id": "name",
+      "type": "shipping_address",
+      "required": false,
+      "nullable": true
+  },
+  "Domicilio": {
+      "column_id": "address1",
+      "type": "shipping_address",
+      "required": false,
+      "nullable": true
+  },
+  "Comuna": {
+      "column_id": "city",
+      "type": "shipping_address",
+      "required": false,
+      "nullable": true
+  },
+  "Código postal": {
+      "column_id": "zip",
+      "type": "shipping_address",
+      "required": false,
+      "nullable": true
+  },
+  "Estado": {
+      "column_id": "province",
+      "type": "shipping_address",
+      "required": false,
+      "nullable": true
+  },
+  "País": {
+      "column_id": "country",
+      "type": "shipping_address",
+      "required": false,
+      "nullable": true
+  }
 }
+]

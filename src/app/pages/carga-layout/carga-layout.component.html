@@ -3,11 +3,11 @@
     <nb-stepper #stepper disableStepNavigation>
 
       <nb-step label="Carga de archivo">
-        <app-carga-archivo (archivoCargado)=setArchivoCargado($event) (procesado)=setProcesado($event) ></app-carga-archivo>
+        <app-carga-archivo (archivoCargado)=setArchivoCargado($event) (procesado)=setProcesado($event) (tipoCarga)="setTipoCarga($event)"></app-carga-archivo>
       </nb-step>
 
       <nb-step label="Previsualización">
-        <app-previsualizacion [archivoCargado]="archivoCargado" [procesado]="procesado" (resultado)=setResultado($event)
+        <app-previsualizacion [tipoCarga]="tipoCarga" [archivoCargado]="archivoCargado" [procesado]="procesado" (resultado)=setResultado($event)
           (errores)="setErrores($event)"></app-previsualizacion>
       </nb-step>
 
