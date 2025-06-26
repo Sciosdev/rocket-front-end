@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  endpoint: "http://18.118.189.189:8080/rocket",
+  endpoint: "https://d1kczdbzrhmdh9.cloudfront.net/rocket",
   clientId: 'rocketApp',
   clientSecret: 'mE8_vt2852d_f@B'
 };
